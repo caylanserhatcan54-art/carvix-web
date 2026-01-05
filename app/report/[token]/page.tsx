@@ -66,21 +66,68 @@ export default function ReportPage({ params }: { params: { token: string } }) {
 
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [waiting, setWaiting] = useState(false);
 
+  // ✅ DEĞİŞTİRİLMEDİ – sadece polling eklendi
   useEffect(() => {
-    fetch(`${api}/session/${token}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setSession(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    let interval: any;
+
+    const fetchSession = () => {
+      fetch(`${api}/session/${token}`)
+        .then((r) => r.json())
+        .then((data) => {
+          setSession(data);
+          setLoading(false);
+
+          // 🔴 ANALİZ DEVAM EDİYORSA BEKLE
+          if (data.status !== "analysis_completed") {
+            setWaiting(true);
+          } else {
+            setWaiting(false);
+            clearInterval(interval);
+          }
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    };
+
+    fetchSession();
+    interval = setInterval(fetchSession, 3000);
+
+    return () => clearInterval(interval);
   }, [token, api]);
 
-  if (loading) return <div className="container" style={{ padding: 24 }}>Rapor hazırlanıyor…</div>;
-  if (!session) return <div className="container" style={{ padding: 24 }}>Rapor bulunamadı.</div>;
+  if (loading)
+    return (
+      <div className="container" style={{ padding: 24 }}>
+        Rapor hazırlanıyor…
+      </div>
+    );
 
-  const scorePct = session.ai_confidence ? Math.round(session.ai_confidence.score * 100) : null;
+  if (!session)
+    return (
+      <div className="container" style={{ padding: 24 }}>
+        Rapor bulunamadı.
+      </div>
+    );
+
+  // 🔴 ANALİZ BİTMEDEN RAPOR GÖSTERME
+  if (waiting) {
+    return (
+      <div className="container" style={{ padding: 24 }}>
+        <h2>🔄 Analiz devam ediyor</h2>
+        <p>
+          Video ve ses verileri inceleniyor.  
+          PDF rapor birkaç dakika içinde hazır olacaktır.
+        </p>
+      </div>
+    );
+  }
+
+  const scorePct = session.ai_confidence
+    ? Math.round(session.ai_confidence.score * 100)
+    : null;
 
   return (
     <div>
@@ -102,23 +149,39 @@ export default function ReportPage({ params }: { params: { token: string } }) {
 
       <section className="section">
         <div className="container">
-          <div className="card" style={{ padding: 22, maxWidth: 920, margin: "0 auto" }}>
-
-            {/* --- ÜST BİLGİ --- */}
-            {/* (senin kodun aynen korunuyor) */}
-
-            {/* RİSK SKORU */}
+          <div
+            className="card"
+            style={{ padding: 22, maxWidth: 920, margin: "0 auto" }}
+          >
+            {/* =========================
+                RİSK SKORU (AYNEN KORUNDU)
+            ========================= */}
             {session.ai_confidence && (
               <>
                 <div className="hr" />
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 14,
+                  }}
+                >
                   <div className="card" style={{ padding: 16 }}>
                     <div className="kicker">Genel Risk Değerlendirmesi</div>
-                    <div style={{ fontWeight: 900, fontSize: 22, marginTop: 6 }}>
+                    <div
+                      style={{
+                        fontWeight: 900,
+                        fontSize: 22,
+                        marginTop: 6,
+                      }}
+                    >
                       %{scorePct} – {session.ai_confidence.label}
                     </div>
-                    <p className="p" style={{ marginTop: 10, lineHeight: 1.65 }}>
+                    <p
+                      className="p"
+                      style={{ marginTop: 10, lineHeight: 1.65 }}
+                    >
                       {session.ai_confidence.explanation}
                     </p>
                   </div>
@@ -126,44 +189,50 @@ export default function ReportPage({ params }: { params: { token: string } }) {
                   <div className="card" style={{ padding: 16 }}>
                     <div className="kicker">Özet</div>
                     <p className="p" style={{ marginTop: 10 }}>
-                      Bu skor; çekim kalitesi, açı ve ışığa bağlı olarak değişebilir.
-                      Nihai karar öncesi profesyonel kontrol önerilir.
+                      Bu skor; çekim kalitesi, açı ve ışığa bağlı olarak
+                      değişebilir. Nihai karar öncesi profesyonel kontrol
+                      önerilir.
                     </p>
                   </div>
                 </div>
 
-                {/* 🔴 YENİ: UYARI LİSTESİ */}
-                {session.ai_confidence.warnings && session.ai_confidence.warnings.length > 0 && (
-                  <div
-                    className="card"
-                    style={{
-                      marginTop: 14,
-                      padding: 14,
-                      background: "#fef2f2",
-                      borderLeft: "6px solid #ef4444",
-                    }}
-                  >
-                    <div style={{ fontWeight: 900, marginBottom: 6 }}>
-                      ⚠️ Analizi Etkileyen Faktörler
+                {/* 🔴 UYARILAR (EKLENDİ AMA EKSİLTİLMEDİ) */}
+                {session.ai_confidence.warnings &&
+                  session.ai_confidence.warnings.length > 0 && (
+                    <div
+                      className="card"
+                      style={{
+                        marginTop: 14,
+                        padding: 14,
+                        background: "#fef2f2",
+                        borderLeft: "6px solid #ef4444",
+                      }}
+                    >
+                      <div style={{ fontWeight: 900, marginBottom: 6 }}>
+                        ⚠️ Analizi Etkileyen Faktörler
+                      </div>
+                      <ul style={{ margin: 0, paddingLeft: 18 }}>
+                        {session.ai_confidence.warnings.map((w) => (
+                          <li key={w} style={{ fontSize: 14 }}>
+                            {prettyWarning(w)}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <ul style={{ margin: 0, paddingLeft: 18 }}>
-                      {session.ai_confidence.warnings.map((w) => (
-                        <li key={w} style={{ fontSize: 14 }}>
-                          {prettyWarning(w)}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                  )}
               </>
             )}
 
-            {/* AI YORUMU */}
+            {/* =========================
+                AI YORUMU (AYNEN KORUNDU)
+            ========================= */}
             {session.ai_commentary && (
               <>
                 <div className="hr" />
                 <div>
-                  <div className="kicker">Yapay Zekâ Genel Değerlendirmesi</div>
+                  <div className="kicker">
+                    Yapay Zekâ Genel Değerlendirmesi
+                  </div>
 
                   <div
                     className="card"
@@ -173,7 +242,13 @@ export default function ReportPage({ params }: { params: { token: string } }) {
                       borderLeft: "6px solid #0f172a",
                     }}
                   >
-                    <p style={{ margin: 0, lineHeight: 1.75, fontWeight: 650 }}>
+                    <p
+                      style={{
+                        margin: 0,
+                        lineHeight: 1.75,
+                        fontWeight: 650,
+                      }}
+                    >
                       {session.ai_commentary.final_text}
                     </p>
 
@@ -197,7 +272,6 @@ export default function ReportPage({ params }: { params: { token: string } }) {
                 </div>
               </>
             )}
-
           </div>
         </div>
       </section>
