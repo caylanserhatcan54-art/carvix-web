@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 type SuspiciousImage = {
   image_path: string;
@@ -58,29 +58,49 @@ export default function ReportPage({ params }: { params: { token: string } }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [waiting, setWaiting] = useState(false);
+  const [timeoutReached, setTimeoutReached] = useState(false);
+
+  const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
     let interval: any;
 
-    const fetchSession = () => {
-      fetch(`${api}/session/${token}`)
-        .then((r) => r.json())
-        .then((data) => {
-          setSession(data);
-          setLoading(false);
+    const fetchSession = async () => {
+      try {
+        const r = await fetch(`${api}/session/${token}`);
+        const data = await r.json();
 
-          if (data.status !== "analysis_completed") {
-            setWaiting(true);
-          } else {
-            setWaiting(false);
-            clearInterval(interval);
-          }
-        })
-        .catch(() => setLoading(false));
+        setSession(data);
+        setLoading(false);
+
+        const analysisDone =
+          data.status === "analysis_completed" ||
+          data.confidence ||
+          data.ai_commentary;
+
+        if (analysisDone) {
+          setWaiting(false);
+          clearInterval(interval);
+          return;
+        }
+
+        // ⏱️ 4 dk timeout
+        if (Date.now() - startTimeRef.current > 4 * 60 * 1000) {
+          setTimeoutReached(true);
+          setWaiting(false);
+          clearInterval(interval);
+          return;
+        }
+
+        setWaiting(true);
+      } catch (e) {
+        // Render sleep vs.
+        setWaiting(true);
+      }
     };
 
     fetchSession();
-    interval = setInterval(fetchSession, 3000);
+    interval = setInterval(fetchSession, 4000);
 
     return () => clearInterval(interval);
   }, [token, api]);
@@ -97,7 +117,30 @@ export default function ReportPage({ params }: { params: { token: string } }) {
     return (
       <div className="container" style={{ padding: 24 }}>
         <h2>🔄 Analiz devam ediyor</h2>
-        <p>Video ve ses verileri inceleniyor. PDF rapor birkaç dakika içinde hazır olacaktır.</p>
+        <p>
+          Video ve ses verileri inceleniyor.  
+          PDF rapor birkaç dakika içinde hazır olacaktır.
+        </p>
+      </div>
+    );
+  }
+
+  if (timeoutReached) {
+    return (
+      <div className="container" style={{ padding: 24 }}>
+        <h2>⏳ Analiz uzadı</h2>
+        <p>
+          Analiz beklenenden uzun sürdü.  
+          PDF rapor hazır olmuş olabilir.
+        </p>
+        <a
+          href={`/report/${token}.pdf`}
+          target="_blank"
+          rel="noreferrer"
+          style={{ fontWeight: 800 }}
+        >
+          📄 PDF Raporu Denetle
+        </a>
       </div>
     );
   }
@@ -106,11 +149,8 @@ export default function ReportPage({ params }: { params: { token: string } }) {
   const level = session.confidence?.confidence_level ?? "";
 
   const reportUrl = `${window.location.origin}/report/${token}.pdf`;
-
   const whatsappText = encodeURIComponent(
-    `Merhaba,\n\nAraç için yapılan AI ön analiz raporunu aşağıdaki linkten inceleyebilir misiniz?\n\n` +
-    `${reportUrl}\n\n` +
-    `Not: Bu rapor ekspertiz yerine geçmez, ön bilgilendirme amaçlıdır.`
+    `Merhaba,\n\nAraç için yapılan AI ön analiz raporu:\n\n${reportUrl}\n\nNot: Bu rapor ekspertiz yerine geçmez.`
   );
 
   return (
@@ -118,16 +158,10 @@ export default function ReportPage({ params }: { params: { token: string } }) {
       {/* NAV */}
       <div className="nav">
         <div className="container nav-inner">
-          <div className="brand">
-            <span className="brand-badge" />
-            Carvix
-          </div>
+          <div className="brand">Carvix</div>
           <div className="nav-links">
             <a href="/">Ana Sayfa</a>
-            <a href="/#nasil">Nasıl çalışır?</a>
-            <a href={`/report/${token}.pdf`} target="_blank" rel="noreferrer">
-              PDF
-            </a>
+            <a href={`/report/${token}.pdf`} target="_blank">PDF</a>
           </div>
         </div>
       </div>
@@ -136,105 +170,61 @@ export default function ReportPage({ params }: { params: { token: string } }) {
         <div className="container">
           <div className="card" style={{ padding: 22, maxWidth: 920, margin: "0 auto" }}>
 
-            {/* GENEL BİLGİ */}
             <div className="kicker">Rapor Bilgileri</div>
-            <p className="p">
+            <p>
               <b>Araç Tipi:</b> {prettyVehicle(session.vehicle_type)} <br />
               <b>Senaryo:</b> {prettyScenario(session.scenario)}
             </p>
 
-            {/* GÜVEN */}
             {score !== null && (
               <>
                 <div className="hr" />
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                  <div className="card" style={{ padding: 16 }}>
-                    <div className="kicker">Rapor Güven Skoru</div>
-                    <div style={{ fontWeight: 900, fontSize: 22, marginTop: 6 }}>
-                      {score}/100 – {level.toUpperCase()}
-                    </div>
-
-                    {session.confidence?.reasons?.length ? (
-                      <ul style={{ marginTop: 10, paddingLeft: 18 }}>
-                        {session.confidence.reasons.map((r, i) => (
-                          <li key={i} style={{ fontSize: 14 }}>{r}</li>
-                        ))}
-                      </ul>
-                    ) : null}
-                  </div>
-
-                  <div className="card" style={{ padding: 16 }}>
-                    <div className="kicker">Özet</div>
-                    <p className="p" style={{ marginTop: 10 }}>
-                      Bu skor; video kalitesi, kapsama oranı ve analiz tutarlılığına göre hesaplanmıştır.
-                      Nihai karar öncesi profesyonel ekspertiz önerilir.
-                    </p>
-                  </div>
-                </div>
+                <h3>Rapor Güven Skoru</h3>
+                <b>{score}/100 – {level.toUpperCase()}</b>
+                <ul>
+                  {session.confidence?.reasons?.map((r, i) => (
+                    <li key={i}>{r}</li>
+                  ))}
+                </ul>
               </>
             )}
 
-            {/* 🔍 ŞÜPHELİ GÖRSELLER */}
-            {session.suspicious_images && session.suspicious_images.length > 0 && (
+            {session.suspicious_images?.length ? (
               <>
                 <div className="hr" />
-                <div className="kicker">Şüpheli Görsel Bulgular</div>
-
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: 12,
-                    marginTop: 10,
-                  }}
-                >
+                <h3>Şüpheli Görsel Bulgular</h3>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   {session.suspicious_images.slice(0, 4).map((img, i) => (
-                    <div key={i} className="card" style={{ padding: 8 }}>
+                    <div key={i}>
                       <img
                         src={`${api}${img.image_path}`}
-                        alt="Şüpheli görsel"
                         style={{ width: "100%", borderRadius: 6 }}
                       />
-                      <p style={{ fontSize: 13, marginTop: 6 }}>
-                        {img.caption || "Görsel risk sinyali"}
-                      </p>
+                      <small>{img.caption}</small>
                     </div>
                   ))}
                 </div>
               </>
-            )}
+            ) : null}
 
-            {/* AI YORUM */}
             {session.ai_commentary && (
               <>
                 <div className="hr" />
-                <div className="kicker">Yapay Zekâ Genel Değerlendirmesi</div>
-                <div className="card" style={{ padding: 16, marginTop: 10 }}>
-                  <p style={{ whiteSpace: "pre-line", lineHeight: 1.7 }}>
-                    {session.ai_commentary.text}
-                  </p>
-                </div>
+                <h3>Yapay Zekâ Değerlendirmesi</h3>
+                <p style={{ whiteSpace: "pre-line" }}>
+                  {session.ai_commentary.text}
+                </p>
               </>
             )}
 
-            {/* PAYLAŞ */}
             <div className="hr" />
-            <div className="kicker">Raporu Paylaş</div>
-
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <a href={reportUrl} target="_blank" rel="noreferrer" style={{ fontWeight: 800 }}>
-                📄 PDF Raporu Aç
-              </a>
-
-              <a
-                href={`https://wa.me/?text=${whatsappText}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontWeight: 800 }}
-              >
-                📲 WhatsApp ile Satıcıya Gönder
-              </a>
-            </div>
+            <a href={reportUrl} target="_blank" style={{ fontWeight: 800 }}>
+              📄 PDF Raporu Aç
+            </a>{" "}
+            |{" "}
+            <a href={`https://wa.me/?text=${whatsappText}`} target="_blank">
+              📲 WhatsApp ile Gönder
+            </a>
 
           </div>
         </div>
