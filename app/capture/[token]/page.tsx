@@ -10,24 +10,6 @@ type Session = {
   status: string;
 };
 
-const silhouetteMap: Record<string, string> = {
-  car: "/silhouettes/car.png",
-  electric_car: "/silhouettes/car.png",
-  pickup: "/silhouettes/pickup.png",
-  van: "/silhouettes/van.png",
-  motorcycle: "/silhouettes/motorcycle.png",
-  atv: "/silhouettes/atv.png",
-};
-
-const silhouetteScale: Record<string, number> = {
-  car: 0.78,
-  electric_car: 0.78,
-  pickup: 0.82,
-  van: 0.86,
-  motorcycle: 0.55,
-  atv: 0.6,
-};
-
 const normalizeVehicleType = (type?: string | null): string => {
   if (!type) return "car";
   const t = type.toLowerCase();
@@ -48,9 +30,7 @@ export default function CapturePage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const liveIntervalRef = useRef<any>(null);
-  const tickRef = useRef<any>(null);
+  const timerRef = useRef<any>(null);
 
   const [vehicleType, setVehicleType] = useState("car");
   const [recording, setRecording] = useState(false);
@@ -59,20 +39,13 @@ export default function CapturePage() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedSec, setElapsedSec] = useState(0);
 
-  const [rotation, setRotation] = useState(0);
-  const [smoothedRotation, setSmoothedRotation] = useState(0);
-  const [lastAlpha, setLastAlpha] = useState<number | null>(null);
-
-  const [warnings, setWarnings] = useState<string[]>([]);
-  const hasWarning = warnings.length > 0;
-
   const [msg, setMsg] = useState(
-    "Aracın önünden başlayın ve rehber noktayı takip ederek etrafında dönün."
+    "Aracın önünden başlayın ve yavaşça etrafında dolaşın."
   );
 
   const MIN_DURATION_SEC = 25;
 
-  /* SESSION */
+  /* ================= SESSION ================= */
   useEffect(() => {
     if (!token) return;
     fetch(`${api}/session/${token}`)
@@ -83,7 +56,7 @@ export default function CapturePage() {
       .catch(() => {});
   }, [api, token]);
 
-  /* CAMERA */
+  /* ================= CAMERA ================= */
   useEffect(() => {
     if (!navigator?.mediaDevices?.getUserMedia) {
       setMsg("Bu tarayıcı kamera erişimini desteklemiyor.");
@@ -93,7 +66,10 @@ export default function CapturePage() {
     let stream: MediaStream | null = null;
 
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" }, audio: false })
+      .getUserMedia({
+        video: { facingMode: { ideal: "environment" } },
+        audio: false,
+      })
       .then((s) => {
         stream = s;
         if (videoRef.current) {
@@ -101,45 +77,26 @@ export default function CapturePage() {
           videoRef.current.play().catch(() => {});
         }
       })
-      .catch(() => setMsg("Kamera açılamadı. Tarayıcı izinlerini kontrol edin."));
+      .catch(() =>
+        setMsg("Kamera açılamadı. Tarayıcı izinlerini kontrol edin.")
+      );
 
     return () => stream?.getTracks().forEach((t) => t.stop());
   }, []);
 
-  /* GYRO */
-  useEffect(() => {
-    const handler = (e: DeviceOrientationEvent) => {
-      if (!recording || e.alpha == null) return;
-      if (lastAlpha !== null) {
-        let diff = Math.abs(e.alpha - lastAlpha);
-        if (diff > 180) diff = 360 - diff;
-        setRotation((r) => Math.min(360, r + Math.min(diff, 12)));
-      }
-      setLastAlpha(e.alpha);
-    };
-    window.addEventListener("deviceorientation", handler);
-    return () => window.removeEventListener("deviceorientation", handler);
-  }, [recording, lastAlpha]);
-
-  /* ROTATION SMOOTH */
-  useEffect(() => {
-    if (!recording) return;
-    setSmoothedRotation((p) => Math.min(360, p * 0.85 + rotation * 0.15));
-  }, [rotation, recording]);
-
-  /* TIMER */
+  /* ================= TIMER ================= */
   const startTimer = () => {
-    tickRef.current = setInterval(() => {
+    timerRef.current = setInterval(() => {
       if (!startTime) return;
       setElapsedSec((Date.now() - startTime) / 1000);
     }, 250);
   };
 
   const stopTimer = () => {
-    if (tickRef.current) clearInterval(tickRef.current);
+    if (timerRef.current) clearInterval(timerRef.current);
   };
 
-  /* RECORD START */
+  /* ================= START RECORD ================= */
   const startRecording = () => {
     if (!videoRef.current?.srcObject) {
       setMsg("Kamera hazır değil.");
@@ -147,10 +104,7 @@ export default function CapturePage() {
     }
 
     chunks.current = [];
-    setRotation(0);
-    setSmoothedRotation(0);
     setElapsedSec(0);
-    setLastAlpha(null);
 
     const now = Date.now();
     setStartTime(now);
@@ -192,17 +146,12 @@ export default function CapturePage() {
     setMsg("Yavaşça aracı dolaşın. En az 25 saniye çekim yapın.");
   };
 
-  /* RECORD STOP */
+  /* ================= STOP RECORD ================= */
   const stopRecording = () => {
     const duration = startTime ? (Date.now() - startTime) / 1000 : 0;
 
     if (duration < MIN_DURATION_SEC) {
       setMsg(`Çekim kısa. En az ${MIN_DURATION_SEC} sn çekmelisiniz.`);
-      return;
-    }
-
-    if (smoothedRotation < 300) {
-      setMsg("360° tarama tamamlanmadı. Aracı tam tur dolaşın.");
       return;
     }
 
@@ -214,15 +163,13 @@ export default function CapturePage() {
 
   const captureProgress = Math.min(
     100,
-    Math.round(
-      Math.min(1, elapsedSec / MIN_DURATION_SEC) * 70 +
-        Math.min(1, smoothedRotation / 360) * 30
-    )
+    Math.round((elapsedSec / MIN_DURATION_SEC) * 100)
   );
 
   return (
     <main>
       <div style={{ position: "relative", height: "100vh", background: "#000" }}>
+        {/* CAMERA */}
         <video
           ref={videoRef}
           autoPlay
@@ -231,10 +178,11 @@ export default function CapturePage() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
 
+        {/* PROGRESS BAR */}
         <div
           style={{
             position: "absolute",
-            bottom: 140,
+            bottom: 190,
             left: "50%",
             transform: "translateX(-50%)",
             width: "80%",
@@ -252,23 +200,56 @@ export default function CapturePage() {
           />
         </div>
 
+        {/* MESSAGE */}
         <div
           style={{
             position: "absolute",
-            bottom: 90,
+            bottom: 150,
             left: "50%",
             transform: "translateX(-50%)",
             color: "#fff",
             textAlign: "center",
+            width: "90%",
+            fontSize: 14,
           }}
         >
           {msg}
         </div>
 
+        {/* ⚠️ CAMERA WARNINGS */}
         <div
           style={{
             position: "absolute",
-            bottom: 30,
+            bottom: 80,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "92%",
+            background: "#fff7ed",
+            color: "#7c2d12",
+            padding: 12,
+            borderRadius: 12,
+            fontSize: 13,
+            border: "1px solid #fed7aa",
+          }}
+        >
+          <strong>Çekim Kalitesi İçin Önemli</strong>
+          <ul style={{ paddingLeft: 18, marginTop: 6 }}>
+            <li>Aracı <b>360°</b> dolaşarak çekin (ön, arka, yanlar).</li>
+            <li>Her panelde <b>1–2 sn</b> durun, hızlı geçmeyin.</li>
+            <li>İyi ışıkta çekin, karanlık analiz doğruluğunu düşürür.</li>
+            <li>Kamerayı sallamayın, iki elle sabit tutun.</li>
+            <li>
+              Motor sesi için (içten yanmalı): kaput açık <b>5–10 sn</b> sabit
+              kayıt alın.
+            </li>
+          </ul>
+        </div>
+
+        {/* BUTTON */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 20,
             left: 0,
             right: 0,
             display: "flex",
@@ -280,7 +261,7 @@ export default function CapturePage() {
               disabled={uploading}
               onClick={startRecording}
               style={{
-                padding: 16,
+                padding: "14px 22px",
                 fontSize: 18,
                 borderRadius: 999,
                 background: "#00c853",
@@ -294,7 +275,7 @@ export default function CapturePage() {
             <button
               onClick={stopRecording}
               style={{
-                padding: 16,
+                padding: "14px 22px",
                 fontSize: 18,
                 borderRadius: 999,
                 background: "#111",

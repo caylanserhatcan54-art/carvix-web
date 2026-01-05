@@ -37,6 +37,7 @@ export default function FlowPage() {
   const [scenario, setScenario] = useState("");
   const [vehicle, setVehicle] = useState("");
   const [msg, setMsg] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -52,27 +53,32 @@ export default function FlowPage() {
   }, [token, api]);
 
   const save = async () => {
-    if (!scenario || !vehicle) return;
+    if (!scenario || !vehicle || saving) return;
 
+    setSaving(true);
     setMsg("Kaydediliyor...");
 
-    const res = await fetch(`${api}/session/${token}/update`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        scenario,
-        vehicle_type: vehicle,
-        steps: [],
-      }),
-    });
+    try {
+      const res = await fetch(`${api}/session/${token}/update`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scenario,
+          vehicle_type: vehicle,
+        }),
+      });
 
-    if (!res.ok) {
-      setMsg("Kaydetme hatası.");
-      return;
+      if (!res.ok) {
+        setMsg("Kaydetme hatası.");
+        setSaving(false);
+        return;
+      }
+
+      router.push(`/capture/${token}?vehicle=${vehicle}`);
+    } catch {
+      setMsg("Bağlantı hatası.");
+      setSaving(false);
     }
-
-    // ✅ ARAÇ TİPİ URL İLE TAŞINIYOR
-    router.push(`/capture/${token}?vehicle=${vehicle}`);
   };
 
   if (!token) {
@@ -80,7 +86,14 @@ export default function FlowPage() {
   }
 
   return (
-    <main style={{ padding: 20, maxWidth: 720, margin: "0 auto", fontFamily: "Arial" }}>
+    <main
+      style={{
+        padding: 20,
+        maxWidth: 720,
+        margin: "0 auto",
+        fontFamily: "Arial",
+      }}
+    >
       <h1 style={{ fontSize: 24, marginBottom: 8 }}>Carvix – Ön Analiz</h1>
       <p style={{ color: "#555", marginBottom: 20 }}>
         Lütfen analiz amacını ve araç tipini seçin.
@@ -146,18 +159,19 @@ export default function FlowPage() {
 
       <button
         onClick={save}
-        disabled={!scenario || !vehicle}
+        disabled={!scenario || !vehicle || saving}
         style={{
           width: "100%",
           padding: 16,
           fontSize: 18,
           borderRadius: 12,
           border: "none",
-          background: !scenario || !vehicle ? "#ccc" : "#000",
+          background: !scenario || !vehicle || saving ? "#ccc" : "#000",
           color: "#fff",
+          cursor: saving ? "not-allowed" : "pointer",
         }}
       >
-        Devam Et → Kamera
+        {saving ? "Kaydediliyor..." : "Devam Et → Kamera"}
       </button>
 
       {msg && <p style={{ marginTop: 12 }}>{msg}</p>}
