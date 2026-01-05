@@ -32,7 +32,6 @@ export default function CapturePage() {
   const chunks = useRef<Blob[]>([]);
   const timerRef = useRef<any>(null);
 
-  const [vehicleType, setVehicleType] = useState("car");
   const [recording, setRecording] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -44,17 +43,6 @@ export default function CapturePage() {
   );
 
   const MIN_DURATION_SEC = 25;
-
-  /* ================= SESSION ================= */
-  useEffect(() => {
-    if (!token) return;
-    fetch(`${api}/session/${token}`)
-      .then((r) => r.json())
-      .then((s: Session) => {
-        setVehicleType(normalizeVehicleType(s.vehicle_type));
-      })
-      .catch(() => {});
-  }, [api, token]);
 
   /* ================= CAMERA ================= */
   useEffect(() => {
@@ -96,7 +84,7 @@ export default function CapturePage() {
     if (timerRef.current) clearInterval(timerRef.current);
   };
 
-  /* ================= START RECORD ================= */
+  /* ================= START ================= */
   const startRecording = () => {
     if (!videoRef.current?.srcObject) {
       setMsg("Kamera hazır değil.");
@@ -118,6 +106,8 @@ export default function CapturePage() {
 
     rec.onstop = async () => {
       setUploading(true);
+      setMsg("Video yükleniyor ve analiz ediliyor… Lütfen bekleyin.");
+
       const blob = new Blob(chunks.current, { type: "video/webm" });
       const form = new FormData();
       form.append("video", blob);
@@ -127,14 +117,13 @@ export default function CapturePage() {
           method: "POST",
           body: form,
         });
-        if (res.ok) {
-          window.location.href = `/report/${token}`;
-        } else {
-          setMsg("Yükleme veya analiz hatası.");
-        }
+
+        if (!res.ok) throw new Error();
+
+        // 🔥 ANALİZ BİTTİ → REPORT
+        window.location.href = `/report/${token}`;
       } catch {
-        setMsg("Bağlantı hatası.");
-      } finally {
+        setMsg("Yükleme veya analiz sırasında hata oluştu.");
         setUploading(false);
       }
     };
@@ -146,7 +135,7 @@ export default function CapturePage() {
     setMsg("Yavaşça aracı dolaşın. En az 25 saniye çekim yapın.");
   };
 
-  /* ================= STOP RECORD ================= */
+  /* ================= STOP ================= */
   const stopRecording = () => {
     const duration = startTime ? (Date.now() - startTime) / 1000 : 0;
 
@@ -157,7 +146,6 @@ export default function CapturePage() {
 
     stopTimer();
     setRecording(false);
-    setMsg("Video yükleniyor ve analiz ediliyor…");
     mediaRecorderRef.current?.stop();
   };
 
@@ -166,10 +154,22 @@ export default function CapturePage() {
     Math.round((elapsedSec / MIN_DURATION_SEC) * 100)
   );
 
+  /* ================= UI ================= */
+  if (uploading) {
+    return (
+      <main style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center" }}>
+          <h2>🔍 Analiz Yapılıyor</h2>
+          <p>Video ve ses verileri inceleniyor.</p>
+          <p>Bu işlem 1–3 dakika sürebilir.</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main>
       <div style={{ position: "relative", height: "100vh", background: "#000" }}>
-        {/* CAMERA */}
         <video
           ref={videoRef}
           autoPlay
@@ -178,7 +178,6 @@ export default function CapturePage() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
 
-        {/* PROGRESS BAR */}
         <div
           style={{
             position: "absolute",
@@ -200,7 +199,6 @@ export default function CapturePage() {
           />
         </div>
 
-        {/* MESSAGE */}
         <div
           style={{
             position: "absolute",
@@ -216,36 +214,6 @@ export default function CapturePage() {
           {msg}
         </div>
 
-        {/* ⚠️ CAMERA WARNINGS */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 80,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "92%",
-            background: "#fff7ed",
-            color: "#7c2d12",
-            padding: 12,
-            borderRadius: 12,
-            fontSize: 13,
-            border: "1px solid #fed7aa",
-          }}
-        >
-          <strong>Çekim Kalitesi İçin Önemli</strong>
-          <ul style={{ paddingLeft: 18, marginTop: 6 }}>
-            <li>Aracı <b>360°</b> dolaşarak çekin (ön, arka, yanlar).</li>
-            <li>Her panelde <b>1–2 sn</b> durun, hızlı geçmeyin.</li>
-            <li>İyi ışıkta çekin, karanlık analiz doğruluğunu düşürür.</li>
-            <li>Kamerayı sallamayın, iki elle sabit tutun.</li>
-            <li>
-              Motor sesi için (içten yanmalı): kaput açık <b>5–10 sn</b> sabit
-              kayıt alın.
-            </li>
-          </ul>
-        </div>
-
-        {/* BUTTON */}
         <div
           style={{
             position: "absolute",
@@ -258,7 +226,6 @@ export default function CapturePage() {
         >
           {!recording ? (
             <button
-              disabled={uploading}
               onClick={startRecording}
               style={{
                 padding: "14px 22px",

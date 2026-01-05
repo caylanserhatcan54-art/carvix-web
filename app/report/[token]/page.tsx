@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 type SuspiciousImage = {
-  image_path: string;
+  image_path: string; // artık /media/... url
   caption?: string;
 };
 
@@ -12,7 +12,7 @@ type Session = {
   scenario: string;
   vehicle_type: string;
   status: string;
-  error?: string;
+  error?: string | null;
 
   confidence?: {
     confidence_score: number;
@@ -58,122 +58,161 @@ export default function ReportPage({ params }: { params: { token: string } }) {
 
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [waiting, setWaiting] = useState(true);
-
-  const startTimeRef = useRef(Date.now());
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    const run = async () => {
       try {
-        const r = await fetch(`${api}/session/${token}`);
+        const r = await fetch(`${api}/session/${token}`, { cache: "no-store" });
         const data = await r.json();
-
         setSession(data);
+      } catch (e) {
+        setSession(null);
+      } finally {
         setLoading(false);
-
-        const analysisDone =
-          data.status === "analysis_completed" ||
-          data.confidence ||
-          data.ai_commentary ||
-          data.suspicious_images;
-
-        if (analysisDone) {
-          setWaiting(false);
-          clearInterval(interval);
-        }
-
-        // ⏱️ max 3 dk bekle
-        if (Date.now() - startTimeRef.current > 3 * 60 * 1000) {
-          setWaiting(false);
-          clearInterval(interval);
-        }
-      } catch {
-        // Render sleep → sessiz devam
       }
-    }, 3000);
-
-    return () => clearInterval(interval);
+    };
+    run();
   }, [token, api]);
 
-  if (loading || waiting) {
+  if (loading) {
+    return <div className="container" style={{ padding: 24 }}>Rapor hazırlanıyor…</div>;
+  }
+
+  if (!session) {
+    return <div className="container" style={{ padding: 24 }}>Rapor bulunamadı.</div>;
+  }
+
+  // ✅ Senkron modelde genelde buraya status=analysis_completed gelmeli.
+  // Ama yine de güvenli fallback:
+  const hasResult = !!(session.confidence || session.ai_commentary || session.suspicious_images?.length);
+  if (!hasResult) {
     return (
       <div className="container" style={{ padding: 24 }}>
-        <h2>🔄 Analiz yapılıyor</h2>
-        <p>
-          Video ve ses verileri inceleniyor.<br />
-          Bu işlem 1–3 dakika sürebilir.
-        </p>
+        <h2>⚠️ Sonuç yok</h2>
+        <p>Analiz sonucu bulunamadı. Lütfen geri dönüp videoyu tekrar yükleyin.</p>
+        {session.error ? (
+          <pre style={{ marginTop: 10, whiteSpace: "pre-wrap" }}>{session.error}</pre>
+        ) : null}
       </div>
     );
   }
 
-  if (!session) {
-    return <div className="container">Rapor bulunamadı.</div>;
-  }
+  const score = session.confidence?.confidence_score ?? null;
+  const level = session.confidence?.confidence_level ?? "";
+
+  const whatsappText = encodeURIComponent(
+    `Merhaba,\n\nAraç için yapılan AI ön analiz sonucu aşağıdadır.\n\n` +
+      `Güven Skoru: ${score ?? "-"} / 100 (${(level || "").toUpperCase()})\n\n` +
+      `Not: Bu rapor ekspertiz yerine geçmez, ön bilgilendirme amaçlıdır.`
+  );
 
   return (
     <div>
+      <div className="nav">
+        <div className="container nav-inner">
+          <div className="brand">Carvix</div>
+          <div className="nav-links">
+            <a href="/">Ana Sayfa</a>
+            <a href="/#nasil">Nasıl çalışır?</a>
+          </div>
+        </div>
+      </div>
+
       <section className="section">
         <div className="container">
-          <div className="card" style={{ padding: 22, maxWidth: 900, margin: "0 auto" }}>
-
-            <h2>📊 Araç Ön Analiz Sonucu</h2>
-
-            <p>
+          <div className="card" style={{ padding: 22, maxWidth: 920, margin: "0 auto" }}>
+            <div className="kicker">Rapor Bilgileri</div>
+            <p className="p">
               <b>Araç Tipi:</b> {prettyVehicle(session.vehicle_type)} <br />
               <b>Senaryo:</b> {prettyScenario(session.scenario)}
             </p>
 
-            {session.error && (
-              <div style={{ background: "#fff3cd", padding: 12, borderRadius: 6 }}>
-                ⚠️ Analiz sırasında bazı teknik sınırlamalar oluştu.
+            {session.error ? (
+              <div className="card" style={{ padding: 14, marginTop: 12, borderLeft: "6px solid #ef4444" }}>
+                <b>⚠️ Analiz Hatası</b>
+                <div style={{ marginTop: 8, whiteSpace: "pre-wrap" }}>{session.error}</div>
+                <div style={{ marginTop: 10, fontSize: 13, color: "#475569" }}>
+                  Yine de mevcut çıkarımlar gösteriliyor (varsa).
+                </div>
               </div>
-            )}
+            ) : null}
 
-            {session.confidence && (
+            {score !== null ? (
               <>
-                <hr />
-                <h3>🔐 Güven Skoru</h3>
-                <b>
-                  {session.confidence.confidence_score}/100 –{" "}
-                  {session.confidence.confidence_level.toUpperCase()}
-                </b>
-                <ul>
-                  {session.confidence.reasons.map((r, i) => (
-                    <li key={i}>{r}</li>
-                  ))}
-                </ul>
+                <div className="hr" />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                  <div className="card" style={{ padding: 16 }}>
+                    <div className="kicker">Rapor Güven Skoru</div>
+                    <div style={{ fontWeight: 900, fontSize: 22, marginTop: 6 }}>
+                      {score}/100 – {(level || "").toUpperCase()}
+                    </div>
+                    {session.confidence?.reasons?.length ? (
+                      <ul style={{ marginTop: 10, paddingLeft: 18 }}>
+                        {session.confidence.reasons.slice(0, 8).map((r, i) => (
+                          <li key={i} style={{ fontSize: 14 }}>{r}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+
+                  <div className="card" style={{ padding: 16 }}>
+                    <div className="kicker">Özet</div>
+                    <p className="p" style={{ marginTop: 10 }}>
+                      Bu skor; video kalitesi, kapsama oranı ve analiz tutarlılığına göre hesaplanmıştır.
+                      Nihai karar öncesi profesyonel ekspertiz önerilir.
+                    </p>
+                  </div>
+                </div>
               </>
-            )}
+            ) : null}
 
             {session.suspicious_images?.length ? (
               <>
-                <hr />
-                <h3>🔍 Şüpheli Görsel Bulgular</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div className="hr" />
+                <div className="kicker">Şüpheli Görsel Bulgular</div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 10 }}>
                   {session.suspicious_images.slice(0, 4).map((img, i) => (
-                    <div key={i}>
+                    <div key={i} className="card" style={{ padding: 8 }}>
                       <img
                         src={`${api}${img.image_path}`}
+                        alt="Şüpheli kare"
                         style={{ width: "100%", borderRadius: 6 }}
                       />
-                      <small>{img.caption}</small>
+                      <p style={{ fontSize: 13, marginTop: 6 }}>
+                        {img.caption || "Görsel risk sinyali"}
+                      </p>
                     </div>
                   ))}
                 </div>
               </>
             ) : null}
 
-            {session.ai_commentary && (
+            {session.ai_commentary ? (
               <>
-                <hr />
-                <h3>🧠 Yapay Zekâ Değerlendirmesi</h3>
-                <p style={{ whiteSpace: "pre-line" }}>
-                  {session.ai_commentary.text}
-                </p>
+                <div className="hr" />
+                <div className="kicker">Yapay Zekâ Genel Değerlendirmesi</div>
+                <div className="card" style={{ padding: 16, marginTop: 10 }}>
+                  <p style={{ whiteSpace: "pre-line", lineHeight: 1.7, margin: 0 }}>
+                    {session.ai_commentary.text}
+                  </p>
+                  <div style={{ marginTop: 12, fontSize: 13, color: "#475569" }}>
+                    Not: Bu rapor ekspertiz yerine geçmez; ön bilgilendirme amaçlıdır.
+                  </div>
+                </div>
               </>
-            )}
+            ) : null}
 
+            <div className="hr" />
+            <div className="kicker">Paylaş</div>
+            <a
+              href={`https://wa.me/?text=${whatsappText}`}
+              target="_blank"
+              rel="noreferrer"
+              style={{ fontWeight: 800 }}
+            >
+              📲 WhatsApp ile Gönder
+            </a>
           </div>
         </div>
       </section>
