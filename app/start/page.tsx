@@ -1,88 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function StartPage({ params }: { params: { token: string } }) {
+const VEHICLES = [
+  { id: "car", label: "🚗 Araba" },
+  { id: "motorcycle", label: "🏍️ Motosiklet" },
+  { id: "pickup", label: "🛻 Pickup" },
+  { id: "van", label: "🚐 Van / Kamyonet" },
+  { id: "atv", label: "🛵 ATV" },
+];
+
+export default function StartPage() {
+  const [vehicle, setVehicle] = useState("car");
   const router = useRouter();
-  const [accepted, setAccepted] = useState(false);
+  const api = process.env.NEXT_PUBLIC_API_BASE;
 
-  const token = params?.token;
+  const start = async () => {
+    const r = await fetch(`${api}/session/start`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vehicle_type: vehicle }),
+    });
 
-  // 🔴 TOKEN YOKSA AKIŞI BOZMA
-  useEffect(() => {
-    if (!token) {
-      router.push("/");
-    }
-  }, [token, router]);
-
-  if (!token) {
-    return <div style={{ padding: 24 }}>Yönlendiriliyor…</div>;
-  }
+    const data = await r.json();
+    router.push(`/upload/${data.token}`);
+  };
 
   return (
-    <div style={{ maxWidth: 800, margin: "40px auto", padding: 20 }}>
-      <h1>Analize Başlamadan Önce</h1>
+    <main style={{ padding: 24 }}>
+      <h1>Aracınızı Seçin</h1>
 
-      <div
-        style={{
-          background: "#f5f7fa",
-          padding: 20,
-          borderRadius: 10,
-          marginTop: 16,
-        }}
-      >
-        <ul>
-          <li>Araç temiz olmalıdır (çamur, yoğun toz analiz doğruluğunu düşürür).</li>
-          <li>Video gündüz ve iyi ışık koşullarında çekilmelidir.</li>
-          <li>Gece, karanlık otopark veya yoğun yağmurda çekim önerilmez.</li>
-          <li>Araç 360° yavaş ve sabit şekilde görüntülenmelidir.</li>
-          <li>
-            Motor sesi analizi için araç çalışır haldeyken kaput açık olmalı ve
-            ses yakından, net biçimde kaydedilmelidir.
-          </li>
-        </ul>
-
-        <p style={{ marginTop: 16, fontSize: 14, color: "#555" }}>
-          <b>Önemli:</b> Bu sistem bir ekspertiz hizmeti değildir. Yapay zekâ;
-          kullanıcı tarafından sağlanan video ve ses kayıtları üzerinden{" "}
-          <b>ön bilgilendirme amaçlı risk ve olasılık değerlendirmesi</b> yapar.
-          Satın alma veya teknik kararlar öncesinde profesyonel ekspertiz
-          yaptırılması önerilir.
-        </p>
-      </div>
-
-      <label style={{ display: "block", marginTop: 20 }}>
-        <input
-          type="checkbox"
-          checked={accepted}
-          onChange={(e) => setAccepted(e.target.checked)}
-        />{" "}
-        Yukarıdaki bilgilendirmeyi okudum, anladım ve kabul ediyorum
-      </label>
-
-      {!accepted && (
-        <p style={{ marginTop: 8, fontSize: 13, color: "#666" }}>
-          Devam edebilmek için bilgilendirmeyi kabul etmelisiniz.
-        </p>
-      )}
+      {VEHICLES.map(v => (
+        <label key={v.id} style={{ display: "block", marginTop: 12 }}>
+          <input
+            type="radio"
+            checked={vehicle === v.id}
+            onChange={() => setVehicle(v.id)}
+          />{" "}
+          {v.label}
+        </label>
+      ))}
 
       <button
-        disabled={!accepted}
-        onClick={() => router.push(`/capture/${token}`)}
-        style={{
-          marginTop: 20,
-          padding: "12px 24px",
-          fontSize: 16,
-          cursor: accepted ? "pointer" : "not-allowed",
-          background: accepted ? "#2563eb" : "#999",
-          color: "#fff",
-          border: "none",
-          borderRadius: 6,
-        }}
+        onClick={start}
+        style={{ marginTop: 24, padding: 14, fontSize: 16 }}
       >
-        Analize Başla
+        Devam Et →
       </button>
-    </div>
+    </main>
   );
 }

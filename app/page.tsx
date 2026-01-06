@@ -1,182 +1,101 @@
 "use client";
 
+import Link from "next/link";
+
 export default function HomePage() {
   return (
-    <div>
-      {/* NAVBAR */}
-      <div className="nav">
-        <div className="container nav-inner">
-          <div className="brand">
-            <span className="brand-badge" />
-            Carvix
-          </div>
+    <main style={{ background: "#f8fafc" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: 32 }}>
 
-          <div className="nav-links">
-            <a href="#nedir">Nedir?</a>
-            <a href="#nasil">Nasıl çalışır?</a>
-            <a href="#guvence">Güvence</a>
-            <button
-              className="btn btn-primary"
-              onClick={() => (window.location.href = "/payment")}
-            >
-              Rapor Oluştur →
-            </button>
-          </div>
-        </div>
-      </div>
+        {/* HERO */}
+        <section style={{ textAlign: "center", padding: "80px 20px" }}>
+          <h1 style={{ fontSize: 44, fontWeight: 900, color: "#0f172a" }}>
+            Araç Alırken Görünmeyeni Görün
+          </h1>
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="container">
-          <div className="hero-grid">
-            <div className="card hero-panel">
-              <div className="hero-visual" />
-              <div style={{ position: "relative" }}>
-                <div className="badge">🔍 Video + 🔊 Ses • AI Ön Analiz</div>
-                <div className="h1">
-                  Aracı satın almadan önce
-                  <br />
-                  yapay zekâya sorun.
-                </div>
-                <p className="p" style={{ maxWidth: 560 }}>
-                  Carvix, telefonla çekilen video ve (gerekiyorsa) motor sesinden
-                  olası riskleri özetler; görsel kanıtlarla PDF rapor üretir.
-                </p>
-
-                <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => (window.location.href = "/payment")}
-                  >
-                    Hemen Ön Analiz Al →
-                  </button>
-                  <button
-                    className="btn btn-ghost"
-                    onClick={() => {
-                      const el = document.getElementById("nasil");
-                      el?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                  >
-                    Nasıl çalışır?
-                  </button>
-                </div>
-
-                <p className="p" style={{ marginTop: 14, fontSize: 13, color: "#64748b" }}>
-                  * Ekspertiz değildir. Ön analiz ve bilgilendirme amaçlıdır.
-                </p>
-              </div>
-            </div>
-
-            {/* RIGHT PANEL */}
-            <div className="card hero-right">
-              <div>
-                <div className="kicker">Ne alacaksın?</div>
-                <div style={{ fontWeight: 900, fontSize: 20, letterSpacing: "-0.02em", marginTop: 6 }}>
-                  Premium PDF + AI Değerlendirme
-                </div>
-                <p className="p" style={{ marginTop: 10 }}>
-                  Hasar bulguları, risk skoru, motor sesi özeti (uygunsa) ve
-                  “insansı” tek paragraf AI yorumu.
-                </p>
-
-                <div className="hr" />
-
-                <div className="kicker">Kapsam</div>
-                <div style={{ display: "grid", gap: 8, marginTop: 10, color: "#334155", fontWeight: 700 }}>
-                  <div>• Araba (içten yanmalı)</div>
-                  <div>• Elektrikli araba (ses analizi yok)</div>
-                  <div>• Motosiklet / ATV</div>
-                  <div>• Pickup / Van</div>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center" }}>
-                <div>
-                  <div className="kicker">Tek seferlik</div>
-                  <div style={{ fontSize: 22, fontWeight: 900 }}>129,90 TL</div>
-                </div>
-                <button className="btn btn-primary" onClick={() => (window.location.href = "/payment")}>
-                  Başla →
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* STEPS */}
-          <div id="nasil" className="step-row">
-            <div className="step">
-              <b>1) Ödeme & Akış</b>
-              <div className="p">Tek seferlik ödeme sonrası senaryo ve araç tipini seçersin.</div>
-            </div>
-            <div className="step">
-              <b>2) Kamera yönlendirme</b>
-              <div className="p">Adım adım çekim talimatlarıyla video kaydı alınır.</div>
-            </div>
-            <div className="step">
-              <b>3) Analiz & Rapor</b>
-              <div className="p">Hasar + (uygunsa) motor sesi analizi yapılır, PDF hazır olur.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* NEDIR */}
-      <section id="nedir" className="section">
-        <div className="container">
-          <div className="kicker">Nedir Carvix?</div>
-          <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: "-0.03em", marginTop: 6 }}>
-            Video ve ses verisiyle “ön risk” görünürlüğü.
-          </div>
-          <p className="p" style={{ marginTop: 10, maxWidth: 860 }}>
-            Carvix, ekspertiz yerine geçmez; ancak aracı görmeden önce
-            “gözden kaçabilecek riskleri” hızlıca işaretler ve net bir rapora dönüştürür.
+          <p style={{ fontSize: 20, marginTop: 20, lineHeight: 1.7, color: "#334155" }}>
+            İkinci el araç ilanındaki fotoğrafları yükleyin.  
+            <br />
+            <b>Carvix</b>, boya, hasar ve şüpheli bölgeleri
+            yapay zekâ ile analiz etsin.
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginTop: 18 }}>
-            <div className="card" style={{ padding: 18 }}>
-              <div className="kicker">Görsel Kanıt</div>
-              <div style={{ fontWeight: 900, fontSize: 18, marginTop: 6 }}>Hasar tespiti</div>
-              <p className="p" style={{ marginTop: 8 }}>Bulgular ve kanıt görselleri PDF’e eklenir.</p>
-            </div>
-            <div className="card" style={{ padding: 18 }}>
-              <div className="kicker">Ses Analizi</div>
-              <div style={{ fontWeight: 900, fontSize: 18, marginTop: 6 }}>Motor sesi</div>
-              <p className="p" style={{ marginTop: 8 }}>Uygun araçlarda ses verisiyle risk özeti.</p>
-            </div>
-            <div className="card" style={{ padding: 18 }}>
-              <div className="kicker">AI Yorum</div>
-              <div style={{ fontWeight: 900, fontSize: 18, marginTop: 6 }}>İnsansı özet</div>
-              <p className="p" style={{ marginTop: 8 }}>Her raporda araç türüne göre farklı, doğal anlatım.</p>
-            </div>
+          <div style={{ marginTop: 36 }}>
+            <Link
+              href="/start"
+              style={{
+                padding: "18px 34px",
+                background: "#00c853",
+                color: "#fff",
+                fontSize: 20,
+                fontWeight: 900,
+                borderRadius: 999,
+                textDecoration: "none",
+              }}
+            >
+              Analizi Başlat – 129,90 TL
+            </Link>
           </div>
 
-          <div className="hr" />
+          <p style={{ marginTop: 16, fontSize: 14, color: "#64748b" }}>
+            Kredi kartı ile tek kullanım • Anında sonuç
+          </p>
+        </section>
 
-          <div id="guvence" className="card" style={{ padding: 18 }}>
-            <div className="kicker">Güvence</div>
-            <div style={{ fontWeight: 900, fontSize: 18, marginTop: 6 }}>Şeffaflık</div>
-            <p className="p" style={{ marginTop: 8 }}>
-              Rapor; çekim kalitesi, açı ve ışığa bağlıdır. Nihai karar öncesi profesyonel kontrol önerilir.
+        {/* FEATURES */}
+        <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20 }}>
+          {[
+            ["📸 Fotoğraf Analizi", "İlandaki veya satıcıdan aldığınız fotoğraflar üzerinden parça bazlı analiz."],
+            ["🤖 Yapay Zekâ Yorum", "Boya, hasar ve değişen riski için açıklamalı değerlendirme."],
+            ["⚠️ Risk Skoru", "Genel güven skoru ve parça bazlı risk sinyalleri."],
+          ].map((x, i) => (
+            <div
+              key={i}
+              style={{
+                background: "#fff",
+                padding: 24,
+                borderRadius: 16,
+                boxShadow: "0 10px 30px rgba(0,0,0,0.04)",
+              }}
+            >
+              <h3>{x[0]}</h3>
+              <p style={{ color: "#475569", lineHeight: 1.6 }}>{x[1]}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* PRICE */}
+        <section style={{ textAlign: "center", marginTop: 80 }}>
+          <div
+            style={{
+              display: "inline-block",
+              background: "#0f172a",
+              color: "#fff",
+              padding: "32px 48px",
+              borderRadius: 20,
+            }}
+          >
+            <h2>Tek Kullanım</h2>
+            <div style={{ fontSize: 40, fontWeight: 900, margin: "12px 0" }}>
+              129,90 TL
+            </div>
+            <p style={{ color: "#cbd5f5" }}>
+              Fotoğraf analizi + opsiyonel motor sesi
             </p>
           </div>
+        </section>
 
-          <div style={{ marginTop: 18 }}>
-            <button className="btn btn-primary" onClick={() => (window.location.href = "/payment")}>
-              Rapor Oluştur →
-            </button>
-          </div>
-        </div>
-      </section>
+        {/* DISCLAIMER */}
+        <section style={{ marginTop: 80, fontSize: 14, color: "#64748b" }}>
+          <b>Yasal Uyarı</b>
+          <p>
+            Carvix tarafından sunulan analizler, yüklenen görseller üzerinden yapılan
+            yapay zekâ destekli <b>ön değerlendirmelerdir</b>.
+            Ekspertiz yerine geçmez.
+          </p>
+        </section>
 
-      {/* FOOTER */}
-      <footer style={{ padding: "22px 0 34px", color: "#64748b" }}>
-        <div className="container" style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-          <div style={{ fontWeight: 800 }}>Carvix</div>
-          <div style={{ fontSize: 13 }}>
-            © {new Date().getFullYear()} Carvix • Ön analiz ve bilgilendirme amaçlıdır.
-          </div>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </main>
   );
 }
