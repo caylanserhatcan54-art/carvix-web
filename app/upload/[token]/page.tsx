@@ -11,14 +11,14 @@ const PARTS = [
   { id: "hood", label: "Kaput" },
   { id: "trunk", label: "Bagaj Kapağı" },
   { id: "roof", label: "Tavan" },
-  { id: "door_inside", label: "Kapı İçleri / Vidalar" },
+  { id: "door_inside", label: "Kapı İçleri / Vida Bölgeleri" },
   { id: "pillars", label: "Direkler" },
   { id: "engine_bay", label: "Motor Bölmesi" },
   { id: "wheels", label: "Jant / Lastik" },
   { id: "interior", label: "İç Mekân" },
 ];
 
-export default function UploadPartsPage() {
+export default function UploadPage() {
   const { token } = useParams();
   const router = useRouter();
   const api = process.env.NEXT_PUBLIC_API_BASE;
@@ -35,104 +35,66 @@ export default function UploadPartsPage() {
   };
 
   const submit = async () => {
-    if (!token) return;
+    if (Object.keys(files).length < 2) {
+      alert("Lütfen en az 2 farklı bölümden fotoğraf ekleyin.");
+      return;
+    }
 
     setLoading(true);
+    const form = new FormData();
 
-    try {
-      /* =========================
-         1️⃣ FOTOĞRAFLARI YÜKLE
-      ========================= */
-      const form = new FormData();
+    Object.entries(files).forEach(([_, imgs]) => {
+      imgs.forEach(img => form.append("images", img));
+    });
 
-      Object.entries(files).forEach(([part, imgs]) => {
-        imgs.forEach(img => {
-          form.append("images", img);
-          form.append("parts", part); // backend şu an zorunlu değil ama ileriye hazır
-        });
-      });
+    const res = await fetch(`${api}/analysis/${token}/images`, {
+      method: "POST",
+      body: form,
+    });
 
-      const uploadRes = await fetch(
-        `${api}/analysis/${token}/images`,
-        {
-          method: "POST",
-          body: form,
-        }
-      );
-
-      if (!uploadRes.ok) {
-        alert("Fotoğraf yükleme hatası");
-        setLoading(false);
-        return;
-      }
-
-      /* =========================
-         2️⃣ ANALİZİ BAŞLAT
-      ========================= */
-      const runRes = await fetch(
-        `${api}/analysis/${token}/run`,
-        { method: "POST" }
-      );
-
-      if (!runRes.ok) {
-        alert("Analiz başlatılamadı");
-        setLoading(false);
-        return;
-      }
-
-      /* =========================
-         3️⃣ RAPORA GİT
-      ========================= */
+    if (res.ok) {
       router.push(`/report/${token}`);
-
-    } catch (e) {
-      alert("Bağlantı hatası");
-    } finally {
-      setLoading(false);
+    } else {
+      alert("Fotoğraflar yüklenemedi.");
     }
   };
 
   return (
-    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-      <h2>📸 Parça Bazlı Fotoğraf Yükleme</h2>
-      <p style={{ marginBottom: 20 }}>
-        Aracın istediğiniz bölümlerinin fotoğraflarını yükleyin.  
-        Ne kadar fazla ve net foto → o kadar doğru analiz.
+    <main className="mobile-wrap">
+      <h2 className="h2">📸 Parça Bazlı Fotoğraf Yükleme</h2>
+      <p className="p">
+        İlandaki veya satıcıdan aldığınız fotoğrafları yükleyin.  
+        Ne kadar net ve çeşitli → o kadar doğru analiz.
       </p>
 
-      {PARTS.map(p => (
-        <div key={p.id} style={{ marginBottom: 18 }}>
-          <label style={{ fontWeight: 600 }}>{p.label}</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={e => handleFiles(p.id, e.target.files)}
-            style={{ display: "block", marginTop: 6 }}
-          />
-          {files[p.id]?.length ? (
-            <small>{files[p.id].length} fotoğraf seçildi</small>
-          ) : null}
-        </div>
-      ))}
+      <div style={{ marginTop: 20 }}>
+        {PARTS.map(p => (
+          <div key={p.id} className="upload-card">
+            <label>{p.label}</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={e => handleFiles(p.id, e.target.files)}
+            />
+            {files[p.id]?.length ? (
+              <small>{files[p.id].length} fotoğraf eklendi</small>
+            ) : (
+              <small>İsteğe bağlı</small>
+            )}
+          </div>
+        ))}
+      </div>
 
-      <button
-        disabled={loading}
-        onClick={submit}
-        style={{
-          marginTop: 32,
-          padding: "14px 20px",
-          fontSize: 16,
-          fontWeight: 700,
-          borderRadius: 10,
-          background: "#111",
-          color: "#fff",
-          border: "none",
-          width: "100%",
-        }}
-      >
-        {loading ? "🔄 Analiz Başlatılıyor…" : "🚀 Analizi Başlat"}
-      </button>
+      <div className="sticky-bottom">
+        <button
+          className="btn btn-primary"
+          disabled={loading}
+          onClick={submit}
+        >
+          {loading ? "Analiz Başlatılıyor…" : "Analizi Başlat"}
+        </button>
+      </div>
     </main>
   );
 }

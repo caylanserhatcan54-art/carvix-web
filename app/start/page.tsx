@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-const VEHICLES = [
+const TYPES = [
   { id: "car", label: "🚗 Araba" },
   { id: "motorcycle", label: "🏍️ Motosiklet" },
   { id: "pickup", label: "🛻 Pickup" },
@@ -12,39 +12,30 @@ const VEHICLES = [
 ];
 
 export default function StartPage() {
-  const [vehicle, setVehicle] = useState("car");
   const router = useRouter();
-  const api = process.env.NEXT_PUBLIC_API_BASE;
-
-  const start = async () => {
-    const r = await fetch(`${api}/session/start`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ vehicle_type: vehicle }),
-    });
-
-    const data = await r.json();
-    router.push(`/upload/${data.token}`);
-  };
+  const [type, setType] = useState("car");
 
   return (
-    <main style={{ padding: 24 }}>
-      <h1>Aracınızı Seçin</h1>
+    <main className="max-w-md mx-auto px-4 pt-10">
+      <h2 className="section-title">Aracınızı Seçin</h2>
 
-      {VEHICLES.map(v => (
-        <label key={v.id} style={{ display: "block", marginTop: 12 }}>
-          <input
-            type="radio"
-            checked={vehicle === v.id}
-            onChange={() => setVehicle(v.id)}
-          />{" "}
-          {v.label}
-        </label>
-      ))}
+      <div className="space-y-3 mt-4">
+        {TYPES.map(t => (
+          <button
+            key={t.id}
+            onClick={() => setType(t.id)}
+            className={`card w-full text-left ${
+              type === t.id ? "border-2 border-green-500" : ""
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
       <button
-        onClick={start}
-        style={{ marginTop: 24, padding: 14, fontSize: 16 }}
+        onClick={() => router.push(`/upload?type=${type}`)}
+        className="btn-primary w-full mt-6"
       >
         Devam Et →
       </button>
