@@ -6,14 +6,14 @@ import { useState } from "react";
 const PARTS = [
   { id: "front", label: "Ön Tampon / Farlar" },
   { id: "rear", label: "Arka Tampon / Stoplar" },
-  { id: "left_side", label: "Sol Yan" },
-  { id: "right_side", label: "Sağ Yan" },
+  { id: "left", label: "Sol Yan" },
+  { id: "right", label: "Sağ Yan" },
   { id: "hood", label: "Kaput" },
   { id: "trunk", label: "Bagaj Kapağı" },
   { id: "roof", label: "Tavan" },
-  { id: "door_inside", label: "Kapı İçleri / Vida Bölgeleri" },
+  { id: "door", label: "Kapı İçleri / Vida Bölgeleri" },
   { id: "pillars", label: "Direkler" },
-  { id: "engine_bay", label: "Motor Bölmesi" },
+  { id: "engine", label: "Motor Bölmesi" },
   { id: "wheels", label: "Jant / Lastik" },
   { id: "interior", label: "İç Mekân" },
 ];
@@ -26,25 +26,22 @@ export default function UploadPage() {
   const [files, setFiles] = useState<Record<string, File[]>>({});
   const [loading, setLoading] = useState(false);
 
-  const handleFiles = (partId: string, f: FileList | null) => {
+  const handleFiles = (id: string, f: FileList | null) => {
     if (!f) return;
-    setFiles(prev => ({
-      ...prev,
-      [partId]: Array.from(f),
-    }));
+    setFiles(prev => ({ ...prev, [id]: Array.from(f) }));
   };
 
   const submit = async () => {
     if (Object.keys(files).length < 2) {
-      alert("Lütfen en az 2 farklı bölümden fotoğraf ekleyin.");
+      alert("En az 2 farklı bölümden fotoğraf ekleyin.");
       return;
     }
 
     setLoading(true);
     const form = new FormData();
 
-    Object.entries(files).forEach(([_, imgs]) => {
-      imgs.forEach(img => form.append("images", img));
+    Object.values(files).flat().forEach(f => {
+      form.append("images", f);
     });
 
     const res = await fetch(`${api}/analysis/${token}/images`, {
@@ -55,46 +52,65 @@ export default function UploadPage() {
     if (res.ok) {
       router.push(`/report/${token}`);
     } else {
-      alert("Fotoğraflar yüklenemedi.");
+      alert("Yükleme başarısız.");
     }
   };
 
   return (
-    <main className="mobile-wrap">
-      <h2 className="h2">📸 Parça Bazlı Fotoğraf Yükleme</h2>
-      <p className="p">
-        İlandaki veya satıcıdan aldığınız fotoğrafları yükleyin.  
-        Ne kadar net ve çeşitli → o kadar doğru analiz.
-      </p>
+    <section className="section">
+      <div className="container">
+        <div className="card" style={{ padding: 32 }}>
 
-      <div style={{ marginTop: 20 }}>
-        {PARTS.map(p => (
-          <div key={p.id} className="upload-card">
-            <label>{p.label}</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={e => handleFiles(p.id, e.target.files)}
-            />
-            {files[p.id]?.length ? (
-              <small>{files[p.id].length} fotoğraf eklendi</small>
-            ) : (
-              <small>İsteğe bağlı</small>
-            )}
+          <span className="kicker">Fotoğraf Yükleme</span>
+          <h1 className="h1">Araç Fotoğraflarını Ekleyin</h1>
+          <p className="p">
+            Daha fazla ve net fotoğraf → daha güvenilir analiz sonucu.
+          </p>
+
+          <div className="hr" />
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: 18,
+            }}
+          >
+            {PARTS.map(p => (
+              <div
+                key={p.id}
+                className="card"
+                style={{ padding: 16 }}
+              >
+                <strong>{p.label}</strong>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  style={{ marginTop: 10 }}
+                  onChange={e => handleFiles(p.id, e.target.files)}
+                />
+                {files[p.id]?.length ? (
+                  <small style={{ color: "var(--muted2)" }}>
+                    {files[p.id].length} fotoğraf seçildi
+                  </small>
+                ) : null}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="sticky-bottom">
-        <button
-          className="btn btn-primary"
-          disabled={loading}
-          onClick={submit}
-        >
-          {loading ? "Analiz Başlatılıyor…" : "Analizi Başlat"}
-        </button>
+          <div style={{ marginTop: 28, textAlign: "right" }}>
+            <button
+              className="btn btn-primary"
+              disabled={loading}
+              onClick={submit}
+            >
+              {loading ? "Analiz Başlatılıyor…" : "Analizi Başlat"}
+            </button>
+          </div>
+
+        </div>
       </div>
-    </main>
+    </section>
   );
 }

@@ -1,71 +1,77 @@
 export default function HomePage() {
   return (
-    <main className="max-w-md mx-auto px-4 pb-24">
+    <>
+      {/* NAV */}
+      <div className="nav">
+        <div className="container nav-inner">
+          <div className="brand">Carvix</div>
+          <a href="/start" className="btn btn-primary">
+            Analizi Başlat →
+          </a>
+        </div>
+      </div>
 
       {/* HERO */}
-      <section className="pt-12 text-center">
-        <h1 className="text-3xl font-extrabold leading-tight">
-          Araç Alırken <br /> Görünmeyeni Gör
-        </h1>
-
-        <p className="text-gray-600 mt-4 text-sm">
-          İkinci el araç ilanındaki fotoğrafları yükleyin.  
-          <b> Carvix</b>, boya, hasar ve şüpheli bölgeleri
-          yapay zekâ ile analiz etsin.
-        </p>
-
-        <div className="mt-6">
-          <a href="/start" className="btn-primary inline-block w-full">
-            Analizi Başlat – 129,90 TL
-          </a>
-          <p className="text-xs text-gray-500 mt-2">
-            Tek kullanım • Anında sonuç • PDF yok
+      <section className="section">
+        <div className="container card" style={{ padding: 60 }}>
+          <h1>Araç Alırken<br />Görünmeyeni Gör</h1>
+          <p>
+            İkinci el araç ilanındaki fotoğrafları yükleyin.  
+            <b> Carvix</b>, boya, hasar ve şüpheli bölgeleri yapay zekâ ile analiz etsin.
           </p>
+
+          <div style={{ marginTop: 30 }}>
+            <a href="/start" className="btn btn-primary">
+              Analizi Başlat – 129,90 TL
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section className="mt-12 grid grid-cols-1 gap-4">
-        <div className="card">
-          📷 <b>Fotoğraf Analizi</b>
-          <p className="text-sm text-gray-600 mt-1">
-            İlandaki veya satıcıdan aldığınız fotoğrafları yükleyin.
-          </p>
-        </div>
+      {/* NASIL ÇALIŞIR */}
+      <section className="section">
+        <div className="container">
+          <h2>Nasıl Çalışır?</h2>
 
-        <div className="card">
-          🤖 <b>Yapay Zekâ Yorum</b>
-          <p className="text-sm text-gray-600 mt-1">
-            Boya, değişen ve hasar ihtimallerini açıklamalı anlatır.
-          </p>
-        </div>
-
-        <div className="card">
-          ⚠️ <b>Risk Skoru</b>
-          <p className="text-sm text-gray-600 mt-1">
-            Araç için genel risk seviyesi ve güven puanı.
-          </p>
+          <div className="vehicle-grid">
+            <div className="card" style={{ padding: 26 }}>
+              <h3>1. Fotoğrafları Yükle</h3>
+              <p>İlandaki veya satıcıdan aldığınız araç fotoğrafları</p>
+            </div>
+            <div className="card" style={{ padding: 26 }}>
+              <h3>2. Yapay Zekâ Analizi</h3>
+              <p>Boya, hasar ve değişen parça riskleri hesaplanır</p>
+            </div>
+            <div className="card" style={{ padding: 26 }}>
+              <h3>3. Sonucu Gör</h3>
+              <p>Risk skoru ve görsel işaretlemeler</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* WHO */}
-      <section className="mt-12">
-        <h2 className="section-title">Kimler Kullanabilir?</h2>
-
-        <ul className="space-y-3 text-sm text-gray-700">
-          <li>✔️ İkinci el araç alacaklar</li>
-          <li>✔️ İlandaki aracı uzaktan analiz etmek isteyenler</li>
-          <li>✔️ Muayene öncesi ön kontrol yapmak isteyenler</li>
-          <li>✔️ Eş, dost veya aile aracına bakmak isteyenler</li>
-        </ul>
+      {/* KİMLER */}
+      <section className="section">
+        <div className="container card" style={{ padding: 40 }}>
+          <h2>Kimler İçin?</h2>
+          <ul>
+            <li>İkinci el araç alacaklar</li>
+            <li>Aracı uzaktan incelemek isteyenler</li>
+            <li>Muayene öncesi ön kontrol yapmak isteyenler</li>
+            <li>Eş, dost veya aile aracı için</li>
+          </ul>
+        </div>
       </section>
 
-      {/* DISCLAIMER */}
-      <section className="mt-12 text-xs text-gray-500">
-        Bu hizmet bir <b>ön analizdir</b>.  
-        Kesin teşhis içermez ve ekspertiz yerine geçmez.
+      {/* SSS */}
+      <section className="section">
+        <div className="container card" style={{ padding: 40 }}>
+          <h2>Sıkça Sorulan Sorular</h2>
+          <p><b>Ekspertiz yerine geçer mi?</b> Hayır, ön analizdir.</p>
+          <p><b>PDF alabilir miyim?</b> Hayır, anlık sonuç sunulur.</p>
+          <p><b>Fotoğraf sayısı önemli mi?</b> Evet, ne kadar çok o kadar net.</p>
+        </div>
       </section>
-
-    </main>
+    </>
   );
 }
