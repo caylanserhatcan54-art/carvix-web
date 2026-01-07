@@ -49,10 +49,12 @@ export default function UploadPage() {
 
   function onFilesSelected(files: FileList | null) {
     if (!files) return;
-    const next = Array.from(files).map((f) => ({
+
+    const next: ImageItem[] = Array.from(files).map((f) => ({
       file: f,
       part: "",
     }));
+
     setItems((prev) => [...prev, ...next]);
   }
 
@@ -68,7 +70,7 @@ export default function UploadPage() {
 
   function validate(): boolean {
     if (!items.length) {
-      alert("En az 1 fotoğraf yükleyin");
+      alert("En az 1 fotoğraf yüklemelisiniz");
       return false;
     }
 
@@ -84,7 +86,7 @@ export default function UploadPage() {
 
   async function submit() {
     if (!token) {
-      alert("Token yok");
+      alert("Token bulunamadı");
       return;
     }
 
@@ -110,15 +112,20 @@ export default function UploadPage() {
       });
 
       if (!res.ok) {
-        const t = await res.text();
-        throw new Error(t);
+        const text = await res.text();
+        throw new Error(text || "Backend hata döndü");
       }
 
       const data = await res.json();
+
+      if (!data?.id) {
+        throw new Error("Job ID dönmedi");
+      }
+
       router.push(`/report/${data.id}`);
-    } catch (err) {
-      console.error(err);
-      alert("Yükleme sırasında hata oluştu");
+    } catch (err: any) {
+      console.error("UPLOAD ERROR:", err);
+      alert(`Yükleme hatası: ${err.message || "Bilinmeyen hata"}`);
     } finally {
       setLoading(false);
     }
@@ -149,7 +156,7 @@ export default function UploadPage() {
             marginTop: 12,
           }}
         >
-          <span style={{ flex: 1 }}>{it.file.name}</span>
+          <span style={{ flex: 1, fontSize: 14 }}>{it.file.name}</span>
 
           <select
             value={it.part}
@@ -170,7 +177,11 @@ export default function UploadPage() {
       <button
         onClick={submit}
         disabled={loading}
-        style={{ marginTop: 24, padding: "12px 24px" }}
+        style={{
+          marginTop: 24,
+          padding: "12px 24px",
+          fontSize: 16,
+        }}
       >
         {loading ? "Analiz Başlatılıyor…" : "Analizi Başlat"}
       </button>
