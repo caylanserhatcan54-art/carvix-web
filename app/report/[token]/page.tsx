@@ -23,7 +23,7 @@ export default function ReportPage() {
           setData(d.result);
         }
       } catch (e) {
-        console.error(e);
+        console.error("Report fetch error:", e);
       }
     };
 
@@ -32,7 +32,9 @@ export default function ReportPage() {
     return () => clearInterval(i);
   }, [token]);
 
-  /* LOADING */
+  /* =============================
+     LOADING
+  ============================== */
   if (!data) {
     return (
       <main className="container section" style={{ textAlign: "center" }}>
@@ -44,23 +46,34 @@ export default function ReportPage() {
     );
   }
 
-  /* SAFE */
-  const detections = data.detections || [];
-  const summary = data.summary || "Sonuç bulunamadı";
+  /* =============================
+     DATA
+  ============================== */
+  const detections = Array.isArray(data.detections) ? data.detections : [];
+  const summary =
+    data.summary ||
+    (detections.length
+      ? `${detections.length} riskli alan tespit edildi`
+      : "Riskli alan tespit edilmedi");
 
+  /* =============================
+     UI
+  ============================== */
   return (
     <main className="section">
       <div className="container">
 
         <h1 className="h1">Araç Ön Analiz Sonucu</h1>
 
+        {/* ÖZET */}
         <div className="card" style={{ marginBottom: 24 }}>
           <h3>Özet</h3>
           <p>{summary}</p>
         </div>
 
+        {/* YOLO */}
         <div className="card">
-          <h3>YOLO Tespitleri</h3>
+          <h3>🧠 YOLO Tespitleri</h3>
 
           {detections.length === 0 ? (
             <p>Riskli alan tespit edilmedi.</p>
@@ -68,7 +81,7 @@ export default function ReportPage() {
             <ul>
               {detections.map((d: any, i: number) => (
                 <li key={i}>
-                  ⚠️ {d.label} ({Math.round(d.conf * 100)}%)
+                  ⚠️ {d.label} — %{Math.round((d.conf || 0) * 100)}
                 </li>
               ))}
             </ul>
@@ -79,3 +92,4 @@ export default function ReportPage() {
     </main>
   );
 }
+
