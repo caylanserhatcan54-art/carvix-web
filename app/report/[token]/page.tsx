@@ -9,14 +9,21 @@ export default function ReportPage() {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
+    if (!token) return;
+
     const fetchResult = async () => {
       try {
         const r = await fetch(`${api}/analysis/${token}`);
+        if (!r.ok) return;
+
         const d = await r.json();
+
         if (d.status === "analysis_completed") {
           setData(d);
         }
-      } catch {}
+      } catch (e) {
+        console.error("Report fetch error:", e);
+      }
     };
 
     fetchResult();
@@ -24,6 +31,9 @@ export default function ReportPage() {
     return () => clearInterval(i);
   }, [api, token]);
 
+  /* =============================
+     LOADING STATE
+  ============================== */
   if (!data) {
     return (
       <main className="container section" style={{ textAlign: "center" }}>
@@ -35,12 +45,18 @@ export default function ReportPage() {
     );
   }
 
+  /* =============================
+     SAFE DERIVED VALUES
+  ============================== */
   const score = data.confidence?.confidence_score ?? 0;
-  const level = data.confidence?.confidence_level ?? "";
+  const level = data.confidence?.confidence_level ?? "bilinmiyor";
 
   const scoreClass =
     score >= 75 ? "score-good" : score >= 55 ? "score-mid" : "score-bad";
 
+  /* =============================
+     UI
+  ============================== */
   return (
     <main className="section">
       <div className="container">
@@ -81,31 +97,41 @@ export default function ReportPage() {
           <h3 className="h3">🤖 Yapay Zekâ Değerlendirmesi</h3>
 
           <div className="card commentary">
-            <p style={{ whiteSpace: "pre-line" }}>
-              {data.ai_commentary.text}
-            </p>
+            {data.ai_commentary?.text ? (
+              <p style={{ whiteSpace: "pre-line" }}>
+                {data.ai_commentary.text}
+              </p>
+            ) : (
+              <p className="muted">
+                Yapay zekâ yorumu hazırlanıyor…
+              </p>
+            )}
           </div>
         </section>
 
         {/* SUSPICIOUS IMAGES */}
-        {data.suspicious_images?.length > 0 && (
-          <section style={{ marginBottom: 32 }}>
-            <h3 className="h3">⚠️ Şüpheli Görülen Bölgeler</h3>
-            <p className="p">
-              Aşağıdaki parçalar, yapay zekâ tarafından
-              risk sinyali taşıyan bölgeler olarak işaretlenmiştir.
-            </p>
+        {Array.isArray(data.suspicious_images) &&
+          data.suspicious_images.length > 0 && (
+            <section style={{ marginBottom: 32 }}>
+              <h3 className="h3">⚠️ Şüpheli Görülen Bölgeler</h3>
+              <p className="p">
+                Yapay zekâ tarafından risk sinyali taşıdığı
+                düşünülen bölgeler aşağıda gösterilmiştir.
+              </p>
 
-            <div className="suspicious-grid">
-              {data.suspicious_images.map((img: any, i: number) => (
-                <div key={i} className="card suspicious-card">
-                  <img src={`${api}${img.image_path}`} />
-                  <p>⚠️ {img.caption}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+              <div className="suspicious-grid">
+                {data.suspicious_images.map((img: any, i: number) => (
+                  <div key={i} className="card suspicious-card">
+                    <img
+                      src={`${api}${img.image_path}`}
+                      alt="Şüpheli Bölge"
+                    />
+                    <p>⚠️ {img.caption || "Şüpheli görünüm"}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
         {/* DISCLAIMER */}
         <div className="disclaimer">
