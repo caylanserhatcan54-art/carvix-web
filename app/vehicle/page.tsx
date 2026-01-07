@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
 const VEHICLES = [
   { key: "car", label: "🚗 Otomobil", desc: "Binek araçlar" },
   { key: "electric_car", label: "🔋 Elektrikli Araç", desc: "Elektrikli binek araçlar" },
@@ -18,36 +16,18 @@ export default function VehicleSelectPage() {
   const router = useRouter();
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  async function handleContinue() {
+  function handleContinue() {
     if (!selected || loading) return;
 
     setLoading(true);
-    setError(null);
 
-    try {
-      const res = await fetch(`${API_BASE}/analysis/start`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          vehicle_type: selected,
-          scenario: "buy_sell",
-        }),
-      });
+    // ✅ TOKEN FRONTEND'DE ÜRETİLİR
+    const token = crypto.randomUUID();
 
-      const data = await res.json();
-
-      if (!data.token) {
-        throw new Error("Token alınamadı");
-      }
-
-      // 👉 DOĞRU AKIŞ
-      router.push(`/upload/${data.token}`);
-    } catch (e: any) {
-      setError("Analiz başlatılamadı. Lütfen tekrar deneyin.");
-      setLoading(false);
-    }
+    // İstersen ileride vehicle_type'ı
+    // query param olarak da taşıyabilirsin
+    router.push(`/upload/${token}?vehicle=${selected}`);
   }
 
   return (
@@ -82,12 +62,6 @@ export default function VehicleSelectPage() {
         >
           {loading ? "Başlatılıyor…" : "Devam Et →"}
         </button>
-
-        {error && (
-          <p className="error-text" style={{ marginTop: 12 }}>
-            {error}
-          </p>
-        )}
 
         <p className="muted" style={{ marginTop: 24 }}>
           Fotoğraf bazlı analiz yapay zekâ destekli bir ön kontroldür.
