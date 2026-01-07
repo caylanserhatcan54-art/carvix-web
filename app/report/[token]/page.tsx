@@ -3,20 +3,42 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
+type ReportData = {
+  status: string;
+  confidence?: {
+    confidence_score: number;
+    confidence_level: string;
+  };
+  ai_commentary?: {
+    text: string;
+  };
+  suspicious_images?: Array<{
+    image_path: string;
+    caption?: string;
+  }>;
+  error?: string;
+};
+
 export default function ReportPage() {
   const { token } = useParams();
   const api = process.env.NEXT_PUBLIC_API_BASE;
-  const [data, setData] = useState<any>(null);
+
+  const [data, setData] = useState<ReportData | null>(null);
+  const [status, setStatus] = useState<string>("loading");
 
   useEffect(() => {
-    if (!token) return;
+    if (!token || !api) return;
 
     const fetchResult = async () => {
       try {
-        const r = await fetch(`${api}/analysis/${token}`);
+        const r = await fetch(`${api}/analysis/${token}`, {
+          cache: "no-store",
+        });
         if (!r.ok) return;
 
-        const d = await r.json();
+        const d: ReportData = await r.json();
+
+        setStatus(d.status || "processing");
 
         if (d.status === "analysis_completed") {
           setData(d);
@@ -32,21 +54,33 @@ export default function ReportPage() {
   }, [api, token]);
 
   /* =============================
-     LOADING STATE
+     LOADING / QUEUED / PROCESSING
   ============================== */
   if (!data) {
     return (
       <main className="container section" style={{ textAlign: "center" }}>
-        <h2 className="h2">🔄 Analiz Yapılıyor</h2>
+        <h2 className="h2">
+          {status === "queued"
+            ? "⏳ Sıraya Alındı"
+            : status === "processing"
+            ? "🔄 Analiz Yapılıyor"
+            : "🔄 Hazırlanıyor"}
+        </h2>
         <p className="p">
-          Yüklenen fotoğraflar yapay zekâ tarafından inceleniyor…
+          {status === "queued"
+            ? "Analiz kuyruğa alındı, GPU worker bekleniyor…"
+            : "Yüklenen fotoğraflar yapay zekâ tarafından inceleniyor…"}
         </p>
+
+        {status === "analysis_completed" && (
+          <p className="p muted">Rapor yükleniyor…</p>
+        )}
       </main>
     );
   }
 
   /* =============================
-     SAFE DERIVED VALUES
+     SAFE VALUES
   ============================== */
   const score = data.confidence?.confidence_score ?? 0;
   const level = data.confidence?.confidence_level ?? "bilinmiyor";
@@ -103,7 +137,7 @@ export default function ReportPage() {
               </p>
             ) : (
               <p className="muted">
-                Yapay zekâ yorumu hazırlanıyor…
+                Yapay zekâ yorumu üretilemedi.
               </p>
             )}
           </div>
@@ -114,13 +148,9 @@ export default function ReportPage() {
           data.suspicious_images.length > 0 && (
             <section style={{ marginBottom: 32 }}>
               <h3 className="h3">⚠️ Şüpheli Görülen Bölgeler</h3>
-              <p className="p">
-                Yapay zekâ tarafından risk sinyali taşıdığı
-                düşünülen bölgeler aşağıda gösterilmiştir.
-              </p>
 
               <div className="suspicious-grid">
-                {data.suspicious_images.map((img: any, i: number) => (
+                {data.suspicious_images.map((img, i) => (
                   <div key={i} className="card suspicious-card">
                     <img
                       src={`${api}${img.image_path}`}
@@ -132,6 +162,14 @@ export default function ReportPage() {
               </div>
             </section>
           )}
+
+        {/* ERROR */}
+        {data.error && (
+          <div className="card" style={{ marginTop: 24 }}>
+            <b>⚠️ Analiz Uyarısı</b>
+            <p>{data.error}</p>
+          </div>
+        )}
 
         {/* DISCLAIMER */}
         <div className="disclaimer">
