@@ -1,5 +1,6 @@
 // web/app/layout.tsx
 import "./globals.css";
+import { SiteShell } from "@/components/marketing/SiteShell";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/marketing";
 import Navbar from "@/components/marketing/Navbar";
@@ -13,12 +14,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body className="min-h-screen bg-neutral-950 text-neutral-100 antialiased">
-        <div className="relative">
-          <Navbar />
-          {children}
-          <Footer />
-        </div>
+      <body>
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );
