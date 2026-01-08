@@ -79,59 +79,72 @@ export default function UploadPage() {
   }
 
   async function submit() {
-  if (!validate()) return;
-  setLoading(true);
+    if (!validate()) return;
+    setLoading(true);
 
-  try {
-    // 1️⃣ PARÇALARA GÖRE GRUPLA
-    const grouped: Record<string, File[]> = {};
+    try {
+      /* =====================================================
+         ✅ 0️⃣ FLOW'U BACKEND'DE OLUŞTUR (KRİTİK EK)
+      ===================================================== */
+      await fetch(`${API}/flows`, { method: "POST" });
 
-    for (const it of items) {
-      if (!grouped[it.part]) grouped[it.part] = [];
-      grouped[it.part].push(it.file);
-    }
+      /* =====================================================
+         1️⃣ PARÇALARA GÖRE GRUPLA
+      ===================================================== */
+      const grouped: Record<string, File[]> = {};
 
-    // 2️⃣ HER PARÇAYI AYRI AYRI YÜKLE
-    for (const partKey of Object.keys(grouped)) {
-      const form = new FormData();
-      form.append("part_key", partKey);
+      for (const it of items) {
+        if (!grouped[it.part]) grouped[it.part] = [];
+        grouped[it.part].push(it.file);
+      }
 
-      grouped[partKey].forEach((file) => {
-        form.append("files", file);
-      });
+      /* =====================================================
+         2️⃣ HER PARÇAYI AYRI AYRI YÜKLE
+      ===================================================== */
+      for (const partKey of Object.keys(grouped)) {
+        const form = new FormData();
+        form.append("part_key", partKey);
 
-      const res = await fetch(
-        `${API}/flows/${token}/upload`,
-        {
-          method: "POST",
-          body: form,
+        grouped[partKey].forEach((file) => {
+          form.append("files", file);
+        });
+
+        const res = await fetch(
+          `${API}/flows/${token}/upload`,
+          {
+            method: "POST",
+            body: form,
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Parça yüklenemedi: ${partKey}`);
         }
+      }
+
+      /* =====================================================
+         3️⃣ ANALİZİ BAŞLAT
+      ===================================================== */
+      const submitRes = await fetch(
+        `${API}/flows/${token}/submit`,
+        { method: "POST" }
       );
 
-      if (!res.ok) {
-        throw new Error(`Parça yüklenemedi: ${partKey}`);
+      if (!submitRes.ok) {
+        throw new Error("Analiz başlatılamadı");
       }
+
+      /* =====================================================
+         4️⃣ RAPORA GİT
+      ===================================================== */
+      router.push(`/report/${token}`);
+    } catch (err) {
+      console.error(err);
+      alert("Yükleme sırasında hata oluştu.");
+    } finally {
+      setLoading(false);
     }
-
-    // 3️⃣ ANALİZİ BAŞLAT
-    const submitRes = await fetch(
-      `${API}/flows/${token}/submit`,
-      { method: "POST" }
-    );
-
-    if (!submitRes.ok) {
-      throw new Error("Analiz başlatılamadı");
-    }
-
-    // 4️⃣ RAPORA GİT
-    router.push(`/report/${token}`);
-  } catch (err) {
-    console.error(err);
-    alert("Yükleme sırasında hata oluştu.");
-  } finally {
-    setLoading(false);
   }
-}
 
   return (
     <main style={{ maxWidth: 980, margin: "0 auto", padding: 28 }}>
