@@ -83,33 +83,44 @@ export default function UploadPage() {
     setLoading(true);
 
     try {
-      const form = new FormData();
-
-      const views = items.map((it) => ({
-        filename: it.file.name,
-        part: it.part,
-      }));
-
-      form.append("views", JSON.stringify(views));
-      items.forEach((it) => form.append("files", it.file));
-
       /* =========================
-         1️⃣ FOTOĞRAFLARI YÜKLE
+         1️⃣ PARÇALARA GÖRE GRUPLA
       ========================= */
-      const uploadRes = await fetch(
-        `${API}/flows/${token}/upload`,
-        {
-          method: "POST",
-          body: form,
-        }
-      );
+      const byPart: Record<string, File[]> = {};
 
-      if (!uploadRes.ok) {
-        throw new Error(await uploadRes.text());
+      for (const it of items) {
+        if (!byPart[it.part]) byPart[it.part] = [];
+        byPart[it.part].push(it.file);
       }
 
       /* =========================
-         2️⃣ ANALİZİ BAŞLAT
+         2️⃣ HER PARÇAYI AYRI YÜKLE
+      ========================= */
+      for (const partKey of Object.keys(byPart)) {
+        const form = new FormData();
+        form.append("part_key", partKey);
+
+        byPart[partKey].forEach((f) => {
+          form.append("files", f);
+        });
+
+        const r = await fetch(
+          `${API}/flows/${token}/upload`,
+          {
+            method: "POST",
+            body: form,
+          }
+        );
+
+        if (!r.ok) {
+          throw new Error(
+            `Parça yüklenemedi: ${partKey}`
+          );
+        }
+      }
+
+      /* =========================
+         3️⃣ ANALİZİ BAŞLAT
       ========================= */
       const submitRes = await fetch(
         `${API}/flows/${token}/submit`,
@@ -121,7 +132,7 @@ export default function UploadPage() {
       }
 
       /* =========================
-         3️⃣ RAPORA GİT
+         4️⃣ RAPORA GİT
       ========================= */
       router.push(`/report/${token}`);
     } catch (err) {
