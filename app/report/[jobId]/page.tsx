@@ -111,15 +111,15 @@ function CarSkeleton({ parts }: { parts: Record<string, PartResult> }) {
 }
 
 export default function ReportPage() {
-  const { job_id } = useParams<{ job_id: string }>();
+  const { jobId } = useParams<{ jobId: string }>();
   const [job, setJob] = useState<any>(null);
   const [payload, setPayload] = useState<ReportPayload | null>(null);
 
   useEffect(() => {
-    if (!job_id) return;
+    if (!jobId) return;
 
     const fetchJob = async () => {
-      const r = await fetch(`${API}/jobs/${job_id}`);
+      const r = await fetch(`${API}/jobs/${jobId}`);
       const d = await r.json();
       setJob(d);
       if (d?.status === "done") setPayload(d.result);
@@ -128,7 +128,7 @@ export default function ReportPage() {
     fetchJob();
     const i = setInterval(fetchJob, 2500);
     return () => clearInterval(i);
-  }, [job_id]);
+  }, [jobId]);
 
   if (!job) return <div style={{ padding: 40 }}>Yükleniyor…</div>;
   if (job.status !== "done") {
