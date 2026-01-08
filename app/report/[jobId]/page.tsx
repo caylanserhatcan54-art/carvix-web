@@ -43,14 +43,10 @@ export default function ReportPage() {
     if (!jobId) return;
 
     const fetchReport = async () => {
-      try {
-        const r = await fetch(`${API}/reports/${jobId}`);
-        if (!r.ok) return;
-        const d = await r.json();
-        setData(d);
-      } catch (e) {
-        console.error("Rapor alınamadı", e);
-      }
+      const r = await fetch(`${API}/reports/${jobId}`);
+      if (!r.ok) return;
+      const d = await r.json();
+      setData(d);
     };
 
     fetchReport();
@@ -58,31 +54,28 @@ export default function ReportPage() {
     return () => clearInterval(i);
   }, [jobId]);
 
-  /** 🔒 HER ZAMAN TANIMLI OLSUN */
-  const parts = data?.report?.parts ?? {};
+  /** 🔒 GARANTİLİ DEFAULT */
+  const parts: Record<string, any> = data?.report?.parts ?? {};
 
-  /** ✅ HOOKLAR KOŞULSUZ */
+  /** ✅ STATUS MAP (diagram için) */
   const statusMap: Record<string, UiStatus> = useMemo(() => {
     const m: Record<string, UiStatus> = {};
-    Object.keys(parts).forEach((key) => {
-      m[key] = "BILINMIYOR";
+    Object.entries(parts).forEach(([key, p]) => {
+      m[key] = (p?.status as UiStatus) || "BILINMIYOR";
     });
     return m;
   }, [parts]);
 
+  /** ✅ TABLO SATIRLARI */
   const rows: PartRow[] = useMemo(() => {
-    return Object.entries(parts).map(([key, images]: any) => ({
+    return Object.entries(parts).map(([key, p]: any) => ({
       key,
       label: niceLabel(key),
-      status: "BILINMIYOR",
-      note:
-        images?.length > 0
-          ? "Bu parça için kanıt görselleri aşağıda sunulmuştur."
-          : "Bu parça için yeterli veri yok.",
+      status: p?.status || "BILINMIYOR",
+      note: p?.ai_comment || "Bu parça için yeterli analiz verisi yok.",
     }));
   }, [parts]);
 
-  /** ⬇️ ARTIK RETURN’LER GÜVENLİ */
   if (!data) {
     return <div style={{ padding: 40 }}>🔄 Rapor yükleniyor…</div>;
   }
@@ -102,14 +95,26 @@ export default function ReportPage() {
         <div className="glass" style={{ padding: 26 }}>
           <h1>Araç Ön Analiz Raporu</h1>
 
+          {/* 🔷 GENEL AI YORUM */}
+          {data.report?.summary && (
+            <div className="card" style={{ marginBottom: 18 }}>
+              <b>🤖 Yapay Zekâ Genel Yorumu</b>
+              <p className="small">{data.report.summary.ai_comment}</p>
+              <p className="small">
+                Genel Risk: <b>{data.report.summary.overall_risk}</b>
+              </p>
+            </div>
+          )}
+
           <VehicleDiagramC map={statusMap} />
 
           <PartTable rows={rows} />
 
+          {/* 📸 KANITLAR */}
           <div style={{ marginTop: 24 }}>
             <h3>📸 Görsel Kanıtlar</h3>
 
-            {Object.entries(parts).map(([partKey, arr]: any) => (
+            {Object.entries(parts).map(([partKey, p]: any) => (
               <div key={partKey} style={{ marginTop: 18 }}>
                 <b>{niceLabel(partKey)}</b>
 
@@ -122,27 +127,14 @@ export default function ReportPage() {
                     marginTop: 8,
                   }}
                 >
-                  {Array.isArray(arr) &&
-                    arr.map((img: any, i: number) => (
+                  {Array.isArray(p?.evidence) &&
+                    p.evidence.map((ev: any, i: number) => (
                       <div key={i} className="card">
-                        {img.annotated_url && (
-                          <>
-                            <div className="small">Algılanan Araç</div>
-                            <img
-                              src={img.annotated_url}
-                              style={{ width: "100%", borderRadius: 8 }}
-                            />
-                          </>
-                        )}
-
-                        {img.crop_url && (
-                          <>
-                            <div className="small">Odaklanan Bölge</div>
-                            <img
-                              src={img.crop_url}
-                              style={{ width: "100%", borderRadius: 8 }}
-                            />
-                          </>
+                        {ev.source_url && (
+                          <img
+                            src={ev.source_url}
+                            style={{ width: "100%", borderRadius: 8 }}
+                          />
                         )}
                       </div>
                     ))}
