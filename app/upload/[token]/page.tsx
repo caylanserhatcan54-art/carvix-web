@@ -2,12 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import {
-  VEHICLE_CONFIG,
-  VehicleType,
-  PackageType,
-  PartKey,
-} from "@/lib/vehicleConfig";
+import { VEHICLE_CONFIG, VehicleType, PackageType, PartKey } from "@/lib/vehicleConfig";
 
 const API =
   process.env.NEXT_PUBLIC_API_BASE ||
@@ -19,6 +14,7 @@ type ImageItem = {
 };
 
 export default function UploadPage() {
+  // ✅ TOKEN BURADAN GELİR
   const { token } = useParams<{ token: string }>();
   const router = useRouter();
   const sp = useSearchParams();
@@ -42,7 +38,7 @@ export default function UploadPage() {
       file: f,
       part: "",
     }));
-    setItems((prev) => [...prev, ...next]);
+    setItems((prev) => [...prev, ...next]); // ✅ HATA BURADAYDI
   }
 
   function updatePart(index: number, part: PartKey | "") {
@@ -61,7 +57,7 @@ export default function UploadPage() {
       return false;
     }
     if (!items.length) {
-      alert("En az 1 fotoğraf yüklemelisiniz.");
+      alert("En az 1 fotoğraf yükleyin.");
       return false;
     }
     for (const it of items) {
@@ -80,6 +76,7 @@ export default function UploadPage() {
     try {
       const form = new FormData();
 
+      // ✅ KRİTİK: TOKEN EKLENİYOR
       form.append("token", token);
 
       const views = items.map((it) => ({
@@ -123,28 +120,20 @@ export default function UploadPage() {
       />
 
       {items.map((it, i) => (
-        <div
-          key={i}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 300px 70px",
-            gap: 10,
-            marginTop: 10,
-            padding: 10,
-            border: "1px solid #eee",
-            borderRadius: 10,
-          }}
-        >
-          <div>{it.file.name}</div>
+        <div key={i} style={{ display: "flex", gap: 10, marginTop: 10 }}>
+          <span>{it.file.name}</span>
 
           <select
             value={it.part}
-            onChange={(e) => updatePart(i, e.target.value as PartKey)}
+            onChange={(e) =>
+              updatePart(i, e.target.value as PartKey)
+            }
           >
             <option value="">Parça seç</option>
             {config.parts.map((p) => (
               <option key={p.key} value={p.key}>
-                {p.label} {requiredSet.has(p.key) ? "*" : ""}
+                {p.label}
+                {requiredSet.has(p.key) ? " *" : ""}
               </option>
             ))}
           </select>
@@ -153,20 +142,10 @@ export default function UploadPage() {
         </div>
       ))}
 
-      <button
-        onClick={submit}
-        disabled={loading}
-        style={{
-          marginTop: 18,
-          padding: "12px 18px",
-          borderRadius: 10,
-          background: "#111827",
-          color: "#fff",
-          fontWeight: 700,
-        }}
-      >
+      <button onClick={submit} disabled={loading}>
         {loading ? "Analiz başlatılıyor…" : "Analizi Başlat"}
       </button>
     </main>
   );
 }
+
