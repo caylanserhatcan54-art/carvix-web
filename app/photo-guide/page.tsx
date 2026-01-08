@@ -1,3 +1,5 @@
+"use client";
+
 export default function PhotoGuidePage() {
   const DO = [
     { title: "Gün ışığı / sabit ışık", desc: "Gölgeli ama aydınlık alan. Flaş kapalı." },
@@ -19,8 +21,8 @@ export default function PhotoGuidePage() {
         <div className="glass fadeIn" style={{ padding: 26 }}>
           <h1 className="h2">Fotoğraf Rehberi</h1>
           <p className="p" style={{ marginTop: 10 }}>
-            Carvix en iyi sonucu “parça bazlı, net ve karşılaştırılabilir” fotoğraflarla verir.
-            Aşağıdaki kurallara uyarsan rapor güveni gözle görülür artar.
+            Carvix en iyi sonucu <b>parça bazlı, net ve karşılaştırılabilir</b> fotoğraflarla verir.
+            Aşağıdaki kurallara uyarsan rapor güveni gözle görülür biçimde artar.
           </p>
 
           <div className="guideGrid">
@@ -48,10 +50,13 @@ export default function PhotoGuidePage() {
           <div className="divider" />
 
           <div className="glass" style={{ padding: 18 }}>
-            <div style={{ fontWeight: 900, fontSize: 16 }}>Önerilen Minimum Set</div>
+            <div style={{ fontWeight: 900, fontSize: 16 }}>
+              Önerilen Minimum Set
+            </div>
             <div className="small" style={{ marginTop: 8 }}>
-              Kaput • Bagaj • Sol/sağ ön kapı • Sol/sağ arka kapı + (mümkünse) menteşe/vida/direk yakın plan.
-              Detaylı pakette bu yakın planlar fark yaratır.
+              Kaput • Bagaj • Sol/sağ ön kapı • Sol/sağ arka kapı <br />
+              + (mümkünse) menteşe / vida / direk yakın plan.  
+              <b>Detaylı pakette bu yakın planlar fark yaratır.</b>
             </div>
           </div>
         </div>

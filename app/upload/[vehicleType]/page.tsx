@@ -2,7 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { VEHICLE_CONFIG, VehicleType, PackageType, PartKey } from "@/lib/vehicleConfig";
+import {
+  VEHICLE_CONFIG,
+  VehicleType,
+  PackageType,
+  PartKey,
+} from "@/lib/vehicleConfig";
 
 const API =
   process.env.NEXT_PUBLIC_API_BASE ||
@@ -14,11 +19,13 @@ type ImageItem = {
 };
 
 export default function UploadPage() {
-  const { vehicleType } = useParams<{ vehicleType: VehicleType }>();
+  const { token } = useParams<{ token: string }>();
   const router = useRouter();
   const sp = useSearchParams();
 
+  const vehicleType = (sp.get("v") as VehicleType) || "car";
   const pkg = (sp.get("p") as PackageType) || "quick";
+
   const config = VEHICLE_CONFIG[vehicleType];
 
   const [items, setItems] = useState<ImageItem[]>([]);
@@ -31,8 +38,11 @@ export default function UploadPage() {
 
   function onFilesSelected(files: FileList | null) {
     if (!files) return;
-    const next = Array.from(files).map((f) => ({ file: f, part: "" }));
-    const [items, setItems] = useState<ImageItem[]>([]);
+    const next: ImageItem[] = Array.from(files).map((f) => ({
+      file: f,
+      part: "",
+    }));
+    setItems((prev) => [...prev, ...next]);
   }
 
   function updatePart(index: number, part: PartKey | "") {
@@ -45,14 +55,11 @@ export default function UploadPage() {
     setItems((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function coverage() {
-    const selected = items.map((i) => i.part).filter(Boolean) as PartKey[];
-    const selectedSet = new Set(selected);
-    const missing = config.required[pkg].filter((p) => !selectedSet.has(p));
-    return { selected, missing };
-  }
-
   function validate(): boolean {
+    if (!token) {
+      alert("Oturum bulunamadı.");
+      return false;
+    }
     if (!items.length) {
       alert("En az 1 fotoğraf yüklemelisiniz.");
       return false;
@@ -73,8 +80,7 @@ export default function UploadPage() {
     try {
       const form = new FormData();
 
-      form.append("vehicle_type", vehicleType);
-      form.append("package", pkg);
+      form.append("token", token);
 
       const views = items.map((it) => ({
         filename: it.file.name,
@@ -101,8 +107,6 @@ export default function UploadPage() {
     }
   }
 
-  const cov = coverage();
-
   return (
     <main style={{ maxWidth: 980, margin: "0 auto", padding: 28 }}>
       <h1>Fotoğraf Yükleme</h1>
@@ -111,32 +115,27 @@ export default function UploadPage() {
         <b>{pkg === "quick" ? "Hızlı" : "Detaylı"}</b>
       </p>
 
-      <div style={{ marginTop: 16 }}>
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={(e) => onFilesSelected(e.target.files)}
-        />
-      </div>
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={(e) => onFilesSelected(e.target.files)}
+      />
 
       {items.map((it, i) => (
         <div
           key={i}
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 320px 80px",
+            gridTemplateColumns: "1fr 300px 70px",
             gap: 10,
-            alignItems: "center",
             marginTop: 10,
             padding: 10,
             border: "1px solid #eee",
             borderRadius: 10,
           }}
         >
-          <div style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
-            {it.file.name}
-          </div>
+          <div>{it.file.name}</div>
 
           <select
             value={it.part}
@@ -168,10 +167,6 @@ export default function UploadPage() {
       >
         {loading ? "Analiz başlatılıyor…" : "Analizi Başlat"}
       </button>
-
-      <p style={{ marginTop: 14, fontSize: 12, color: "#6b7280" }}>
-        Bu rapor yapay zekâ destekli ön değerlendirmedir. Ekspertiz yerine geçmez.
-      </p>
     </main>
   );
 }
