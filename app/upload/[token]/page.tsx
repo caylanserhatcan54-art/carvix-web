@@ -2,7 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { VEHICLE_CONFIG, VehicleType, PackageType, PartKey } from "@/lib/vehicleConfig";
+import {
+  VEHICLE_CONFIG,
+  VehicleType,
+  PackageType,
+  PartKey,
+} from "@/lib/vehicleConfig";
 
 const API =
   process.env.NEXT_PUBLIC_API_BASE ||
@@ -14,7 +19,6 @@ type ImageItem = {
 };
 
 export default function UploadPage() {
-  // ✅ TOKEN BURADAN GELİR
   const { token } = useParams<{ token: string }>();
   const router = useRouter();
   const sp = useSearchParams();
@@ -34,11 +38,13 @@ export default function UploadPage() {
 
   function onFilesSelected(files: FileList | null) {
     if (!files) return;
+
     const next: ImageItem[] = Array.from(files).map((f) => ({
       file: f,
       part: "",
     }));
-    setItems((prev) => [...prev, ...next]); // ✅ HATA BURADAYDI
+
+    setItems((prev) => [...prev, ...next]);
   }
 
   function updatePart(index: number, part: PartKey | "") {
@@ -56,16 +62,19 @@ export default function UploadPage() {
       alert("Oturum bulunamadı.");
       return false;
     }
+
     if (!items.length) {
       alert("En az 1 fotoğraf yükleyin.");
       return false;
     }
+
     for (const it of items) {
       if (!it.part) {
         alert("Her fotoğraf için parça seçmelisiniz.");
         return false;
       }
     }
+
     return true;
   }
 
@@ -76,9 +85,6 @@ export default function UploadPage() {
     try {
       const form = new FormData();
 
-      // ✅ KRİTİK: TOKEN EKLENİYOR
-      form.append("token", token);
-
       const views = items.map((it) => ({
         filename: it.file.name,
         part: it.part,
@@ -87,15 +93,37 @@ export default function UploadPage() {
       form.append("views", JSON.stringify(views));
       items.forEach((it) => form.append("files", it.file));
 
-      const res = await fetch(`${API}/jobs`, {
-        method: "POST",
-        body: form,
-      });
+      /* =========================
+         1️⃣ FOTOĞRAFLARI YÜKLE
+      ========================= */
+      const uploadRes = await fetch(
+        `${API}/flows/${token}/upload`,
+        {
+          method: "POST",
+          body: form,
+        }
+      );
 
-      if (!res.ok) throw new Error(await res.text());
+      if (!uploadRes.ok) {
+        throw new Error(await uploadRes.text());
+      }
 
-      const data = await res.json();
-      router.push(`/report/${data.id}`);
+      /* =========================
+         2️⃣ ANALİZİ BAŞLAT
+      ========================= */
+      const submitRes = await fetch(
+        `${API}/flows/${token}/submit`,
+        { method: "POST" }
+      );
+
+      if (!submitRes.ok) {
+        throw new Error("Analiz başlatılamadı");
+      }
+
+      /* =========================
+         3️⃣ RAPORA GİT
+      ========================= */
+      router.push(`/report/${token}`);
     } catch (err) {
       console.error(err);
       alert("Yükleme sırasında hata oluştu.");
@@ -107,6 +135,7 @@ export default function UploadPage() {
   return (
     <main style={{ maxWidth: 980, margin: "0 auto", padding: 28 }}>
       <h1>Fotoğraf Yükleme</h1>
+
       <p>
         Araç: <b>{config.title}</b> • Paket:{" "}
         <b>{pkg === "quick" ? "Hızlı" : "Detaylı"}</b>
@@ -148,4 +177,3 @@ export default function UploadPage() {
     </main>
   );
 }
-
