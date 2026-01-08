@@ -34,18 +34,17 @@ function normalizeStatus(raw?: string): UiStatus {
 
 function niceLabel(key: string) {
   const map: Record<string, string> = {
-    front_left_door: "Sol Ön Kapı",
-    front_right_door: "Sağ Ön Kapı",
-    rear_left_door: "Sol Arka Kapı",
-    rear_right_door: "Sağ Arka Kapı",
-    hood: "Kaput",
-    roof: "Tavan",
-    trunk: "Bagaj",
-    front_bumper: "Ön Tampon",
-    rear_bumper: "Arka Tampon",
-    hinge_bolts: "Kapı / Kaput Menteşeleri",
-    overall_left: "Sol Yan Genel",
-    overall_right: "Sağ Yan Genel",
+    GENEL_ON: "Genel - Ön",
+    GENEL_ARKA: "Genel - Arka",
+    GENEL_SAG: "Genel - Sağ",
+    GENEL_SOL: "Genel - Sol",
+    GENEL_TAVAN: "Genel - Tavan",
+    SOL_ON_KAPI: "Sol Ön Kapı",
+    SAG_ON_KAPI: "Sağ Ön Kapı",
+    SOL_ARKA_KAPI: "Sol Arka Kapı",
+    SAG_ARKA_KAPI: "Sağ Arka Kapı",
+    KAPUT: "Kaput",
+    BAGAJ: "Bagaj",
   };
   return map[key] || key;
 }
@@ -54,15 +53,15 @@ function niceLabel(key: string) {
    PAGE
 ============================== */
 export default function ReportPage() {
-  const { jobId: token } = useParams<{ jobId: string }>();
+  const { jobId } = useParams<{ jobId: string }>();
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (!jobId) return;
 
     const fetchReport = async () => {
       try {
-        const r = await fetch(`${API}/reports/${token}`);
+        const r = await fetch(`${API}/reports/${jobId}`);
         if (!r.ok) return;
         const d = await r.json();
         setData(d);
@@ -74,7 +73,7 @@ export default function ReportPage() {
     fetchReport();
     const i = setInterval(fetchReport, 3000);
     return () => clearInterval(i);
-  }, [token]);
+  }, [jobId]);
 
   if (!data) {
     return <div style={{ padding: 40 }}>🔄 Rapor yükleniyor…</div>;
@@ -89,16 +88,16 @@ export default function ReportPage() {
     );
   }
 
-  const report = data.report || {};
-  const parts = report.parts || {};
+  const report = data.report ?? {};
+  const parts = report.parts ?? {};
 
   /* ==============================
-     STATUS MAP
+     STATUS MAP (SAFE)
   ============================== */
   const statusMap: Record<string, UiStatus> = useMemo(() => {
     const m: Record<string, UiStatus> = {};
     Object.keys(parts).forEach((key) => {
-      m[key] = "BILINMIYOR"; // hızlı MVP → iddia yok
+      m[key] = "BILINMIYOR";
     });
     return m;
   }, [parts]);
@@ -109,7 +108,7 @@ export default function ReportPage() {
       label: niceLabel(key),
       status: "BILINMIYOR",
       note:
-        images?.length > 0
+        images && images.length > 0
           ? "Bu parça için kanıt görselleri aşağıda sunulmuştur."
           : "Bu parça için yeterli veri yok.",
     }));
@@ -138,34 +137,42 @@ export default function ReportPage() {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(220px, 1fr))",
                     gap: 12,
                     marginTop: 8,
                   }}
                 >
-                  {arr.map((img: any, i: number) => (
-                    <div key={i} className="card">
-                      {img.annotated_url && (
-                        <>
-                          <div className="small">Algılanan Araç</div>
-                          <img
-                            src={img.annotated_url}
-                            style={{ width: "100%", borderRadius: 8 }}
-                          />
-                        </>
-                      )}
+                  {Array.isArray(arr) &&
+                    arr.map((img: any, i: number) => (
+                      <div key={i} className="card">
+                        {img.annotated_url && (
+                          <>
+                            <div className="small">Algılanan Araç</div>
+                            <img
+                              src={img.annotated_url}
+                              style={{
+                                width: "100%",
+                                borderRadius: 8,
+                              }}
+                            />
+                          </>
+                        )}
 
-                      {img.crop_url && (
-                        <>
-                          <div className="small">Odaklanan Bölge</div>
-                          <img
-                            src={img.crop_url}
-                            style={{ width: "100%", borderRadius: 8 }}
-                          />
-                        </>
-                      )}
-                    </div>
-                  ))}
+                        {img.crop_url && (
+                          <>
+                            <div className="small">Odaklanan Bölge</div>
+                            <img
+                              src={img.crop_url}
+                              style={{
+                                width: "100%",
+                                borderRadius: 8,
+                              }}
+                            />
+                          </>
+                        )}
+                      </div>
+                    ))}
                 </div>
               </div>
             ))}
