@@ -9,9 +9,6 @@ const API =
   process.env.NEXT_PUBLIC_API_BASE ||
   "https://ai-arac-analiz-backend.onrender.com";
 
-/* ==============================
-   UI STATUS
-============================== */
 type UiStatus =
   | "ORIJINAL"
   | "BOYALI"
@@ -20,17 +17,6 @@ type UiStatus =
   | "SUPHELI"
   | "PLASTIK"
   | "BILINMIYOR";
-
-function normalizeStatus(raw?: string): UiStatus {
-  const v = (raw || "").toUpperCase();
-  if (v.includes("DEG")) return "DEGISEN";
-  if (v.includes("LOKAL")) return "LOKAL_BOYA";
-  if (v.includes("BOYA")) return "BOYALI";
-  if (v.includes("SUP")) return "SUPHELI";
-  if (v.includes("PLAST")) return "PLASTIK";
-  if (v.includes("ORIJ") || v === "OK") return "ORIJINAL";
-  return "BILINMIYOR";
-}
 
 function niceLabel(key: string) {
   const map: Record<string, string> = {
@@ -49,9 +35,6 @@ function niceLabel(key: string) {
   return map[key] || key;
 }
 
-/* ==============================
-   PAGE
-============================== */
 export default function ReportPage() {
   const { jobId } = useParams<{ jobId: string }>();
   const [data, setData] = useState<any>(null);
@@ -75,25 +58,10 @@ export default function ReportPage() {
     return () => clearInterval(i);
   }, [jobId]);
 
-  if (!data) {
-    return <div style={{ padding: 40 }}>🔄 Rapor yükleniyor…</div>;
-  }
+  /** 🔒 HER ZAMAN TANIMLI OLSUN */
+  const parts = data?.report?.parts ?? {};
 
-  if (data.status !== "done") {
-    return (
-      <div style={{ padding: 40 }}>
-        <h2>Analiz Devam Ediyor</h2>
-        <p>Lütfen bekleyin…</p>
-      </div>
-    );
-  }
-
-  const report = data.report ?? {};
-  const parts = report.parts ?? {};
-
-  /* ==============================
-     STATUS MAP (SAFE)
-  ============================== */
+  /** ✅ HOOKLAR KOŞULSUZ */
   const statusMap: Record<string, UiStatus> = useMemo(() => {
     const m: Record<string, UiStatus> = {};
     Object.keys(parts).forEach((key) => {
@@ -108,11 +76,25 @@ export default function ReportPage() {
       label: niceLabel(key),
       status: "BILINMIYOR",
       note:
-        images && images.length > 0
+        images?.length > 0
           ? "Bu parça için kanıt görselleri aşağıda sunulmuştur."
           : "Bu parça için yeterli veri yok.",
     }));
   }, [parts]);
+
+  /** ⬇️ ARTIK RETURN’LER GÜVENLİ */
+  if (!data) {
+    return <div style={{ padding: 40 }}>🔄 Rapor yükleniyor…</div>;
+  }
+
+  if (data.status !== "done") {
+    return (
+      <div style={{ padding: 40 }}>
+        <h2>Analiz Devam Ediyor</h2>
+        <p>Lütfen bekleyin…</p>
+      </div>
+    );
+  }
 
   return (
     <main className="section">
@@ -124,9 +106,6 @@ export default function ReportPage() {
 
           <PartTable rows={rows} />
 
-          {/* =========================
-              KANIT GÖRSELLERİ
-          ========================= */}
           <div style={{ marginTop: 24 }}>
             <h3>📸 Görsel Kanıtlar</h3>
 
@@ -151,10 +130,7 @@ export default function ReportPage() {
                             <div className="small">Algılanan Araç</div>
                             <img
                               src={img.annotated_url}
-                              style={{
-                                width: "100%",
-                                borderRadius: 8,
-                              }}
+                              style={{ width: "100%", borderRadius: 8 }}
                             />
                           </>
                         )}
@@ -164,10 +140,7 @@ export default function ReportPage() {
                             <div className="small">Odaklanan Bölge</div>
                             <img
                               src={img.crop_url}
-                              style={{
-                                width: "100%",
-                                borderRadius: 8,
-                              }}
+                              style={{ width: "100%", borderRadius: 8 }}
                             />
                           </>
                         )}
@@ -181,8 +154,7 @@ export default function ReportPage() {
           <div className="card" style={{ marginTop: 24 }}>
             <b>⚠️ Hukuki Bilgilendirme</b>
             <p className="small">
-              Bu rapor yapay zekâ destekli ön analizdir. Boya, değişen veya
-              mekanik durum hakkında kesin hüküm vermez. Resmî ekspertiz yerine
+              Bu rapor yapay zekâ destekli ön analizdir. Resmî ekspertiz yerine
               geçmez.
             </p>
           </div>
