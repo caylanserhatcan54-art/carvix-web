@@ -4,9 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || "https://ai-arac-analiz-backend.onrender.com";
-
 const VEHICLES = [
   { key: "car", title: "Otomobil", desc: "Binek araçlar" },
   { key: "electric_car", title: "Elektrikli Araç", desc: "Elektrikli binek" },
@@ -21,36 +18,25 @@ type PackageKey = "quick" | "detailed";
 
 export default function VehicleSelectPage() {
   const router = useRouter();
+
   const [selected, setSelected] = useState<VehicleKey | null>(null);
   const [pkg, setPkg] = useState<PackageKey>("quick");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleContinue() {
+  function handleContinue() {
     if (!selected || loading) return;
 
     setLoading(true);
     setError(null);
 
     try {
-      const res = await fetch(`${API_BASE}/analysis/start`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          vehicle_type: selected,
-          package: pkg,
-          scenario: "buy_sell",
-        }),
-      });
+      // ✅ TOKEN FRONTEND’DE ÜRETİLİR
+      const token = crypto.randomUUID();
 
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-
-      if (!data?.token) throw new Error("Token alınamadı");
-
-      // ✅ Token’lı upload akışı
-      router.push(`/upload/${data.token}?v=${selected}&p=${pkg}`);
-    } catch (e) {
+      // ❌ BACKEND ÇAĞRISI YOK
+      router.push(`/upload/${token}?v=${selected}&p=${pkg}`);
+    } catch {
       setError("Analiz başlatılamadı. Lütfen tekrar deneyin.");
       setLoading(false);
     }
@@ -61,6 +47,7 @@ export default function VehicleSelectPage() {
       <div className="container">
         <div className="glass fadeIn" style={{ padding: 26 }}>
           <h1 className="h2">Analiz edilecek aracı seç</h1>
+
           <p className="p" style={{ marginTop: 10 }}>
             Seçtiğin araç tipine göre fotoğraf rehberi ve rapor şablonu optimize edilir.
           </p>
@@ -88,6 +75,7 @@ export default function VehicleSelectPage() {
             </button>
           </div>
 
+          {/* Araç seçimi */}
           <div
             className="featureGrid"
             style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 18 }}
@@ -112,6 +100,7 @@ export default function VehicleSelectPage() {
             })}
           </div>
 
+          {/* Devam */}
           <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
             <button
               className="btn btnPrimary microPulse"
@@ -138,7 +127,8 @@ export default function VehicleSelectPage() {
           <div className="divider" />
 
           <div className="small">
-            Carvix, fotoğrafa dayalı yapay zekâ destekli ön değerlendirmedir; ekspertiz yerine geçmez.
+            Carvix, fotoğrafa dayalı yapay zekâ destekli ön değerlendirmedir;
+            ekspertiz yerine geçmez.
           </div>
         </div>
       </div>
