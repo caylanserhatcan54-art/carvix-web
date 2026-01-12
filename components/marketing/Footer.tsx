@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container py-10 flex flex-col gap-6 text-sm text-white/70">
 
         {/* LINKLER */}
-        <nav className="flex flex-wrap justify-center gap-6">
+        <nav className="flex flex-col md:flex-row justify-center items-center gap-3 md:gap-6 text-center">
           <Link href="/hakkimizda" className="hover:text-white">Hakkımızda</Link>
           <Link href="/gizlilik-politikasi" className="hover:text-white">Gizlilik Politikası</Link>
           <Link href="/mesafeli-satis-sozlesmesi" className="hover:text-white">Mesafeli Satış Sözleşmesi</Link>
@@ -24,7 +24,7 @@ export default function Footer() {
         </div>
 
         {/* ALT METİN */}
-        <p className="text-center text-xs text-white/50">
+        <p className="text-center text-xs text-white/50 max-w-3xl mx-auto leading-relaxed">
           © 2026 Carvix — Bu rapor yapay zekâ destekli ön değerlendirmedir, resmî ekspertiz yerine geçmez.
         </p>
       </div>
