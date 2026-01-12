@@ -10,12 +10,7 @@ export const metadata: Metadata = {
   title: `${BRAND.name} • ${BRAND.tagline}`,
   description: BRAND.subtagline,
 
-  // 🔹 SEKME LOGOSU (favicon)
-  icons: {
-    icon: "/icon.png",
-  },
-
-  // 🔹 GOOGLE / PAYLAŞIM LOGOSU
+  // 🔹 GOOGLE / SOSYAL PAYLAŞIM
   openGraph: {
     title: BRAND.name,
     description: BRAND.subtagline,
