@@ -1,4 +1,3 @@
-// web/app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
 
@@ -10,6 +9,28 @@ import { BRAND } from "@/lib/marketing";
 export const metadata: Metadata = {
   title: `${BRAND.name} • ${BRAND.tagline}`,
   description: BRAND.subtagline,
+
+  // 🔹 SEKME LOGOSU (favicon)
+  icons: {
+    icon: "/icon.png",
+  },
+
+  // 🔹 GOOGLE / PAYLAŞIM LOGOSU
+  openGraph: {
+    title: BRAND.name,
+    description: BRAND.subtagline,
+    url: "https://www.carvix.site",
+    siteName: BRAND.name,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "tr_TR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

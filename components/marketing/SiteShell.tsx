@@ -28,3 +28,33 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+
+/* ✅ BUILD HATASINI ÇÖZEN BADGE EXPORT */
+export function Badge({
+  tone,
+  text,
+}: {
+  tone: "ok" | "warn" | "bad" | "muted";
+  text: string;
+}) {
+  const styles: Record<string, string> = {
+    ok: "background:#16a34a;color:white;",
+    warn: "background:#f59e0b;color:black;",
+    bad: "background:#dc2626;color:white;",
+    muted: "background:#374151;color:white;",
+  };
+
+  return (
+    <span
+      style={{
+        padding: "4px 8px",
+        borderRadius: 6,
+        fontSize: 12,
+        whiteSpace: "nowrap",
+        ...(tone && { cssText: styles[tone] }),
+      }}
+    >
+      {text}
+    </span>
+  );
+}
