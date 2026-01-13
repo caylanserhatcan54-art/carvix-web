@@ -17,8 +17,8 @@ export default function HomePage() {
             <div style={{ marginTop: 18 }}>
               <h1 className="h1">Aracı görmeden önce riskini ölç.</h1>
               <p className="p" style={{ marginTop: 14, fontSize: 16 }}>
-                Carvix; panel ton/parlaklık/yansıma farklarını **karşılaştırır**, menteşe/vida gibi kritik bölgelerde
-                **işlem izini sınıflandırır**, sonuçları **parça bazlı ekspertiz tablosu** olarak sunar.
+                Carvix; panel ton/parlaklık/yansıma farklarını <b>karşılaştırır</b>, menteşe/vida gibi kritik bölgelerde
+                <b> işlem izini sınıflandırır</b>, sonuçları <b>parça bazlı ekspertiz tablosu</b> olarak sunar.
               </p>
             </div>
 

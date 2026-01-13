@@ -12,6 +12,7 @@ export default function Footer() {
           <Link href="/mesafeli-satis-sozlesmesi" className="hover:text-white">Mesafeli Satış Sözleşmesi</Link>
           <Link href="/iade-ve-teslimat" className="hover:text-white">İade & Teslimat</Link>
           <Link href="/iletisim" className="hover:text-white">İletişim</Link>
+          <Link href="/arac-analizi" className="hover:text-white">AI Araç Analizi Hizmeti</Link>
         </nav>
 
         {/* ÖDEME LOGOLARI */}

@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   title: `${BRAND.name} • ${BRAND.tagline}`,
   description: BRAND.subtagline,
 
-  // 🔹 GOOGLE / SOSYAL PAYLAŞIM
   openGraph: {
     title: BRAND.name,
     description: BRAND.subtagline,
