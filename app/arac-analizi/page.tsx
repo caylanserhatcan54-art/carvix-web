@@ -9,9 +9,12 @@ export default function AracAnaliziPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:4000/create-payment", {
-        method: "POST",
-      });
+      const res = await fetch(
+  "https://carvix-payment-server.onrender.com/create-payment",
+  {
+    method: "POST",
+  }
+);
 
       if (!res.ok) {
         throw new Error("Payment server hata verdi");
