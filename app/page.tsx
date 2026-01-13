@@ -29,6 +29,10 @@ export default function HomePage() {
               <Link className="btn btnGhost" href="/photo-guide">
                 Doğru Fotoğraf Rehberi
               </Link>
+              {/* 🚀 Yeni Düğme: AI Araç Analizi Hizmeti */}
+              <Link className="btn btnPrimary" href="/arac-analizi">
+                AI Araç Analizi Hizmetini İncele →
+              </Link>
             </div>
 
             <div className="kpiGrid">
