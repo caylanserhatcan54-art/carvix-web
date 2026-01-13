@@ -17,61 +17,77 @@ export default function HomePage() {
             <div style={{ marginTop: 18 }}>
               <h1 className="h1">Aracı görmeden önce riskini ölç.</h1>
               <p className="p" style={{ marginTop: 14, fontSize: 16 }}>
-                Carvix; panel ton/parlaklık/yansıma farklarını <b>karşılaştırır</b>, menteşe/vida gibi kritik bölgelerde
-                <b> işlem izini sınıflandırır</b>, sonuçları <b>parça bazlı ekspertiz tablosu</b> olarak sunar.
+                Carvix; panel ton/parlaklık/yansıma farklarını <b>karşılaştırır</b>, menteşe/vida gibi kritik
+                bölgelerde <b>işlem izini sınıflandırır</b>, sonuçları <b>parça bazlı ekspertiz tablosu</b>{" "}
+                olarak sunar.
               </p>
             </div>
 
+            {/* 🔴 BUTONLAR */}
             <div style={{ display: "flex", gap: 12, marginTop: 22, flexWrap: "wrap" }}>
-              <Link className="btn btnPrimary" href="/vehicle">
-                Analizi Başlat →
+              {/* Ana satın alma butonu */}
+              <Link className="btn btnPrimary" href="/arac-analizi">
+                Paketi Satın Al →
               </Link>
+
+              {/* Bilgilendirici */}
               <Link className="btn btnGhost" href="/photo-guide">
                 Doğru Fotoğraf Rehberi
               </Link>
-              {/* 🚀 Yeni Düğme: AI Araç Analizi Hizmeti */}
+
+              {/* Alternatif satın alma CTA */}
               <Link className="btn btnPrimary" href="/arac-analizi">
-                AI Araç Analizi Hizmetini İncele →
+                AI Araç Analizi Paketi →
               </Link>
             </div>
 
             <div className="kpiGrid">
               <div className="card" style={{ padding: 16 }}>
                 <div style={{ fontWeight: 900, fontSize: 18 }}>Parça bazlı</div>
-                <div className="small">Hangi parçanın neden şüpheli olabileceğini açıklar.</div>
+                <div className="small">
+                  Hangi parçanın neden şüpheli olabileceğini açıklar.
+                </div>
               </div>
               <div className="card" style={{ padding: 16 }}>
                 <div style={{ fontWeight: 900, fontSize: 18 }}>Hızlı eleme</div>
-                <div className="small">Yola çıkmadan önce riskli aracı filtrelemeye yardım eder.</div>
+                <div className="small">
+                  Yola çıkmadan önce riskli aracı filtrelemeye yardım eder.
+                </div>
               </div>
               <div className="card" style={{ padding: 16 }}>
                 <div style={{ fontWeight: 900, fontSize: 18 }}>Şeffaf çıktı</div>
-                <div className="small">OK / SUSPECTED / DETECTED + güven skoru + kısa kanıtlar.</div>
+                <div className="small">
+                  OK / SUSPECTED / DETECTED + güven skoru + kısa kanıtlar.
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right premium panel */}
+          {/* Right panel */}
           <div className="glass" style={{ padding: 22, display: "flex", flexDirection: "column", gap: 14 }}>
-            <div style={{ fontWeight: 900, fontSize: 16, color: "rgba(255,255,255,.86)" }}>Nasıl çalışır?</div>
+            <div style={{ fontWeight: 900, fontSize: 16, color: "rgba(255,255,255,.86)" }}>
+              Satın alma sonrası süreç
+            </div>
+
             <div className="card" style={{ padding: 16 }}>
-              <div style={{ fontWeight: 900 }}>1) Aracı seç</div>
-              <div className="small">Otomobil, elektrikli, motosiklet, pickup/van, ATV.</div>
+              <div style={{ fontWeight: 900 }}>1) Paketi satın al</div>
+              <div className="small">Ödeme güvenli şekilde iyzico üzerinden yapılır.</div>
             </div>
             <div className="card" style={{ padding: 16 }}>
-              <div style={{ fontWeight: 900 }}>2) Parça bazlı yükle</div>
-              <div className="small">Kapı/çamurluk/kaput/bagaj + menteşe/vida/direk (önerilir).</div>
+              <div style={{ fontWeight: 900 }}>2) Fotoğraf & video yükle</div>
+              <div className="small">Parça bazlı yükleme önerilir.</div>
             </div>
             <div className="card" style={{ padding: 16 }}>
-              <div style={{ fontWeight: 900 }}>3) Raporu gör</div>
-              <div className="small">Ekspertiz tablosu + AI ön yorumu + hukuki bilgilendirme.</div>
+              <div style={{ fontWeight: 900 }}>3) Dijital raporu al</div>
+              <div className="small">
+                AI ön yorumu + parça bazlı tablo + hukuki bilgilendirme.
+              </div>
             </div>
 
             <div className="divider" />
 
             <div className="small">
-              <b>Not:</b> Carvix ekspertiz değildir; fotoğrafa dayalı ön değerlendirmedir. En iyi sonuç için “detay parça”
-              fotoğrafları yükleyin.
+              <b>Not:</b> Carvix ekspertiz değildir; fotoğrafa dayalı ön değerlendirmedir.
             </div>
           </div>
         </div>
@@ -81,54 +97,29 @@ export default function HomePage() {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           <h2 className="h2">Neden Carvix?</h2>
-          <p className="p" style={{ marginTop: 10 }}>
-            “Fotoğrafa bakmak” ile “fotoğrafları ölçerek karşılaştırmak” aynı şey değil.
-          </p>
-
-          <div className="featureGrid">
-            <div className="card" style={{ padding: 18 }}>
-              <div style={{ fontWeight: 900, fontSize: 16 }}>Karşılaştırmalı analiz</div>
-              <p className="small">Komşu panellere göre ton/parlaklık/yansıma farklarını kıyaslar.</p>
-            </div>
-            <div className="card" style={{ padding: 18 }}>
-              <div style={{ fontWeight: 900, fontSize: 16 }}>Kritik bölgelerde güçlü</div>
-              <p className="small">Menteşe/vida/direk gibi bölgeler sök–tak şüphesini yakalamaya yardımcı olur.</p>
-            </div>
-            <div className="card" style={{ padding: 18 }}>
-              <div style={{ fontWeight: 900, fontSize: 16 }}>Parça bazlı rapor</div>
-              <p className="small">“Hangi parçada ne olabilir?” sorusuna net tablo ile cevap verir.</p>
-            </div>
-          </div>
 
           <div className="pricingGrid">
             <div className="glass" style={{ padding: 22 }}>
-              <h3 style={{ margin: 0 }}>129,90₺ / Paket</h3>
+              <h3 style={{ margin: 0 }}>AI Araç Ön Analiz Paketi</h3>
               <p className="p" style={{ marginTop: 10 }}>
-                Ekspertize gitmeden önce risk elemesi yap. Zaman/yol masrafını azaltmaya yardımcı olur.
+                Dijital hizmettir. Satın alma sonrası anında kullanılabilir.
               </p>
-              <div style={{ display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap" }}>
-                <span className="pill">Parça bazlı tablo</span>
-                <span className="pill">AI ön yorum</span>
-                <span className="pill">Hukuki bilgilendirme</span>
-              </div>
+
+              <h3 style={{ marginTop: 12 }}>129,90₺</h3>
+
               <div style={{ marginTop: 18 }}>
-                <Link className="btn btnPrimary" href="/vehicle">
-                  Analizi Başlat →
+                <Link className="btn btnPrimary" href="/arac-analizi">
+                  Hemen Satın Al →
                 </Link>
               </div>
             </div>
 
             <div className="card" style={{ padding: 22 }}>
-              <h3 style={{ margin: 0 }}>“Fotoğrafa ben de bakarım.”</h3>
+              <h3 style={{ margin: 0 }}>Güvenli ödeme</h3>
               <p className="p" style={{ marginTop: 10 }}>
-                Carvix senin göremediğini değil, <b>emin olamadığını ölçer</b>. Aynı anda panelleri kıyaslar, kritik
-                bölgeleri sınıflandırır ve bunu sayısal güven skoruyla raporlar.
+                Ödeme işlemleri iyzico altyapısı ile korunur. Kart bilgileriniz
+                sistemimizde tutulmaz.
               </p>
-              <div style={{ marginTop: 14 }}>
-                <Link className="btn" href="/photo-guide">
-                  Fotoğraf Rehberini Gör
-                </Link>
-              </div>
             </div>
           </div>
         </div>
