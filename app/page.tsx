@@ -117,8 +117,7 @@ export default function HomePage() {
             <div className="card" style={{ padding: 22 }}>
               <h3 style={{ margin: 0 }}>Güvenli ödeme</h3>
               <p className="p" style={{ marginTop: 10 }}>
-                Ödeme işlemleri iyzico altyapısı ile korunur. Kart bilgileriniz
-                sistemimizde tutulmaz.
+                Ödeme işlemleri güvenli şekilde yapılır. Kart bilgileriniz korunur ve gizliliğiniz sağlanır.
               </p>
             </div>
           </div>
