@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Script from "next/script"; // Yeni eklediğimiz import
 
 import { SiteShell } from "@/components/marketing/SiteShell";
 import Navbar from "@/components/marketing/Navbar";
@@ -40,6 +41,12 @@ export default function RootLayout({
           {children}
           <Footer />
         </SiteShell>
+        
+        {/* Lemon Squeezy Pencere Scripti */}
+        <Script
+          src="https://app.lemonsqueezy.com/js/lemon.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
