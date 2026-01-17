@@ -2,46 +2,64 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 mt-24 bg-black text-white/70">
-      <div className="max-w-7xl mx-auto px-6 py-10">
-
-        {/* LINKLER */}
-        <nav className="text-center">
-          <ul className="flex flex-col items-center gap-2">
-            <li>
-              <Link href="/hakkimizda" className="hover:text-white">Hakkımızda</Link>
-            </li>
-            <li>
-              <Link href="/gizlilik-politikasi" className="hover:text-white">Gizlilik Politikası</Link>
-            </li>
-            <li>
-              <Link href="/mesafeli-satis-sozlesmesi" className="hover:text-white">Mesafeli Satış Sözleşmesi</Link>
-            </li>
-            <li>
-              <Link href="/iade-ve-teslimat" className="hover:text-white">İade & Teslimat</Link>
-            </li>
-            <li>
-              <Link href="/iletisim" className="hover:text-white">İletişim</Link>
-            </li>
-            <li>
-              <Link href="/arac-analizi" className="hover:text-white">AI Araç Analizi Hizmeti</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* ÖDEME LOGOLARI */}
-        <div className="flex justify-center mt-6">
-          <img
-            src="/logos/payment-band.png"
-            alt="Ödeme Yöntemleri"
-            className="h-8 opacity-80"
-          />
+    <footer style={{ backgroundColor: '#000', color: 'rgba(255,255,255,0.7)', borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '80px', padding: '40px 20px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        
+        {/* LOGO VE İSİM */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '30px' }}>
+          <img src="/carvix-logo.png" alt="Carvix" style={{ height: '20px', width: 'auto' }} />
+          <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Carvix</span>
         </div>
 
-        {/* ALT METİN */}
-        <p className="mt-6 text-center text-xs text-white/50 max-w-3xl mx-auto leading-relaxed">
-          © 2026 Carvix — Bu rapor yapay zekâ destekli ön değerlendirmedir, resmî ekspertiz yerine geçmez.
-        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '30px' }}>
+          
+          {/* LİNKLER */}
+          <nav>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 40px', fontSize: '13px' }}>
+              <li><Link href="/hakkimizda" style={{ color: 'inherit', textDecoration: 'none' }}>Hakkımızda</Link></li>
+              <li><Link href="/gizlilik-politikasi" style={{ color: 'inherit', textDecoration: 'none' }}>Gizlilik Politikası</Link></li>
+              <li><Link href="/mesafeli-satis-sozlesmesi" style={{ color: 'inherit', textDecoration: 'none' }}>Mesafeli Satış Sözleşmesi</Link></li>
+              <li><Link href="/iade-ve-teslimat" style={{ color: 'inherit', textDecoration: 'none' }}>İade & Teslimat</Link></li>
+              <li><Link href="/iletisim" style={{ color: 'inherit', textDecoration: 'none' }}>İletişim</Link></li>
+            </ul>
+          </nav>
+
+          {/* SAĞ TARAF: ÖDEME BANDI */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+              
+              {/* Tami Kutusu */}
+              <div style={{ border: '1px solid #fff', padding: '2px 5px', borderRadius: '3px' }}>
+                <span style={{ fontSize: '9px', fontWeight: '900', color: '#fff', letterSpacing: '1px' }}>TAMİ</span>
+              </div>
+              
+              {/* Visa (Kendi klasöründen) */}
+              <img src="/visa-logo.svg" alt="Visa" style={{ height: '10px', width: 'auto' }} />
+              
+              {/* Mastercard (Kendi klasöründen) */}
+              <img src="/mastercard-logo.svg" alt="Mastercard" style={{ height: '16px', width: 'auto' }} />
+              
+              {/* Masterpass (Kırılmaması için Kodla Çizildi) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ display: 'flex' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#EB001B', marginRight: '-4px' }}></div>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#F79E1B', opacity: 0.9 }}></div>
+                </div>
+                <span style={{ fontSize: '11px', color: '#fff', fontWeight: '600', fontFamily: 'sans-serif' }}>masterpass</span>
+              </div>
+
+            </div>
+            
+            <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+              256-bit SSL Güvenli Ödeme Altyapısı
+            </p>
+          </div>
+        </div>
+
+        {/* TELİF */}
+        <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
+          © 2026 Carvix — Yapay zeka destekli analiz hizmetidir.
+        </div>
       </div>
     </footer>
   );

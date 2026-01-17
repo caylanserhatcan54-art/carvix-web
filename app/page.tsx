@@ -7,11 +7,12 @@ import { Badge } from "@/components/marketing/SiteShell";
 export default function HomePage() {
   const router = useRouter();
 
-  // 🔴 EKLENEN FONKSİYON
+  // 🔴 Tami Entegrasyonu ile Güncellenen Fonksiyon
   const startAnalyze = async (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
 
     try {
+      // 1. Önce backend'den jobId alıyoruz
       const res = await fetch("/api/analyze/start", {
         method: "POST",
       });
@@ -22,9 +23,38 @@ export default function HomePage() {
       }
 
       const data = await res.json();
-      router.push(`/payment?jobId=${data.jobId}`);
-    } catch {
-      alert("Sunucuya bağlanılamadı");
+
+      // 2. Tami için telefon numarası zorunludur. 
+      // Şimdilik hızlıca Masterpass uyumu için kullanıcıdan istiyoruz.
+      const phoneNumber = prompt("Masterpass ödeme doğrulaması için telefon numaranızı giriniz (Örn: 905301234567):");
+      
+      if (!phoneNumber || phoneNumber.length < 10) {
+        alert("Ödemeye devam edebilmek için geçerli bir telefon numarası gereklidir.");
+        return;
+      }
+
+      // 3. Oluşturduğumuz Tami API rotasına istek atıyoruz
+      const tamiRes = await fetch("/api/tami/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: "129.90",
+          orderId: `SIP-${data.jobId}`,
+          phoneNumber: phoneNumber
+        }),
+      });
+
+      const tamiData = await tamiRes.json();
+
+      if (tamiData.url) {
+        // Kullanıcıyı Tami'nin güvenli ödeme sayfasına gönderiyoruz
+        window.location.href = tamiData.url;
+      } else {
+        alert("Ödeme sayfası oluşturulamadı, lütfen tekrar deneyin.");
+      }
+
+    } catch (err) {
+      alert("Sunucuya bağlanılamadı veya bir hata oluştu.");
     }
   };
 
@@ -50,13 +80,12 @@ export default function HomePage() {
 
             {/* 🔴 CTA Butonları */}
             <div style={{ display: "flex", gap: 12, marginTop: 22, flexWrap: "wrap" }}>
-              {/* ⬇️ SADECE onClick EKLENDİ */}
               <Link
-  className="btn btnPrimary"
-  href="/vehicle"
->
-  AI Araç Analizi Paketi →
-</Link>
+                className="btn btnPrimary"
+                href="/vehicle"
+              >
+                AI Araç Analizi Paketi →
+              </Link>
 
               <Link className="btn btnGhost" href="/photo-guide">
                 Doğru Fotoğraf Rehberi
@@ -124,10 +153,9 @@ export default function HomePage() {
               <h3 style={{ marginTop: 12 }}>129,90₺</h3>
 
               <div style={{ marginTop: 18 }}>
-                {/* ⬇️ BURAYA DA AYNI EKLENDİ */}
                 <Link
                   className="btn btnPrimary"
-                  href="/vehicle"
+                  href="#"
                   onClick={startAnalyze}
                 >
                   AI Araç Analizi Paketi →
