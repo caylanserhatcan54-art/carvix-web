@@ -5,87 +5,73 @@ import { useParams, useRouter } from "next/navigation";
 import VehicleDiagramC from "@/components/report/VehicleDiagramC";
 import PartTable, { PartRow } from "@/components/report/PartTable";
 
-const API =
-  process.env.NEXT_PUBLIC_API_BASE ||
-  "https://ai-arac-analiz-backend.onrender.com";
+const API = (process.env.NEXT_PUBLIC_API_BASE || "https://ai-arac-analiz-backend.onrender.com").replace(/\/$/, "");
 
-// Lemon Squeezy tip tanımı
-declare global {
-  interface Window {
-    createLemonSqueezy: () => void;
-    LemonSqueezy: any;
-  }
-}
-
-type UiStatus =
-  | "ORIJINAL"
-  | "BOYALI"
-  | "LOKAL_BOYA"
-  | "DEGISEN"
-  | "SUPHELI"
-  | "PLASTIK"
-  | "BILINMIYOR";
+type UiStatus = "ORIJINAL" | "BOYALI" | "LOKAL_BOYA" | "DEGISEN" | "SUPHELI" | "PLASTIK" | "BILINMIYOR";
 
 function niceLabel(key: string) {
   const map: Record<string, string> = {
-    GENEL_ON: "Genel - Ön",
-    GENEL_ARKA: "Genel - Arka",
-    GENEL_SAG: "Genel - Sağ",
-    GENEL_SOL: "Genel - Sol",
-    GENEL_TAVAN: "Genel - Tavan",
-    SOL_ON_KAPI: "Sol Ön Kapı",
-    SAG_ON_KAPI: "Sağ Ön Kapı",
-    SOL_ARKA_KAPI: "Sol Arka Kapı",
-    SAG_ARKA_KAPI: "Sağ Arka Kapı",
-    KAPUT: "Kaput",
-    BAGAJ: "Bagaj",
+    GENEL_ON: "Genel - Ön", GENEL_ARKA: "Genel - Arka", GENEL_SAG: "Genel - Sağ",
+    GENEL_SOL: "Genel - Sol", GENEL_TAVAN: "Genel - Tavan", SOL_ON_KAPI: "Sol Ön Kapı",
+    SAG_ON_KAPI: "Sağ Ön Kapı", SOL_ARKA_KAPI: "Sol Arka Kapı", SAG_ARKA_KAPI: "Sağ Arka Kapı",
+    KAPUT: "Kaput", BAGAJ: "Bagaj",
   };
   return map[key] || key;
 }
 
 export default function ReportPage() {
   const { jobId } = useParams<{ jobId: string }>();
-  const router = useRouter();
   const [data, setData] = useState<any>(null);
+  const [loadingPayment, setLoadingPayment] = useState(false);
+
+  const fetchReport = async () => {
+    try {
+      const r = await fetch(`${API}/reports/${jobId}`);
+      if (!r.ok) return;
+      const d = await r.json();
+      setData(d);
+    } catch (error) {
+      console.error("Rapor çekilemedi:", error);
+    }
+  };
 
   useEffect(() => {
     if (!jobId) return;
-
-    const fetchReport = async () => {
-      try {
-        const r = await fetch(`${API}/reports/${jobId}`);
-        if (!r.ok) return;
-        const d = await r.json();
-        setData(d);
-      } catch (error) {
-        console.error("Rapor çekilemedi:", error);
-      }
-    };
-
     fetchReport();
-    // Ödeme yapılıp status "done" olana kadar her 3 saniyede bir kontrol et
+
+    // Rapor "done" olana kadar her 5 saniyede bir kontrol et
     const i = setInterval(() => {
-        if (data?.status !== "done") {
-            fetchReport();
-        }
-    }, 3000);
+      if (data?.status !== "done") {
+        fetchReport();
+      }
+    }, 5000);
 
     return () => clearInterval(i);
   }, [jobId, data?.status]);
 
-  // Lemon Squeezy'yi başlat
-  useEffect(() => {
-    if (window.createLemonSqueezy) {
-      window.createLemonSqueezy();
-    }
-  }, []);
-
-  const handlePayment = () => {
-    const checkoutUrl = `https://carvix.lemonsqueezy.com/checkout/buy/5b3fb07b-2fdb-486e-84e6-ed99f2c2b964?embed=1&checkout[custom][token]=${jobId}`;
-    if (window.LemonSqueezy) {
-      window.LemonSqueezy.Url.Open(checkoutUrl);
-    } else {
-      window.open(checkoutUrl, "_blank");
+  // TAMI ÖDEME TETİKLEYİCİ
+  const handleTamiPayment = async () => {
+    try {
+      setLoadingPayment(true);
+      const res = await fetch(`${API}/payments/tami/init`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            flow_token: jobId, 
+            amount: 129.90 
+        }),
+      });
+      
+      const paymentData = await res.json();
+      if (paymentData?.paymentUrl) {
+        window.location.href = paymentData.paymentUrl;
+      } else {
+        alert("Ödeme başlatılamadı.");
+      }
+    } catch (error) {
+      alert("Bağlantı hatası.");
+    } finally {
+      setLoadingPayment(false);
     }
   };
 
@@ -104,117 +90,79 @@ export default function ReportPage() {
       key,
       label: niceLabel(key),
       status: p?.status || "BILINMIYOR",
-      note: p?.ai_comment || "Bu parça için yeterli analiz verisi yok.",
+      note: p?.ai_comment || "Analiz bekleniyor...",
     }));
   }, [parts]);
 
-  // 1. Yükleme Ekranı
-  if (!data) {
-    return <div style={{ padding: 40, textAlign: "center" }}>🔄 Rapor verileri alınıyor…</div>;
-  }
+  if (!data) return <div style={{ padding: 40, textAlign: "center", color: "#fff" }}>🔄 Rapor verileri alınıyor…</div>;
 
-  // 2. ÖDEME KONTROLÜ (Ödeme yapılmadıysa raporu kilitle)
-  // Backend'den status "queued", "processing" geliyorsa ve "paid" değilse burası çalışır
-  if (data.status !== "done" && data.status !== "paid") {
+  // ÖDEME KONTROLÜ (Eğer ödenmediyse kilit ekranı göster)
+  if (data.status !== "done" && !data.paid) {
     return (
-      <div className="container" style={{ padding: "100px 20px", textAlign: "center" }}>
-        <div className="glass" style={{ padding: 40, maxWidth: 600, margin: "0 auto" }}>
-          <h2 style={{ fontSize: 24, marginBottom: 16 }}>🔒 Raporunuz Hazır!</h2>
-          <p style={{ marginBottom: 24, color: "#666" }}>
-            Aracınızın yapay zeka analizi tamamlandı. Detaylı boya, değişen ve risk raporunu görüntülemek için lütfen ödemeyi tamamlayın.
+      <div className="container" style={{ padding: "100px 20px", textAlign: "center", color: "#fff" }}>
+        <div className="glass" style={{ padding: 40, maxWidth: 600, margin: "0 auto", backgroundColor: "#111" }}>
+          <h2 style={{ fontSize: 24, marginBottom: 16 }}>🔒 Analiz Raporunuz Hazır</h2>
+          <p style={{ marginBottom: 24, color: "#a1a1aa" }}>
+            Aracınızın yapay zeka analizi tamamlandı. Detaylı ekspertiz raporunu görüntülemek için ödemeyi tamamlayın.
           </p>
           <button 
-            onClick={handlePayment}
-            style={{ 
-              backgroundColor: "#2563eb", 
-              color: "white", 
-              padding: "15px 40px", 
-              borderRadius: "8px", 
-              fontSize: 18, 
-              fontWeight: "bold",
-              cursor: "pointer",
-              border: "none"
-            }}
+            onClick={handleTamiPayment}
+            disabled={loadingPayment}
+            style={{ backgroundColor: "#2563eb", color: "white", padding: "18px 40px", borderRadius: "12px", fontSize: 18, fontWeight: "bold", cursor: "pointer", border: "none" }}
           >
-            129,90 TL ÖDE VE RAPORU GÖR
+            {loadingPayment ? "Lütfen Bekleyin..." : "129,90 TL ÖDE VE GÖR"}
           </button>
         </div>
       </div>
     );
   }
 
-  // 3. ÖDEME YAPILDI AMA ANALİZ HENÜZ BİTMEDİ (Worker çalışıyor)
-  if (data.status === "paid" || (data.status === "queued" && data.paid)) {
-      return (
-        <div className="container" style={{ padding: "100px 20px", textAlign: "center" }}>
-            <div className="glass" style={{ padding: 40 }}>
-                <h2>✅ Ödeme Onaylandı</h2>
-                <p>Yapay zekamız görsellerinizi inceliyor, raporunuz saniyeler içinde burada olacak...</p>
-                <div className="loader" style={{ marginTop: 20 }}>🔄</div>
-            </div>
-        </div>
-      )
+  // ANALİZ SÜRECİ (Ödendi ama AI hala çalışıyor)
+  if (data.status === "processing" || data.status === "queued") {
+    return (
+      <div className="container" style={{ padding: "100px 20px", textAlign: "center", color: "#fff" }}>
+          <div className="glass" style={{ padding: 40 }}>
+              <h2>✅ Ödeme Başarılı</h2>
+              <p>Yapay zekamız parçaları inceliyor... Lütfen bu sayfayı kapatmayın.</p>
+              <div style={{ marginTop: 20, fontSize: "40px" }} className="animate-spin">🔄</div>
+          </div>
+      </div>
+    );
   }
 
-  // 4. RAPOR EKRANI (Her şey tamam)
+  // RAPORUN KENDİSİ
   return (
-    <main className="section">
+    <main className="section" style={{ color: "#fff" }}>
       <div className="container">
-        <div className="glass" style={{ padding: 26 }}>
+        <div className="glass" style={{ padding: 26, backgroundColor: "#111" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-             <h1>Araç Ön Analiz Raporu</h1>
-             <span style={{ backgroundColor: "#dcfce7", color: "#166534", padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: "bold" }}>ÖDENDİ</span>
+             <h1 className="h2">Yapay Zeka Ekspertiz Raporu</h1>
+             <span style={{ backgroundColor: "#166534", color: "#dcfce7", padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: "bold" }}>TAMAMLANDI</span>
           </div>
 
           {data.report?.summary && (
-            <div className="card" style={{ marginBottom: 18 }}>
-              <b>🤖 Yapay Zekâ Genel Yorumu</b>
-              <p className="small">{data.report.summary.ai_comment}</p>
-              <p className="small">
-                Genel Risk: <b>{data.report.summary.overall_risk}</b>
-              </p>
+            <div className="card" style={{ marginBottom: 18, padding: 15, border: "1px solid #333" }}>
+              <b style={{ color: "#60a5fa" }}>🤖 Yapay Zekâ Özeti</b>
+              <p style={{ marginTop: 8 }}>{data.report.summary.ai_comment}</p>
+              <p style={{ marginTop: 8 }}>Genel Risk Durumu: <b>{data.report.summary.overall_risk}</b></p>
             </div>
           )}
 
           <VehicleDiagramC map={statusMap} />
-
           <PartTable rows={rows} />
 
-          <div style={{ marginTop: 24 }}>
-            <h3>📸 Görsel Kanıtlar</h3>
-            {Object.entries(parts).map(([partKey, p]: any) => (
-              <div key={partKey} style={{ marginTop: 18 }}>
-                <b>{niceLabel(partKey)}</b>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                    gap: 12,
-                    marginTop: 8,
-                  }}
-                >
-                  {Array.isArray(p?.evidence) &&
-                    p.evidence.map((ev: any, i: number) => (
-                      <div key={i} className="card">
-                        {ev.source_url && (
-                          <img
-                            src={ev.source_url}
-                            alt={partKey}
-                            style={{ width: "100%", borderRadius: 8 }}
-                          />
-                        )}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="card" style={{ marginTop: 24 }}>
-            <b>⚠️ Hukuki Bilgilendirme</b>
-            <p className="small">
-              Bu rapor yapay zekâ destekli ön analizdir. Resmî ekspertiz yerine geçmez.
-            </p>
+          <div style={{ marginTop: 32 }}>
+            <h3>📸 Analiz Kanıtları</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginTop: 16 }}>
+              {Object.entries(parts).map(([partKey, p]: any) => 
+                Array.isArray(p?.evidence) && p.evidence.map((ev: any, i: number) => (
+                  <div key={`${partKey}-${i}`} className="card" style={{ overflow: "hidden" }}>
+                    <img src={ev.source_url} alt={partKey} style={{ width: "100%", height: "150px", objectFit: "cover" }} />
+                    <div style={{ padding: 8, fontSize: 11, textAlign: "center" }}>{niceLabel(partKey)}</div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
