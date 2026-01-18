@@ -1,9 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Script from "next/script"; // Yeni eklediğimiz import
+import Script from "next/script";
 
 import { SiteShell } from "@/components/marketing/SiteShell";
-import Navbar from "@/components/marketing/Navbar";
 import Footer from "@/components/marketing/Footer";
 import { BRAND } from "@/lib/marketing";
 
@@ -36,8 +35,8 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body>
+        {/* Navbar'ı buradan sildik, SiteShell zaten içinde barındırıyor */}
         <SiteShell>
-          <Navbar />
           {children}
           <Footer />
         </SiteShell>

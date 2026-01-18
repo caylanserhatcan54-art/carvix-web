@@ -1,44 +1,104 @@
 "use client";
 
+import { PackageCheck, RotateCcw, AlertTriangle, MessageSquare } from "lucide-react";
+
 export default function IadeVeTeslimatPage() {
   return (
-    <div className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px', lineHeight: '1.7', color: '#333', fontFamily: 'sans-serif' }}>
-      <h1 style={{ borderBottom: '2px solid #eee', paddingBottom: '10px' }}>📦 İptal, İade ve Teslimat Koşulları</h1>
-      
-      <p style={{ marginTop: '20px' }}>
-        Carvix üzerinden satın alınan dijital hizmetlerin (AI Araç Analiz Raporu) teslimat ve iade süreçleri, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümlerine tabidir.
-      </p>
+    <div style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '40px 20px' }}>
+      <div className="container" style={{ 
+        maxWidth: '800px', 
+        margin: '0 auto', 
+        lineHeight: '1.8', 
+        color: '#e4e4e7', 
+        fontFamily: 'sans-serif' 
+      }}>
+        
+        {/* Başlık Bölümü */}
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <h1 style={{ 
+            color: '#ffffff', 
+            fontSize: '2.2rem', 
+            fontWeight: '800', 
+            letterSpacing: '-1px',
+            marginBottom: '10px'
+          }}>
+            İptal, İade ve Teslimat
+          </h1>
+          <div style={{ width: '60px', height: '4px', backgroundColor: '#ef4444', margin: '0 auto', borderRadius: '2px' }}></div>
+        </div>
 
-      <h3>1. Teslimat Koşulları</h3>
-      <p>
-        Carvix tarafından sunulan hizmetler tamamen dijitaldir. Kullanıcı, gerekli araç görsellerini yükleyip ödeme işlemini Tami Sanal POS altyapısı üzerinden başarıyla tamamladığı anda, analiz süreci başlar. Oluşturulan rapor, kullanıcıya web sitesi üzerinden <strong>anında (elektronik ortamda)</strong> sunulur. Fiziksel bir kargo gönderimi söz konusu değildir.
-      </p>
+        <section style={{ marginBottom: '30px' }}>
+          <p>
+            <strong style={{ color: '#fff' }}>Carvix</strong> üzerinden satın alınan dijital hizmetlerin (AI Araç Analiz Raporu) süreçleri, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümlerine tabidir.
+          </p>
+        </section>
 
-      <h3>2. İptal ve İade Politikası (Cayma Hakkı İstisnası)</h3>
-      <p>
-        Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ğ) bendi uyarınca; <strong>"Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</strong> tüketicinin cayma hakkı bulunmamaktadır.
-      </p>
-      <ul style={{ backgroundColor: '#fff5f5', padding: '20px', borderRadius: '8px', borderLeft: '4px solid #f87171' }}>
-        <li>Satın alınan analiz raporu kişiye özel olarak anında oluşturulduğu ve sunulduğu için, ödeme onayından sonra işlemin iptali veya ücret iadesi mümkün değildir.</li>
-        <li>Kullanıcı, ödeme yapmadan önce bu koşulu kabul etmiş sayılır.</li>
-      </ul>
+        {/* 1. Teslimat */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <PackageCheck size={24} color="#3b82f6" />
+            <h3 style={{ color: '#fff', margin: 0 }}>1. Teslimat Koşulları</h3>
+          </div>
+          <p>
+            Carvix hizmetleri tamamen <strong style={{ color: '#fff' }}>dijitaldir</strong>. Ödeme işlemi Tami Sanal POS üzerinden tamamlandığı anda analiz süreci başlar. Rapor, web sitemiz üzerinden <strong style={{ color: '#3b82f6' }}>anında (elektronik ortamda)</strong> sunulur. Fiziksel bir kargo gönderimi yapılmamaktadır.
+          </p>
+        </div>
 
-      <h3>3. Teknik Aksaklıklar ve Hatalı İşlemler</h3>
-      <p>
-        Sistem kaynaklı bir teknik hata nedeniyle raporun oluşturulamaması veya görsellerin işlenememesi durumunda, kullanıcının hakkı saklıdır. Bu gibi durumlarda:
-      </p>
-      <ul>
-        <li>Hata incelenir ve mümkünse hizmetin yeniden ifası sağlanır.</li>
-        <li>Hizmetin teknik olarak sunulamadığı kesinleşirse, ödenen tutar Tami aracılığıyla kullanıcının kartına iade edilir. İadenin karta yansıma süresi bankalara göre 2-7 iş günü arasında değişebilir.</li>
-      </ul>
+        {/* 2. İptal ve İade - Kritik Bölüm */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <RotateCcw size={24} color="#ef4444" />
+            <h3 style={{ color: '#fff', margin: 0 }}>2. İptal ve İade Politikası</h3>
+          </div>
+          <p style={{ marginBottom: '20px' }}>
+            Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ğ) bendi uyarınca; <em>"Elektronik ortamda anında ifa edilen hizmetler"</em> kapsamında tüketicinin <strong>cayma hakkı bulunmamaktadır.</strong>
+          </p>
+          
+          <div style={{ 
+            backgroundColor: 'rgba(239, 68, 68, 0.05)', 
+            padding: '25px', 
+            borderRadius: '16px', 
+            borderLeft: '4px solid #ef4444' 
+          }}>
+            <ul style={{ margin: 0, paddingLeft: '20px', color: '#fca5a5' }}>
+              <li style={{ marginBottom: '10px' }}>Satın alınan rapor kişiye özel ve anında oluşturulduğu için ücret iadesi mümkün değildir.</li>
+              <li>Kullanıcı, ödeme yapmadan önce bu dijital teslimat koşulunu kabul etmiş sayılır.</li>
+            </ul>
+          </div>
+        </div>
 
-      <h3>4. Uyuşmazlıkların Çözümü</h3>
-      <p>
-        Her türlü şikayet ve destek talebiniz için öncelikle <strong>info@carvix.site</strong> adresi üzerinden bizimle iletişime geçmeniz rica olunur. Talepleriniz 24 saat içerisinde titizlikle incelenerek tarafınıza geri dönüş sağlanacaktır.
-      </p>
+        {/* 3. Teknik Aksaklıklar */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <AlertTriangle size={24} color="#f59e0b" />
+            <h3 style={{ color: '#fff', margin: 0 }}>3. Teknik Aksaklıklar</h3>
+          </div>
+          <p>
+            Sistem kaynaklı bir hata nedeniyle raporun oluşturulamaması durumunda:
+          </p>
+          <ul style={{ color: '#a1a1aa', paddingLeft: '20px' }}>
+            <li style={{ marginBottom: '8px' }}>Hata incelenerek hizmetin yeniden sunulması sağlanır.</li>
+            <li>Hizmet teknik olarak sunulamazsa, tutar Tami aracılığıyla kartınıza iade edilir (Yansıma süresi 2-7 iş günüdür).</li>
+          </ul>
+        </div>
 
-      <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid #eee', fontSize: '0.85rem', color: '#666' }}>
-        <p>Tüketiciler, şikayet ve itirazları konusundaki başvurularını T.C. Ticaret Bakanlığı bünyesindeki Tüketici Hakem Heyetlerine veya Tüketici Mahkemelerine yapabilirler.</p>
+        {/* 4. İletişim */}
+        <div style={{ 
+          marginTop: '60px', 
+          padding: '30px', 
+          backgroundColor: '#18181b', 
+          borderRadius: '20px', 
+          border: '1px solid #27272a',
+          textAlign: 'center'
+        }}>
+          <MessageSquare size={24} color="#3b82f6" style={{ marginBottom: '15px' }} />
+          <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>Uyuşmazlık ve Destek</h3>
+          <p style={{ color: '#a1a1aa', fontSize: '0.95rem', margin: 0 }}>
+            Tüm talepleriniz için bize <strong style={{ color: '#fff' }}>info@carvix.site</strong> üzerinden ulaşabilirsiniz. 
+            Tüketici şikayetleri için T.C. Ticaret Bakanlığı Hakem Heyetleri yetkilidir.
+          </p>
+        </div>
+
       </div>
     </div>
   );

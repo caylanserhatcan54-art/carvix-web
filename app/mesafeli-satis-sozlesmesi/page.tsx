@@ -1,64 +1,124 @@
 "use client";
 
+import { Scale, Users, CreditCard, PlayCircle, ShieldCheck } from "lucide-react";
+
 export default function MesafeliSatisSozlesmesiPage() {
   return (
-    <div className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px', lineHeight: '1.6', color: '#333', fontFamily: 'sans-serif' }}>
-      <h1 style={{ borderBottom: '2px solid #eee', paddingBottom: '10px' }}>📄 Mesafeli Satış Sözleşmesi</h1>
-      
-      <p style={{ marginTop: '20px' }}>
-        İşbu sözleşme, <strong>www.carvix.site</strong> (bundan sonra "WEB SİTESİ" olarak anılacaktır) üzerinden sunulan dijital hizmetlerin satışına ilişkin olarak, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri uyarınca düzenlenmiştir.
-      </p>
+    <div style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '40px 20px' }}>
+      <div className="container" style={{ 
+        maxWidth: '800px', 
+        margin: '0 auto', 
+        lineHeight: '1.8', 
+        color: '#e4e4e7', 
+        fontFamily: 'sans-serif' 
+      }}>
+        
+        {/* Başlık Bölümü */}
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <h1 style={{ 
+            color: '#ffffff', 
+            fontSize: '2.2rem', 
+            fontWeight: '800', 
+            letterSpacing: '-1px',
+            marginBottom: '10px'
+          }}>
+            Mesafeli Satış Sözleşmesi
+          </h1>
+          <div style={{ width: '60px', height: '4px', backgroundColor: '#3b82f6', margin: '0 auto', borderRadius: '2px' }}></div>
+        </div>
 
-      <section style={{ marginTop: '25px' }}>
-        <h3 style={{ borderLeft: '4px solid #2563eb', paddingLeft: '10px' }}>1. Taraflar</h3>
-        <p>
-          <strong>SATICI:</strong><br />
-          Unvan: Carvix Araç Analiz Teknolojileri<br />
-          Adres: Sakarya, Adapazarı Merkez<br />
-          E-posta: info@carvix.site<br />
-          Telefon: 0533 523 99 54
-        </p>
-        <p>
-          <strong>ALICI (Tüketici):</strong><br />
-          WEB SİTESİ üzerinden dijital hizmet satın alan, ödeme sırasında iletişim bilgilerini beyan eden gerçek veya tüzel kişidir.
-        </p>
-      </section>
+        <section style={{ marginBottom: '30px' }}>
+          <p>
+            İşbu sözleşme, <strong style={{ color: '#fff' }}>www.carvix.site</strong> üzerinden sunulan dijital hizmetlerin satışına ilişkin olarak, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri uyarınca düzenlenmiştir.
+          </p>
+        </section>
 
-      <section>
-        <h3 style={{ borderLeft: '4px solid #2563eb', paddingLeft: '10px' }}>2. Sözleşme Konusu Hizmet ve Ödeme</h3>
-        <p>
-          <strong>Hizmet Tanımı:</strong> Kullanıcı tarafından yüklenen araç verilerinin yapay zeka algoritmaları ile analiz edilerek bir dijital risk raporu oluşturulmasıdır.<br />
-          <strong>Hizmet Bedeli:</strong> Ödeme sayfasında belirtilen ve Alıcı tarafından onaylanan tutardır.<br />
-          <strong>Ödeme Altyapısı:</strong> Ödemeler, <strong>Tami Ödeme ve Elektronik Para Hizmetleri A.Ş.</strong> güvenli ödeme sistemleri üzerinden tahsil edilir.
-        </p>
-      </section>
+        {/* 1. Taraflar */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <Users size={24} color="#3b82f6" />
+            <h3 style={{ color: '#fff', margin: 0 }}>1. Taraflar</h3>
+          </div>
+          <div style={{ backgroundColor: '#18181b', padding: '20px', borderRadius: '16px', border: '1px solid #27272a' }}>
+            <p style={{ margin: 0 }}>
+              <strong style={{ color: '#fff' }}>SATICI:</strong><br />
+              Unvan: Carvix Araç Analiz Teknolojileri<br />
+              Adres: Sakarya, Adapazarı Merkez<br />
+              E-posta: info@carvix.site<br />
+              Telefon: 0533 523 99 54
+            </p>
+            <p style={{ marginTop: '15px', marginBottom: 0 }}>
+              <strong style={{ color: '#fff' }}>ALICI (Tüketici):</strong><br />
+              Sistem üzerinden hizmet satın alan ve ödeme sırasında bilgilerini beyan eden gerçek veya tüzel kişidir.
+            </p>
+          </div>
+        </div>
 
-      <section>
-        <h3 style={{ borderLeft: '4px solid #2563eb', paddingLeft: '10px' }}>3. İfa ve Teslimat</h3>
-        <p>
-          Sözleşme konusu hizmet dijital bir içerik olup, ödeme onayı alındığı anda Alıcı'nın erişimine elektronik ortamda anında sunulur. Alıcı, bu aşamadan sonra hizmetin ifa edilmiş olduğunu kabul eder.
-        </p>
-      </section>
+        {/* 2. Hizmet ve Ödeme */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <CreditCard size={24} color="#3b82f6" />
+            <h3 style={{ color: '#fff', margin: 0 }}>2. Sözleşme Konusu Hizmet ve Ödeme</h3>
+          </div>
+          <p>
+            <strong style={{ color: '#fff' }}>Hizmet Tanımı:</strong> Yapay zeka algoritmaları ile dijital araç risk analiz raporu oluşturulması.<br />
+            <strong style={{ color: '#fff' }}>Ödeme Altyapısı:</strong> Ödemeler, <strong style={{ color: '#fff' }}>Tami Ödeme ve Elektronik Para Hizmetleri A.Ş.</strong> güvenli sistemleri üzerinden tahsil edilir.
+          </p>
+        </div>
 
-      <section style={{ backgroundColor: '#fff5f5', padding: '20px', borderRadius: '8px', border: '1px solid #fee2e2' }}>
-        <h3 style={{ marginTop: 0 }}>4. Cayma Hakkı İstisnası</h3>
-        <p>
-          Mesafeli Sözleşmeler Yönetmeliği'nin 15/1-ğ maddesi uyarınca; <strong>"Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</strong> cayma hakkı kullanılamaz. Alıcı, satın aldığı raporun kendisine sunulmasıyla birlikte cayma hakkını kaybedeceğini peşinen kabul eder.
-        </p>
-      </section>
+        {/* 3. İfa ve Teslimat */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <PlayCircle size={24} color="#3b82f6" />
+            <h3 style={{ color: '#fff', margin: 0 }}>3. İfa ve Teslimat</h3>
+          </div>
+          <p>
+            Sözleşme konusu hizmet dijital bir içerik olup, ödeme onayı alındığı anda Alıcı'nın erişimine elektronik ortamda anında sunulur. Alıcı, bu aşamadan sonra hizmetin ifa edilmiş olduğunu kabul eder.
+          </p>
+        </div>
 
-      <section>
-        <h3 style={{ borderLeft: '4px solid #2563eb', paddingLeft: '10px' }}>5. Genel Şartlar</h3>
-        <ul style={{ paddingLeft: '20px' }}>
-          <li>Alıcı, sisteme yüklediği görsellerin doğruluğundan sorumludur.</li>
-          <li>Sistem kaynaklı teknik hatalarda, Alıcı'nın ödediği tutar Satıcı tarafından 10 iş günü içerisinde iade edilir.</li>
-          <li>İşbu sözleşme, Alıcı tarafından elektronik ortamda onaylandığı anda yürürlüğe girer.</li>
-        </ul>
-      </section>
+        {/* 4. Cayma Hakkı İstisnası */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <Scale size={24} color="#ef4444" />
+            <h3 style={{ color: '#fff', margin: 0 }}>4. Cayma Hakkı İstisnası</h3>
+          </div>
+          <div style={{ 
+            backgroundColor: 'rgba(239, 68, 68, 0.05)', 
+            padding: '25px', 
+            borderRadius: '16px', 
+            border: '1px solid rgba(239, 68, 68, 0.2)' 
+          }}>
+            <p style={{ margin: 0 }}>
+              Mesafeli Sözleşmeler Yönetmeliği'nin 15/1-ğ maddesi uyarınca; <strong>"Elektronik ortamda anında ifa edilen hizmetlerde"</strong> cayma hakkı kullanılamaz. Alıcı, satın aldığı raporun kendisine sunulmasıyla birlikte cayma hakkını kaybedeceğini peşinen kabul eder.
+            </p>
+          </div>
+        </div>
 
-      <p style={{ marginTop: '40px', fontSize: '13px', opacity: 0.6, textAlign: 'center', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-        Son güncelleme: 17 Ocak 2026
-      </p>
+        {/* 5. Genel Şartlar */}
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <ShieldCheck size={24} color="#3b82f6" />
+            <h3 style={{ color: '#fff', margin: 0 }}>5. Genel Şartlar</h3>
+          </div>
+          <ul style={{ color: '#a1a1aa', paddingLeft: '20px' }}>
+            <li style={{ marginBottom: '10px' }}>Alıcı, sisteme yüklediği görsellerin doğruluğundan sorumludur.</li>
+            <li style={{ marginBottom: '10px' }}>Teknik hatalarda, ücret iadesi Tami aracılığıyla 10 iş günü içerisinde yapılır.</li>
+            <li>Bu sözleşme, elektronik onay ile birlikte yürürlüğe girer.</li>
+          </ul>
+        </div>
+
+        <footer style={{ 
+          marginTop: '60px', 
+          paddingTop: '20px', 
+          borderTop: '1px solid #27272a', 
+          fontSize: '0.85rem', 
+          color: '#52525b',
+          textAlign: 'center'
+        }}>
+          <p>Son Güncelleme: 18 Ocak 2026 - Carvix Araç Analiz Teknolojileri</p>
+        </footer>
+      </div>
     </div>
   );
 }
