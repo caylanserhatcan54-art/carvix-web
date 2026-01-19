@@ -3,31 +3,39 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    // Shopier'den gelen form verilerini alıyoruz
+    // 1. Shopier'den gelen veriyi al
     const formData = await request.formData();
     
-    // Render'daki gerçek backend adresin
+    // 2. Render backend adresin
     const BACKEND_URL = "https://ai-arac-analiz-backend.onrender.com/api/payment/shopier-callback";
 
-    console.log("Shopier verisi alındı, Render'a iletiliyor...");
+    console.log("Shopier verisi iletiliyor...");
 
-    // Veriyi Render backend'ine aynen iletiyoruz
+    // 3. Veriyi URLSearchParams formatına çevirerek gönder (Backend'in daha rahat okuması için)
+    const params = new URLSearchParams();
+    formData.forEach((value, key) => {
+      params.append(key, value.toString());
+    });
+
     const response = await fetch(BACKEND_URL, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: params.toString(),
     });
 
     const result = await response.text();
+    console.log("Backend cevabı:", result);
 
-    // Shopier "OK" yazısını görmeli, backend'den gelen cevabı döndürüyoruz
+    // Shopier "OK" yazısını görmeli
     return new NextResponse(result, { status: 200 });
   } catch (error) {
     console.error("Proxy Hatası:", error);
-    return new NextResponse("Internal Proxy Error", { status: 500 });
+    return new NextResponse("FAILED", { status: 500 });
   }
 }
 
-// Bazı durumlarda Shopier GET isteği de atabilir, hazırlıklı olalım
-export async function GET(request: Request) {
+export async function GET() {
     return new NextResponse("Shopier Proxy Active", { status: 200 });
 }
