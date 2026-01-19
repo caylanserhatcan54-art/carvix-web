@@ -8,9 +8,8 @@ import {
   PackageType,
   PartKey,
 } from "@/lib/vehicleConfig";
-import { Upload, Trash2, CreditCard, CheckCircle2, Zap, Image as ImageIcon } from "lucide-react";
+import { Upload, Trash2, CreditCard, CheckCircle2, Zap, Image as ImageIcon, Loader2 } from "lucide-react";
 
-// Sondaki slash'ı temizliyoruz
 const API = (process.env.NEXT_PUBLIC_API_BASE || "https://ai-arac-analiz-backend.onrender.com").replace(/\/$/, "");
 
 type ImageItem = {
@@ -22,7 +21,6 @@ export default function UploadPage() {
   const router = useRouter();
   const sp = useSearchParams();
 
-  // URL'den araç tipi ve paketi al
   const vehicleType = (sp.get("v") as VehicleType) || "car";
   const pkg = (sp.get("p") as PackageType) || "quick";
   const config = VEHICLE_CONFIG[vehicleType];
@@ -31,8 +29,8 @@ export default function UploadPage() {
   const [loading, setLoading] = useState(false);
   const [analysisReady, setAnalysisReady] = useState(false);
   const [flowToken, setFlowToken] = useState<string | null>(null);
+  const [showMaintenance, setShowMaintenance] = useState(false); // Bakım modu kontrolü
 
-  // Sayfa açıldığında backend'den bir flow token (analiz ID) oluştur
   useEffect(() => {
     async function initFlow() {
       try {
@@ -78,7 +76,6 @@ export default function UploadPage() {
         grouped[it.part].push(it.file);
       });
 
-      // Her parça grubunu backend'e gönder
       for (const partKey of Object.keys(grouped)) {
         const form = new FormData();
         form.append("part_key", partKey);
@@ -92,7 +89,6 @@ export default function UploadPage() {
         if (!uploadRes.ok) throw new Error(`${partKey} yüklenemedi`);
       }
 
-      // Analizi kuyruğa al
       await fetch(`${API}/flows/${flowToken}/submit`, { method: "POST" });
       setAnalysisReady(true);
     } catch (err) {
@@ -102,38 +98,34 @@ export default function UploadPage() {
     }
   }
 
-  const handleTamiPayment = async () => {
-    if (!flowToken) return;
-    
-    try {
-      setLoading(true);
-      const res = await fetch(`${API}/payments/tami/init`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            flow_token: flowToken, // main.py bu ismi bekliyor
-            amount: 129.90 
-        }),
-      });
-      
-      const data = await res.json();
-      
-      if (data && data.paymentUrl) {
-        window.location.href = data.paymentUrl;
-      } else {
-        alert("Ödeme sayfası oluşturulamadı: " + (data.detail || "Bilinmeyen hata"));
-      }
-    } catch (error) {
-      alert("Backend bağlantı hatası. Lütfen daha sonra tekrar deneyin.");
-    } finally {
-      setLoading(false);
-    }
+  // BURASI GÜNCELLENDİ: Hata vermek yerine şık bir uyarı gösterecek
+  const handlePayment = async () => {
+    setShowMaintenance(true); // Kullanıcıya bakımda olduğumuzu gösteriyoruz
   };
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px', fontFamily: 'sans-serif' }}>
+      
+      {/* Bakım Modu Modalı */}
+      {showMaintenance && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ backgroundColor: '#18181b', padding: '40px', borderRadius: '32px', border: '1px solid #27272a', maxWidth: '450px', textAlign: 'center' }}>
+            <Loader2 size={40} className="animate-spin" color="#3b82f6" style={{ margin: '0 auto 20px auto' }} />
+            <h2 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '15px' }}>Sistem Güncelleniyor</h2>
+            <p style={{ color: '#a1a1aa', fontSize: '14px', lineHeight: '1.6', marginBottom: '25px' }}>
+              Değerli kullanıcımız, size daha güvenli bir ödeme deneyimi sunmak için altyapı geçiş aşamasındayız. Çok yakında İşyerimpos altyapısıyla hizmetinizdeyiz.
+            </p>
+            <button 
+              onClick={() => setShowMaintenance(false)}
+              style={{ padding: '12px 24px', borderRadius: '12px', backgroundColor: '#fff', color: '#000', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              Anladım
+            </button>
+          </div>
+        </div>
+      )}
+
       <div style={{ width: '100%', maxWidth: '600px', textAlign: 'center' }}>
-        
         <div style={{ marginBottom: '40px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(59,130,246,0.1)', padding: '6px 16px', borderRadius: '100px', color: '#60a5fa', fontSize: '11px', fontWeight: 'bold', marginBottom: '20px' }}>
             <Zap size={14} /> YAPAY ZEKA ANALİZ MERKEZİ
@@ -144,6 +136,7 @@ export default function UploadPage() {
 
         {!analysisReady ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {/* Fotoğraf Yükleme Alanı ... (Aynı kalıyor) */}
             <div style={{ position: 'relative', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '24px', padding: '60px 20px', backgroundColor: 'rgba(255,255,255,0.02)', cursor: 'pointer' }}>
               <input type="file" multiple accept="image/*" onChange={(e) => onFilesSelected(e.target.files)} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
               <Upload size={40} color="#3b82f6" style={{ marginBottom: '16px' }} />
@@ -182,8 +175,8 @@ export default function UploadPage() {
             </div>
             <h2 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '10px' }}>Yükleme Tamamlandı!</h2>
             <p style={{ color: '#a1a1aa', fontSize: '14px', marginBottom: '30px', lineHeight: '1.5' }}>Yapay zeka analizi için görseller hazırlandı. Raporu oluşturmak için ödemenizi güvenle tamamlayın.</p>
-            <button onClick={handleTamiPayment} disabled={loading} style={{ width: '100%', padding: '20px', borderRadius: '16px', backgroundColor: '#2563eb', color: '#fff', fontWeight: '900', fontSize: '18px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-              {loading ? "Yönlendiriliyor..." : <><CreditCard /> 129,90 TL ÖDE</>}
+            <button onClick={handlePayment} disabled={loading} style={{ width: '100%', padding: '20px', borderRadius: '16px', backgroundColor: '#2563eb', color: '#fff', fontWeight: '900', fontSize: '18px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+              <CreditCard /> 129,90 TL ÖDE
             </button>
           </div>
         )}
