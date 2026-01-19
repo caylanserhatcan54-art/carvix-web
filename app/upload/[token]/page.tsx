@@ -8,10 +8,10 @@ import {
   PackageType,
   PartKey,
 } from "@/lib/vehicleConfig";
-import { Upload, Trash2, CreditCard, CheckCircle2, Zap, Image as ImageIcon, Loader2, Mail } from "lucide-react";
+import { Upload, Trash2, CreditCard, CheckCircle2, Zap, Image as ImageIcon, Loader2, Mail, AlertCircle } from "lucide-react";
 
 const API = (process.env.NEXT_PUBLIC_API_BASE || "https://ai-arac-analiz-backend.onrender.com").replace(/\/$/, "");
-const SHOPIER_LINK = "https://www.shopier.com/carvix/43380964"; // Senin Shopier linkin
+const SHOPIER_LINK = "https://www.shopier.com/carvix/43380964"; 
 
 type ImageItem = {
   file: File;
@@ -30,7 +30,7 @@ export default function UploadPage() {
   const [loading, setLoading] = useState(false);
   const [analysisReady, setAnalysisReady] = useState(false);
   const [flowToken, setFlowToken] = useState<string | null>(null);
-  const [email, setEmail] = useState(""); // Kullanıcı mail adresi
+  const [email, setEmail] = useState(""); 
 
   useEffect(() => {
     async function initFlow() {
@@ -88,7 +88,6 @@ export default function UploadPage() {
         await fetch(`${API}/flows/${flowToken}/upload`, { method: "POST", body: form });
       }
 
-      // Backend'e mail adresini de gönderiyoruz (Eşleşme için kritik)
       await fetch(`${API}/flows/${flowToken}/submit`, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -104,7 +103,6 @@ export default function UploadPage() {
   }
 
   const handlePayment = () => {
-    // Kullanıcıyı Shopier'e yönlendiriyoruz
     window.location.href = SHOPIER_LINK;
   };
 
@@ -123,8 +121,8 @@ export default function UploadPage() {
         {!analysisReady ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
-            {/* E-posta Giriş Alanı */}
-            <div style={{ backgroundColor: '#18181b', padding: '20px', borderRadius: '20px', border: '1px solid #27272a', textAlign: 'left' }}>
+            {/* E-posta Giriş Alanı ve Önemli Uyarı */}
+            <div style={{ backgroundColor: '#18181b', padding: '20px', borderRadius: '24px', border: '1px solid #27272a', textAlign: 'left' }}>
                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#a1a1aa', marginBottom: '10px' }}>
                  <Mail size={16} /> Raporun Gönderileceği E-posta
                </label>
@@ -133,8 +131,16 @@ export default function UploadPage() {
                  placeholder="ornek@mail.com"
                  value={email}
                  onChange={(e) => setEmail(e.target.value)}
-                 style={{ width: '100%', padding: '12px', borderRadius: '12px', backgroundColor: '#000', border: '1px solid #3f3f3f', color: '#fff', outline: 'none' }}
+                 style={{ width: '100%', padding: '14px', borderRadius: '14px', backgroundColor: '#000', border: '1px solid #3f3f3f', color: '#fff', outline: 'none', marginBottom: '16px' }}
                />
+               
+               {/* Kullanıcı Bilgilendirme Kutusu */}
+               <div style={{ display: 'flex', gap: '10px', padding: '12px', backgroundColor: 'rgba(59,130,246,0.05)', borderRadius: '12px', border: '1px solid rgba(59,130,246,0.2)' }}>
+                  <AlertCircle size={18} color="#60a5fa" style={{ flexShrink: 0 }} />
+                  <p style={{ fontSize: '11px', color: '#d1d1d6', margin: 0, lineHeight: '1.5' }}>
+                    <strong style={{ color: '#60a5fa' }}>Önemli Not:</strong> Otomatik onaylama sistemimiz e-posta üzerinden eşleşme yapar. Lütfen ödeme sayfasında da yukarıda girdiğiniz e-posta adresini kullandığınızdan emin olun.
+                  </p>
+               </div>
             </div>
 
             <div style={{ position: 'relative', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '24px', padding: '60px 20px', backgroundColor: 'rgba(255,255,255,0.02)', cursor: 'pointer' }}>
