@@ -42,10 +42,10 @@ export default function MesafeliSatisSozlesmesiPage() {
           <div style={{ backgroundColor: '#18181b', padding: '20px', borderRadius: '16px', border: '1px solid #27272a' }}>
             <p style={{ margin: 0 }}>
               <strong style={{ color: '#fff' }}>SATICI:</strong><br />
-              Unvan: Carvix Araç Analiz Teknolojileri<br />
-              Adres: Sakarya, Adapazarı Merkez<br />
+              Unvan: Serhat Can Çaylan <br />
+              Adres: Çayiçi Mah. Toker Sk. No: 16 İç Kapı No: 1 Sapanca / SAKARYA <br />
               E-posta: info@carvix.site<br />
-              Telefon: 0533 523 99 54
+              Telefon: 0533 523 99 54 
             </p>
             <p style={{ marginTop: '15px', marginBottom: 0 }}>
               <strong style={{ color: '#fff' }}>ALICI (Tüketici):</strong><br />
@@ -62,7 +62,7 @@ export default function MesafeliSatisSozlesmesiPage() {
           </div>
           <p>
             <strong style={{ color: '#fff' }}>Hizmet Tanımı:</strong> Yapay zeka algoritmaları ile dijital araç risk analiz raporu oluşturulması.<br />
-            <strong style={{ color: '#fff' }}>Ödeme Altyapısı:</strong> Ödemeler, <strong style={{ color: '#fff' }}>Tami Ödeme ve Elektronik Para Hizmetleri A.Ş.</strong> güvenli sistemleri üzerinden tahsil edilir.
+            <strong style={{ color: '#fff' }}>Ödeme Altyapısı:</strong> Ödemeler, <strong style={{ color: '#fff' }}>İşyerimpos</strong> güvenli sistemleri üzerinden tahsil edilir.
           </p>
         </div>
 
@@ -103,7 +103,7 @@ export default function MesafeliSatisSozlesmesiPage() {
           </div>
           <ul style={{ color: '#a1a1aa', paddingLeft: '20px' }}>
             <li style={{ marginBottom: '10px' }}>Alıcı, sisteme yüklediği görsellerin doğruluğundan sorumludur.</li>
-            <li style={{ marginBottom: '10px' }}>Teknik hatalarda, ücret iadesi Tami aracılığıyla 10 iş günü içerisinde yapılır.</li>
+            <li style={{ marginBottom: '10px' }}>Teknik hatalarda, ücret iadesi İşyerimpos aracılığıyla 10 iş günü içerisinde yapılır.</li>
             <li>Bu sözleşme, elektronik onay ile birlikte yürürlüğe girer.</li>
           </ul>
         </div>
@@ -116,7 +116,7 @@ export default function MesafeliSatisSozlesmesiPage() {
           color: '#52525b',
           textAlign: 'center'
         }}>
-          <p>Son Güncelleme: 18 Ocak 2026 - Carvix Araç Analiz Teknolojileri</p>
+          <p>Son Güncelleme: 19 Ocak 2026 - Serhat Can Çaylan</p>
         </footer>
       </div>
     </div>

@@ -29,7 +29,7 @@ export default function IadeVeTeslimatPage() {
 
         <section style={{ marginBottom: '30px' }}>
           <p>
-            <strong style={{ color: '#fff' }}>Carvix</strong> üzerinden satın alınan dijital hizmetlerin (AI Araç Analiz Raporu) süreçleri, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümlerine tabidir.
+            <strong style={{ color: '#fff' }}>Serhat Can Çaylan</strong> üzerinden satın alınan dijital hizmetlerin (AI Araç Analiz Raporu) süreçleri, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri uyarınca düzenlenmiştir.
           </p>
         </section>
 
@@ -40,7 +40,7 @@ export default function IadeVeTeslimatPage() {
             <h3 style={{ color: '#fff', margin: 0 }}>1. Teslimat Koşulları</h3>
           </div>
           <p>
-            Carvix hizmetleri tamamen <strong style={{ color: '#fff' }}>dijitaldir</strong>. Ödeme işlemi Tami Sanal POS üzerinden tamamlandığı anda analiz süreci başlar. Rapor, web sitemiz üzerinden <strong style={{ color: '#3b82f6' }}>anında (elektronik ortamda)</strong> sunulur. Fiziksel bir kargo gönderimi yapılmamaktadır.
+            Sunulan hizmetler tamamen <strong style={{ color: '#fff' }}>dijitaldir</strong>. Ödeme işlemi <strong style={{ color: '#fff' }}>İşyerimpos</strong> güvenli altyapısı üzerinden tamamlandığı anda analiz süreci başlar. Rapor, web sitemiz üzerinden <strong style={{ color: '#3b82f6' }}>anında (elektronik ortamda)</strong> sunulur. Fiziksel bir kargo veya materyal gönderimi yapılmamaktadır.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export default function IadeVeTeslimatPage() {
             <h3 style={{ color: '#fff', margin: 0 }}>2. İptal ve İade Politikası</h3>
           </div>
           <p style={{ marginBottom: '20px' }}>
-            Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ğ) bendi uyarınca; <em>"Elektronik ortamda anında ifa edilen hizmetler"</em> kapsamında tüketicinin <strong>cayma hakkı bulunmamaktadır.</strong>
+            Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ğ) bendi uyarınca; <em>"Elektronik ortamda anında ifa edilen hizmetler ve tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmeler"</em> kapsamında tüketicinin <strong>cayma hakkı bulunmamaktadır.</strong>
           </p>
           
           <div style={{ 
@@ -61,8 +61,8 @@ export default function IadeVeTeslimatPage() {
             borderLeft: '4px solid #ef4444' 
           }}>
             <ul style={{ margin: 0, paddingLeft: '20px', color: '#fca5a5' }}>
-              <li style={{ marginBottom: '10px' }}>Satın alınan rapor kişiye özel ve anında oluşturulduğu için ücret iadesi mümkün değildir.</li>
-              <li>Kullanıcı, ödeme yapmadan önce bu dijital teslimat koşulunu kabul etmiş sayılır.</li>
+              <li style={{ marginBottom: '10px' }}>Satın alınan dijital rapor kişiye özel ve anında oluşturulduğu için işlem tamamlandıktan sonra ücret iadesi mümkün değildir.</li>
+              <li>Kullanıcı, ödeme onay sayfasında bu dijital teslimat ve iade koşulunu kabul etmiş sayılır.</li>
             </ul>
           </div>
         </div>
@@ -74,11 +74,11 @@ export default function IadeVeTeslimatPage() {
             <h3 style={{ color: '#fff', margin: 0 }}>3. Teknik Aksaklıklar</h3>
           </div>
           <p>
-            Sistem kaynaklı bir hata nedeniyle raporun oluşturulamaması durumunda:
+            Sistem kaynaklı bir hata nedeniyle raporun oluşturulamaması veya erişilememesi durumunda:
           </p>
           <ul style={{ color: '#a1a1aa', paddingLeft: '20px' }}>
-            <li style={{ marginBottom: '8px' }}>Hata incelenerek hizmetin yeniden sunulması sağlanır.</li>
-            <li>Hizmet teknik olarak sunulamazsa, tutar Tami aracılığıyla kartınıza iade edilir (Yansıma süresi 2-7 iş günüdür).</li>
+            <li style={{ marginBottom: '8px' }}>Teknik inceleme yapılarak hizmetin telafisi (raporun yeniden sunulması) sağlanır.</li>
+            <li>Hizmetin sunulmasının imkansız olduğu durumlarda, ödenen tutar <strong style={{ color: '#fff' }}>İşyerimpos</strong> aracılığıyla kartınıza iade edilir (Banka yansıma süresi 2-7 iş günüdür).</li>
           </ul>
         </div>
 
@@ -92,13 +92,23 @@ export default function IadeVeTeslimatPage() {
           textAlign: 'center'
         }}>
           <MessageSquare size={24} color="#3b82f6" style={{ marginBottom: '15px' }} />
-          <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>Uyuşmazlık ve Destek</h3>
+          <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>Destek ve Uyuşmazlık</h3>
           <p style={{ color: '#a1a1aa', fontSize: '0.95rem', margin: 0 }}>
-            Tüm talepleriniz için bize <strong style={{ color: '#fff' }}>info@carvix.site</strong> üzerinden ulaşabilirsiniz. 
-            Tüketici şikayetleri için T.C. Ticaret Bakanlığı Hakem Heyetleri yetkilidir.
+            Tüm soru ve iade talepleriniz için bize <strong style={{ color: '#fff' }}>info@carvix.site</strong> üzerinden ulaşabilirsiniz. <br />
+            <strong>Adres:</strong> Çayiçi Mah. Toker Sk. No: 16 İç Kapı No: 1 Sapanca / SAKARYA
           </p>
         </div>
 
+        <footer style={{ 
+          marginTop: '60px', 
+          paddingTop: '20px', 
+          borderTop: '1px solid #27272a', 
+          fontSize: '0.85rem', 
+          color: '#52525b',
+          textAlign: 'center'
+        }}>
+          <p>Son Güncelleme: 19 Ocak 2026 - Serhat Can Çaylan</p>
+        </footer>
       </div>
     </div>
   );

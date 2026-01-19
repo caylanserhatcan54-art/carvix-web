@@ -7,7 +7,7 @@ export default function GizlilikPolitikasiPage() {
         maxWidth: '800px', 
         margin: '0 auto', 
         lineHeight: '1.8', 
-        color: '#e4e4e7', // Yazı rengini açık gri/beyaz yaptık
+        color: '#e4e4e7', 
         fontFamily: 'sans-serif' 
       }}>
         <h1 style={{ 
@@ -21,12 +21,12 @@ export default function GizlilikPolitikasiPage() {
         </h1>
         
         <p style={{ fontSize: '0.85rem', color: '#71717a', marginBottom: '30px' }}>
-          Son Güncelleme: 18 Ocak 2026
+          Son Güncelleme: 19 Ocak 2026
         </p>
 
         <section>
           <p style={{ fontSize: '1.1rem' }}>
-            <strong style={{ color: '#fff' }}>Carvix</strong> ("Şirket") olarak, 
+            <strong style={{ color: '#fff' }}>Serhat Can Çaylan</strong> ("Veri Sorumlusu") olarak, 
             <span style={{ color: '#3b82f6' }}> www.carvix.site</span> üzerinden sunduğumuz yapay zeka analiz hizmetlerinde 
             verilerinizin güvenliğini en üst düzeyde tutuyoruz.
           </p>
@@ -41,8 +41,8 @@ export default function GizlilikPolitikasiPage() {
         }}>
           <h3 style={{ marginTop: 0, color: '#fff' }}>1. Veri Sorumlusu Bilgileri</h3>
           <p style={{ marginBottom: 0, color: '#a1a1aa' }}>
-            <strong style={{ color: '#fff' }}>Ünvan:</strong> Carvix Araç Analiz Sistemleri<br />
-            <strong style={{ color: '#fff' }}>Adres:</strong> Sakarya / Adapazarı<br />
+            <strong style={{ color: '#fff' }}>Ünvan:</strong> Serhat Can Çaylan<br />
+            <strong style={{ color: '#fff' }}>Adres:</strong> Çayiçi Mah. Toker Sk. No: 16 İç Kapı No: 1 Sapanca / SAKARYA<br />
             <strong style={{ color: '#fff' }}>E-posta:</strong> info@carvix.site
           </p>
         </section>
@@ -53,16 +53,16 @@ export default function GizlilikPolitikasiPage() {
             <strong style={{ color: '#fff' }}>Görsel Veriler:</strong> Analiz için yüklediğiniz araç fotoğrafları.
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: '#fff' }}>Ödeme Güvenliği:</strong> Ödemeler doğrudan <strong style={{ color: '#fff' }}>Tami Sanal POS</strong> altyapısı ile şifreli (SSL) olarak gerçekleşir. Kart bilgileriniz Carvix sistemlerinde <u>asla</u> kaydedilmez.
+            <strong style={{ color: '#fff' }}>Ödeme Güvenliği:</strong> Ödemeler doğrudan <strong style={{ color: '#fff' }}>İşyerimpos</strong> altyapısı ile şifreli (SSL) olarak gerçekleşir. Kart bilgileriniz tarafımızca <u>asla</u> kaydedilmez veya saklanmaz.
           </li>
           <li>
-            <strong style={{ color: '#fff' }}>İşlem Bilgisi:</strong> IP adresi ve sistem kullanım kayıtları.
+            <strong style={{ color: '#fff' }}>İşlem Bilgisi:</strong> IP adresi, tarayıcı bilgileri ve sistem kullanım kayıtları.
           </li>
         </ul>
 
         <h3 style={{ color: '#fff', marginTop: '40px' }}>3. İşlenme Amacı</h3>
         <p>
-          Verileriniz; yapay zeka raporlarının oluşturulması, hizmet kalitesinin artırılması ve yasal faturalandırma süreçleri için KVKK standartlarında işlenmektedir.
+          Verileriniz; yapay zeka raporlarının oluşturulması, ödeme işlemlerinin gerçekleştirilmesi, hizmet kalitesinin artırılması ve yasal faturalandırma süreçlerinin takibi amacıyla 6698 sayılı KVKK standartlarında işlenmektedir.
         </p>
 
         <h3 style={{ color: '#fff', marginTop: '40px' }}>4. Kullanıcı Hakları</h3>
@@ -78,7 +78,7 @@ export default function GizlilikPolitikasiPage() {
           color: '#52525b',
           textAlign: 'center'
         }}>
-          <p>© 2026 Carvix. Tüm hakları saklıdır. Bu metin kullanıcıyı şeffaf bilgilendirme amaçlıdır.</p>
+          <p>© 2026 Serhat Can Çaylan. Tüm hakları saklıdır. Bu metin kullanıcıyı şeffaf bilgilendirme amaçlıdır.</p>
         </footer>
       </div>
     </div>
