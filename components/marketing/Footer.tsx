@@ -28,18 +28,18 @@ export default function Footer() {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
               
-              {/* Tami Kutusu */}
-              <div style={{ border: '1px solid #fff', padding: '2px 5px', borderRadius: '3px' }}>
-                <span style={{ fontSize: '9px', fontWeight: '900', color: '#fff', letterSpacing: '1px' }}>TAMİ</span>
+              {/* Güvenlik Sertifikası Kutusu (Tami yerine PCI-DSS eklendi) */}
+              <div style={{ border: '1px solid rgba(255,255,255,0.3)', padding: '2px 5px', borderRadius: '3px' }}>
+                <span style={{ fontSize: '9px', fontWeight: 'bold', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>PCI-DSS COMPLIANT</span>
               </div>
               
-              {/* Visa (Kendi klasöründen) */}
+              {/* Visa */}
               <img src="/visa-logo.svg" alt="Visa" style={{ height: '10px', width: 'auto' }} />
               
-              {/* Mastercard (Kendi klasöründen) */}
+              {/* Mastercard */}
               <img src="/mastercard-logo.svg" alt="Mastercard" style={{ height: '16px', width: 'auto' }} />
               
-              {/* Masterpass (Kırılmaması için Kodla Çizildi) */}
+              {/* Masterpass */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <div style={{ display: 'flex' }}>
                   <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#EB001B', marginRight: '-4px' }}></div>
@@ -58,7 +58,7 @@ export default function Footer() {
 
         {/* TELİF */}
         <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
-          © 2026 Carvix — Yapay zeka destekli analiz hizmetidir.
+          © 2026 Serhat Can Çaylan — Carvix Yapay Zeka Analiz Hizmetleri. Tüm hakları saklıdır.
         </div>
       </div>
     </footer>
