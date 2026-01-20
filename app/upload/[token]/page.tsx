@@ -2,35 +2,39 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  VEHICLE_CONFIG,
-  VehicleType,
-  PackageType,
-  PartKey,
-} from "@/lib/vehicleConfig";
-import { Upload, Trash2, CreditCard, CheckCircle2, Zap, Image as ImageIcon, Loader2, Mail, AlertCircle } from "lucide-react";
+import { VEHICLE_CONFIG, VehicleType, PackageType, PartKey } from "@/lib/vehicleConfig";
+import { 
+  Upload, Trash2, CreditCard, CheckCircle2, Zap, 
+  Image as ImageIcon, Mail, AlertCircle, ShoppingCart, 
+  Tag, X, ArrowRight, ShieldCheck, Sparkles
+} from "lucide-react";
 
 const API = (process.env.NEXT_PUBLIC_API_BASE || "https://ai-arac-analiz-backend.onrender.com").replace(/\/$/, "");
-const SHOPIER_LINK = "https://www.shopier.com/carvix/43380964"; 
-
-type ImageItem = {
-  file: File;
-  part: PartKey | "";
-};
 
 export default function UploadPage() {
-  const router = useRouter();
   const sp = useSearchParams();
+  const vehicleType = (sp.get("v") as any) || "car";
+  const pkg = (sp.get("p") as any) || "standard";
+  const config = VEHICLE_CONFIG[vehicleType as VehicleType];
 
-  const vehicleType = (sp.get("v") as VehicleType) || "car";
-  const pkg = (sp.get("p") as PackageType) || "quick";
-  const config = VEHICLE_CONFIG[vehicleType];
-
-  const [items, setItems] = useState<ImageItem[]>([]);
+  const [items, setItems] = useState<{file: File, part: PartKey | ""}[]>([]);
   const [loading, setLoading] = useState(false);
-  const [analysisReady, setAnalysisReady] = useState(false);
+  const [email, setEmail] = useState("");
+  const [showCart, setShowCart] = useState(false); 
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [coupon, setCoupon] = useState("");
+  const [discount, setDiscount] = useState(0);
   const [flowToken, setFlowToken] = useState<string | null>(null);
-  const [email, setEmail] = useState(""); 
+
+  const basePrice = pkg === "standard" ? 89.90 : 129.90;
+  const totalPrice = (basePrice - discount).toFixed(2);
+
+  const filteredParts = useMemo(() => {
+    if (pkg === "standard") {
+      return config.parts.filter(p => !p.key.includes("MENTESE") && !p.key.includes("VIDA") && !p.key.includes("DIREK"));
+    }
+    return config.parts;
+  }, [config, pkg]);
 
   useEffect(() => {
     async function initFlow() {
@@ -38,41 +42,53 @@ export default function UploadPage() {
         const res = await fetch(`${API}/flows`, { method: "POST" });
         const data = await res.json();
         if (data.token) setFlowToken(data.token);
-      } catch (err) {
-        console.error("Flow başlatılamadı:", err);
-      }
+      } catch (err) { console.error("Flow başlatılamadı:", err); }
     }
     initFlow();
   }, []);
 
-  function onFilesSelected(files: FileList | null) {
+  const applyCoupon = () => {
+    if (coupon.toUpperCase() === "CARVIX20" || coupon.toUpperCase() === "FENOMEN20") {
+      setDiscount(20);
+    } else {
+      alert("Geçersiz kupon kodu.");
+      setDiscount(0);
+    }
+  };
+
+  const onFilesSelected = (files: FileList | null) => {
     if (!files) return;
-    const next: ImageItem[] = Array.from(files).map((f) => ({ file: f, part: "" }));
+    const next = Array.from(files).map((f) => ({ file: f, part: "" as const }));
     setItems((prev) => [...prev, ...next]);
-  }
+  };
 
-  function updatePart(index: number, part: PartKey | "") {
-    setItems((prev) => prev.map((it, i) => (i === index ? { ...it, part } : it)));
-  }
+  // --- BURASI KRİTİK: SEPETE EKLEME MANTIĞI ---
+  const handleAddToCart = () => {
+    if (!email || !email.includes("@")) return alert("Lütfen önce e-posta adresinizi girin.");
+    if (items.length === 0) return alert("Lütfen analiz için fotoğraf yükleyin.");
+    if (items.some(it => !it.part)) return alert("Lütfen tüm fotoğrafların parçalarını seçin.");
+    
+    // 1. Ürün bilgisini oluştur
+    const newItem = {
+      id: Date.now(),
+      name: `${pkg === "standard" ? "Standart" : "Detaylı"} Analiz Raporu`,
+      price: basePrice,
+      email: email,
+      vehicle: config.title
+    };
 
-  function removeItem(index: number) {
-    setItems((prev) => prev.filter((_, i) => i !== index));
-  }
+    // 2. LocalStorage'a yaz (SiteShell buradan okuyacak)
+    const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    localStorage.setItem("cart", JSON.stringify([...existingCart, newItem]));
 
-  async function submit() {
-    if (!flowToken || !items.length) {
-      alert("Sistem hazır değil. Lütfen sayfayı yenileyin.");
-      return;
-    }
-    if (!email || !email.includes("@")) {
-      alert("Lütfen raporun gönderileceği geçerli bir e-posta adresi girin.");
-      return;
-    }
-    if (items.some(it => !it.part)) {
-      alert("Lütfen her fotoğraf için parça seçimi yapın.");
-      return;
-    }
+    // 3. SiteShell'i tetikle (Event gönder)
+    window.dispatchEvent(new Event("cartUpdated"));
 
+    setIsAddedToCart(true);
+  };
+
+  const handleFinalPayment = async () => {
+    if (!flowToken) return alert("Sistem henüz hazır değil.");
     setLoading(true);
     try {
       const grouped: Record<string, File[]> = {};
@@ -80,118 +96,166 @@ export default function UploadPage() {
         if (!grouped[it.part]) grouped[it.part] = [];
         grouped[it.part].push(it.file);
       });
-
       for (const partKey of Object.keys(grouped)) {
         const form = new FormData();
         form.append("part_key", partKey);
         grouped[partKey].forEach(file => form.append("files", file));
         await fetch(`${API}/flows/${flowToken}/upload`, { method: "POST", body: form });
       }
-
       await fetch(`${API}/flows/${flowToken}/submit`, { 
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email })
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, package_type: pkg }) 
       });
-      
-      setAnalysisReady(true);
+      window.location.href = pkg === "standard" ? "https://www.shopier.com/carvix/standard_link" : "https://www.shopier.com/carvix/43380964";
     } catch (err) {
-      alert("Yükleme başarısız oldu.");
-    } finally {
+      alert("Hata oluştu.");
       setLoading(false);
     }
-  }
-
-  const handlePayment = () => {
-    window.location.href = SHOPIER_LINK;
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px', fontFamily: 'sans-serif' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', padding: '60px 20px', position: 'relative', fontFamily: 'Inter, system-ui, sans-serif' }}>
       
-      <div style={{ width: '100%', maxWidth: '600px', textAlign: 'center' }}>
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(59,130,246,0.1)', padding: '6px 16px', borderRadius: '100px', color: '#60a5fa', fontSize: '11px', fontWeight: 'bold', marginBottom: '20px' }}>
-            <Zap size={14} /> YAPAY ZEKA ANALİZ MERKEZİ
+      {/* Arka Plan Dekorasyonu */}
+      <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
+
+      {/* SEPET PANELİ */}
+      {showCart && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ width: '100%', maxWidth: '420px', backgroundColor: '#0a0a0a', height: '100%', padding: '40px', borderLeft: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', boxShadow: '-20px 0 50px rgba(0,0,0,1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+              <h2 style={{ fontSize: '22px', fontWeight: '900', color: '#fff' }}>Ödeme Özeti</h2>
+              <button onClick={() => setShowCart(false)} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: '#fff', cursor: 'pointer', padding: '8px', borderRadius: '12px' }}><X size={20}/></button>
+            </div>
+
+            <div style={{ flex: 1 }}>
+              <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '20px', padding: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ marginBottom: '15px' }}>
+                  <p style={{ color: '#71717a', fontSize: '13px', marginBottom: '5px' }}>Seçilen Paket</p>
+                  <p style={{ fontWeight: '800', fontSize: '16px', color: '#3b82f6' }}>{pkg === "standard" ? "Standart Analiz" : "Detaylı Analiz"}</p>
+                </div>
+                
+                <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.05)', margin: '20px 0' }} />
+                
+                <label style={{ fontSize: '11px', color: '#52525b', marginBottom: '10px', display: 'block', fontWeight: '800', letterSpacing: '0.5px' }}>PROMOSYON KODU</label>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+                  <input placeholder="Kodunuz..." value={coupon} onChange={(e) => setCoupon(e.target.value)} style={{ flex: 1, padding: '12px', borderRadius: '12px', backgroundColor: '#111', border: '1px solid #222', color: '#fff', outline: 'none', fontSize: '14px' }} />
+                  <button onClick={applyCoupon} style={{ padding: '0 15px', borderRadius: '12px', backgroundColor: '#222', border: 'none', color: '#fff', fontWeight: '700', cursor: 'pointer', fontSize: '13px' }}>Uygula</button>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#71717a', marginBottom: '10px' }}>
+                  <span>Ara Toplam:</span>
+                  <span>{basePrice.toFixed(2)} TL</span>
+                </div>
+                {discount > 0 && (
+                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#22c55e', marginBottom: '10px' }}>
+                    <span>İndirim:</span>
+                    <span>-{discount.toFixed(2)} TL</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: '900', color: '#fff', marginTop: '20px' }}>
+                  <span>Toplam:</span>
+                  <span>{totalPrice} TL</span>
+                </div>
+              </div>
+            </div>
+
+            <button onClick={handleFinalPayment} disabled={loading} style={{ width: '100%', padding: '20px', borderRadius: '18px', backgroundColor: '#3b82f6', color: '#fff', fontWeight: '900', fontSize: '18px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', transition: 'all 0.2s', boxShadow: '0 10px 30px rgba(59,130,246,0.3)' }}>
+              {loading ? "Hazırlanıyor..." : <>Ödemeye Geç <ArrowRight size={20} /></>}
+            </button>
           </div>
-          <h1 style={{ fontSize: '32px', fontWeight: '800', margin: '0 0 10px 0', letterSpacing: '-1px' }}>Rapor Hazırlığı</h1>
-          <p style={{ color: '#71717a', fontSize: '14px' }}>{config.title} • {pkg === "quick" ? "Hızlı" : "Detaylı"} Paket</p>
+        </div>
+      )}
+
+      {/* ANA İÇERİK */}
+      <div style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ marginBottom: '50px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(90deg, rgba(59,130,246,0.1) 0%, rgba(37,99,235,0.1) 100%)', padding: '8px 20px', borderRadius: '100px', color: '#60a5fa', fontSize: '12px', fontWeight: '800', marginBottom: '25px', border: '1px solid rgba(59,130,246,0.2)' }}>
+            <Sparkles size={14} /> ADIM 2: FOTOĞRAF ANALİZ MERKEZİ
+          </div>
+          <h1 style={{ fontSize: '42px', fontWeight: '950', margin: '0', letterSpacing: '-2px', background: 'linear-gradient(to bottom, #fff, #a1a1aa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Aracınızı Yükleyin
+          </h1>
+          <p style={{ color: '#71717a', fontSize: '16px', marginTop: '15px', fontWeight: '500' }}>AI motorumuzun detaylı ekspertiz yapabilmesi için net kareler seçin.</p>
         </div>
 
-        {!analysisReady ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            
-            {/* E-posta Giriş Alanı ve Önemli Uyarı */}
-            <div style={{ backgroundColor: '#18181b', padding: '20px', borderRadius: '24px', border: '1px solid #27272a', textAlign: 'left' }}>
-               <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#a1a1aa', marginBottom: '10px' }}>
-                 <Mail size={16} /> Raporun Gönderileceği E-posta
-               </label>
-               <input 
-                 type="email" 
-                 placeholder="ornek@mail.com"
-                 value={email}
-                 onChange={(e) => setEmail(e.target.value)}
-                 style={{ width: '100%', padding: '14px', borderRadius: '14px', backgroundColor: '#000', border: '1px solid #3f3f3f', color: '#fff', outline: 'none', marginBottom: '16px' }}
-               />
-               
-               {/* Kullanıcı Bilgilendirme Kutusu */}
-               <div style={{ display: 'flex', gap: '10px', padding: '12px', backgroundColor: 'rgba(59,130,246,0.05)', borderRadius: '12px', border: '1px solid rgba(59,130,246,0.2)' }}>
-                  <AlertCircle size={18} color="#60a5fa" style={{ flexShrink: 0 }} />
-                  <p style={{ fontSize: '11px', color: '#d1d1d6', margin: 0, lineHeight: '1.5' }}>
-                    <strong style={{ color: '#60a5fa' }}>Önemli Not:</strong> Otomatik onaylama sistemimiz e-posta üzerinden eşleşme yapar. Lütfen ödeme sayfasında da yukarıda girdiğiniz e-posta adresini kullandığınızdan emin olun.
-                  </p>
-               </div>
-            </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+          
+          {/* E-posta Alanı (Premium Look) */}
+          <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', padding: '24px', borderRadius: '28px', border: '1px solid rgba(255,255,255,0.06)', textAlign: 'left', backdropFilter: 'blur(5px)' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#a1a1aa', marginBottom: '12px', fontWeight: '600' }}><Mail size={18} color="#3b82f6" /> Rapor Teslimat Adresi</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="ornek@mail.com" style={{ width: '100%', padding: '16px', borderRadius: '16px', backgroundColor: '#000', border: '1px solid #222', color: '#fff', outline: 'none', transition: 'border-color 0.2s' }} />
+          </div>
 
-            <div style={{ position: 'relative', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '24px', padding: '60px 20px', backgroundColor: 'rgba(255,255,255,0.02)', cursor: 'pointer' }}>
-              <input type="file" multiple accept="image/*" onChange={(e) => onFilesSelected(e.target.files)} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
-              <Upload size={40} color="#3b82f6" style={{ marginBottom: '16px' }} />
-              <p style={{ fontWeight: '600', marginBottom: '4px' }}>Fotoğrafları Seçin</p>
-              <p style={{ fontSize: '12px', color: '#52525b' }}>Aracın parçalarını net şekilde çekip yükleyin</p>
+          {/* Dosya Seçme (Modern Animasyonlu) */}
+          <div style={{ position: 'relative', border: '2px dashed rgba(59,130,246,0.3)', borderRadius: '28px', padding: '50px 20px', backgroundColor: 'rgba(59,130,246,0.02)', cursor: 'pointer', transition: 'all 0.3s' }}>
+            <input type="file" multiple accept="image/*" onChange={(e) => onFilesSelected(e.target.files)} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
+            <div className="upload-icon-box" style={{ marginBottom: '15px' }}>
+              <Upload size={40} color="#3b82f6" />
             </div>
+            <p style={{ fontWeight: '700', fontSize: '16px', color: '#fff' }}>Fotoğrafları Buraya Bırakın</p>
+            <p style={{ fontSize: '13px', color: '#52525b', marginTop: '5px' }}>JPG, PNG veya WEBP (Max 10MB)</p>
+          </div>
 
-            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {items.map((it, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', backgroundColor: '#18181b', padding: '12px', borderRadius: '16px', border: '1px solid #27272a' }}>
-                  <ImageIcon size={18} color="#3b82f6" />
-                  <span style={{ flex: 1, fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{it.file.name}</span>
-                  <select
-                    style={{ backgroundColor: '#000', color: '#fff', border: '1px solid #3f3f3f', borderRadius: '8px', padding: '4px 8px', fontSize: '11px' }}
-                    value={it.part}
-                    onChange={(e) => updatePart(i, e.target.value as PartKey)}
-                  >
-                    <option value="">Parça Seçin</option>
-                    {config.parts.map((p) => (
-                      <option key={p.key} value={p.key}>{p.label}</option>
-                    ))}
-                  </select>
-                  <button onClick={() => removeItem(i)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={16} /></button>
+          {/* Dosya Listesi (Şık Kartlar) */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {items.map((it, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '15px', backgroundColor: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', transition: 'transform 0.2s' }}>
+                <div style={{ width: '40px', height: '40px', backgroundColor: 'rgba(59,130,246,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   <ImageIcon size={20} color="#3b82f6" />
                 </div>
-              ))}
-            </div>
+                <span style={{ flex: 1, fontSize: '13px', fontWeight: '600', textAlign: 'left', color: '#d4d4d8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{it.file.name}</span>
+                <select 
+                  value={it.part} 
+                  onChange={(e) => setItems(prev => prev.map((item, idx) => idx === i ? {...item, part: e.target.value as any} : item))} 
+                  style={{ backgroundColor: '#000', color: '#fff', fontSize: '12px', padding: '8px 12px', borderRadius: '10px', border: '1px solid #333', cursor: 'pointer' }}
+                >
+                  <option value="">Parça Seçin</option>
+                  {filteredParts.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
+                </select>
+                <button onClick={() => setItems(prev => prev.filter((_, idx) => idx !== i))} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '5px' }}><Trash2 size={18} /></button>
+              </div>
+            ))}
+          </div>
 
-            <button onClick={submit} disabled={loading || items.length === 0} style={{ marginTop: '20px', padding: '18px', borderRadius: '16px', backgroundColor: '#fff', color: '#000', fontWeight: '900', border: 'none', cursor: 'pointer', opacity: (loading || items.length === 0) ? 0.5 : 1 }}>
-              {loading ? "İŞLENİYOR..." : "ANALİZİ BAŞLAT"}
+          {/* İşlem Butonları */}
+          {!isAddedToCart ? (
+            <button onClick={handleAddToCart} style={{ padding: '22px', borderRadius: '22px', backgroundColor: '#3b82f6', color: '#fff', fontWeight: '900', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', fontSize: '18px', boxShadow: '0 15px 35px rgba(59,130,246,0.4)', transition: 'transform 0.2s' }}>
+              <ShoppingCart size={22} /> Sepete Ekle
             </button>
-          </div>
-        ) : (
-          <div style={{ backgroundColor: '#18181b', padding: '40px', borderRadius: '32px', border: '1px solid #27272a', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
-            <div style={{ width: '60px', height: '60px', backgroundColor: 'rgba(34,197,94,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px auto' }}>
-              <CheckCircle2 size={30} color="#22c55e" />
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', animation: 'slideUp 0.4s ease-out' }}>
+              <div style={{ backgroundColor: 'rgba(34,197,94,0.05)', color: '#4ade80', padding: '18px', borderRadius: '22px', fontSize: '15px', fontWeight: '700', border: '1px solid rgba(34,197,94,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                <CheckCircle2 size={20} /> Ürün Başarıyla Eklendi
+              </div>
+              <button onClick={() => setShowCart(true)} style={{ padding: '22px', borderRadius: '22px', backgroundColor: '#fff', color: '#000', fontWeight: '900', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', fontSize: '18px', boxShadow: '0 15px 35px rgba(255,255,255,0.1)' }}>
+                Sepete Git ve Öde <ArrowRight size={22} />
+              </button>
             </div>
-            <h2 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '10px' }}>Analiz Kuyruğa Alındı!</h2>
-            <p style={{ color: '#a1a1aa', fontSize: '14px', marginBottom: '30px', lineHeight: '1.5' }}>
-              Fotoğraflarınız başarıyla yüklendi. Raporunuz hazırlandığında <b>{email}</b> adresine gönderilecektir. Devam etmek için ödemeyi tamamlayın.
-            </p>
-            <button onClick={handlePayment} style={{ width: '100%', padding: '20px', borderRadius: '16px', backgroundColor: '#2563eb', color: '#fff', fontWeight: '900', fontSize: '18px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-              <CreditCard /> 129,90 TL ÖDE
-            </button>
-            <p style={{ fontSize: '11px', color: '#52525b', marginTop: '15px' }}>
-              Ödemeniz Shopier güvencesiyle 256-bit SSL korumalı sayfada yapılacaktır.
-            </p>
+          )}
+
+          {/* Güvenlik Rozetleri */}
+          <div style={{ marginTop: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', color: '#52525b', fontSize: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '30px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><ShieldCheck size={16} color="#22c55e" /> SSL Korumalı</div>
+              <div style={{ width: '1px', height: '12px', backgroundColor: '#27272a' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>Garanti BBVA Güvencesi</div>
           </div>
-        )}
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .upload-icon-box {
+          animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+      `}</style>
     </div>
   );
 }

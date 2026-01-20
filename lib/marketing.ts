@@ -8,18 +8,42 @@ export const BRAND = {
     "Bu rapor yapay zekâ destekli ön değerlendirmedir; resmî ekspertiz yerine geçmez.",
 };
 
+// GARANTİ BANKASI VE PAKET AYRIMI İÇİN GÜNCELLENEN KISIM
+export const PRICING_PLANS = [
+  {
+    id: "standard",
+    planName: "Standart İnceleme",
+    amount: 89.9, // İstediğin fiyatla değiştirebilirsin
+    description: "Aracın genel dış kondisyonu ve boya analizi.",
+    note: "Dış aksam odaklı • 24 saat rapor erişimi",
+    bullets: [
+      "Genel dış panel analizi (Ön, Arka, Yanlar)",
+      "Tavan ve bagaj yüzey kontrolü",
+      "Boya / lokal boya şüphesi tespiti",
+      "Görünür çizik ve göçük sınıflandırması",
+      "Güven skoru ve hızlı özet rapor",
+    ],
+  },
+  {
+    id: "detailed",
+    planName: "Detaylı İnceleme",
+    amount: 149.9, // İstediğin fiyatla değiştirebilirsin
+    description: "Parça bazlı derinlemesine risk ve sök-tak analizi.",
+    note: "Profesyonel detay odaklı • 48 saat rapor erişimi",
+    bullets: [
+      "Standart paketteki tüm özellikler",
+      "Vida ve menteşelerde sök–tak şüphesi",
+      "Direkler ve şase birleşim noktaları",
+      "Kapı içleri ve motor içi bağlantı elemanları",
+      "Detaylı parça bazlı kanıt görselleri",
+    ],
+  },
+];
+
+// Geriye dönük uyumluluk için eski PRICING objesini de tutalım (Hata vermemesi için)
 export const PRICING = {
   currency: "₺",
-  amount: 129.9,
-  planName: "Tek Analiz",
-  planNote: "Misafir kullanım • 24 saat rapor erişimi • Sınırsız parça fotoğrafı",
-  bullets: [
-    "Parça bazlı rapor: Kapı/çamurluk/kaput/bagaj",
-    "Boya / lokal boya şüphesi (karşılaştırmalı)",
-    "Vida/menteşe/direklerde sök–tak şüphesi",
-    "Hasar sınıflandırma (düşük/orta/yüksek)",
-    "Hukuki bilgilendirme + güven skoru",
-  ],
+  ...PRICING_PLANS[0] 
 };
 
 export const VALUE_POINTS = [
@@ -43,24 +67,16 @@ export const VALUE_POINTS = [
 
 export const FAQS = [
   {
+    q: "Hangi paketi seçmeliyim?",
+    a: "Eğer sadece aracın dışındaki boya ve kaporta durumunu merak ediyorsanız Standart Paket yeterlidir. Ancak aracın parçalarının sökülüp takıldığından veya direklerde işlem olduğundan şüpheleniyorsanız Detaylı Paket'i öneririz.",
+  },
+  {
     q: "Bu ekspertiz mi?",
     a: "Hayır. Carvix, fotoğraflara dayalı yapay zekâ destekli ön analizdir. Ekspertiz yerine geçmez; ekspertize gitmeden önce risk elemesi yapar.",
   },
   {
     q: "Neden para vereyim, fotoğrafa ben de bakarım?",
     a: "Fotoğrafa bakmak başka, panelleri karşılaştırarak ölçmek başka. Carvix; ton/parlaklık/yansıma/doku farklarını kıyaslar, vida/menteşe izlerini sınıflandırır ve raporu standart formatta sunar.",
-  },
-  {
-    q: "Hangi durumda daha doğru sonuç verir?",
-    a: "En iyi sonuç: panel fotoğrafları (kapı/çamurluk/kaput/bagaj) + menteşe/vida/direk detayları. Sadece genel fotoğraflar boya/lokal boya için zayıftır.",
-  },
-  {
-    q: "Doğruluk oranı nedir?",
-    a: "Fotoğraf kalitesi ve parça kapsamına bağlı. Genel hasar tespiti genelde daha yüksek; boya/lokal boya ve sök–tak şüphesi için detay fotoğraf gereklidir. Rapor “OK / SUSPECTED / DETECTED” ve güven skoru ile gelir.",
-  },
-  {
-    q: "Fotoğraflarım başkasıyla karışır mı?",
-    a: "Hayır. Her analiz ayrı bir kimlik ile işlenir; rapor ve dosyalar birbirinden izole edilir.",
   },
 ];
 
@@ -76,21 +92,19 @@ export const PHOTO_GUIDE = {
   ],
   packs: [
     {
-      title: "Minimum (Hızlı Eleme)",
+      title: "Standart (Hızlı Eleme)",
       bullets: [
-        "2 panel: (ör. SOL_ON_KAPI, SAG_ON_KAPI)",
-        "1 kritik detay: (KAPI_MENTESE veya KAPUT_VIDALARI)",
-        "Varsa 1 hasar yakın planı",
+        "4 ana panel: (Ön, Arka, Sağ Yan, Sol Yan)",
+        "Tavan ve Bagaj kapağı",
       ],
-      note: "Boya karşılaştırması için en az 2 panel önerilir.",
+      note: "Sadece dış yüzey analizi yapılır.",
     },
     {
-      title: "Önerilen (En İyi Sonuç)",
+      title: "Detaylı (Tam Analiz)",
       bullets: [
-        "4 panel: 2 kapı + 2 çamurluk (mümkünse)",
-        "Kaput/bagaj paneli (opsiyonel)",
-        "2 kritik detay: menteşe + vida",
-        "Hasar varsa: çizik/göçük yakın plan",
+        "Tüm dış paneller",
+        "Kritik detaylar: Kapı menteşeleri, Kaput vidaları",
+        "İç direkler ve şase uçları",
       ],
       note: "Sök–tak şüphesi en iyi menteşe/vida/direk ile yakalanır.",
     },

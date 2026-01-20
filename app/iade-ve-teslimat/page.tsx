@@ -1,12 +1,12 @@
 "use client";
 
-import { PackageCheck, RotateCcw, AlertTriangle, MessageSquare } from "lucide-react";
+import { PackageCheck, RotateCcw, AlertTriangle, MessageSquare, CreditCard, ShieldCheck } from "lucide-react";
 
 export default function IadeVeTeslimatPage() {
   return (
-    <div style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '40px 20px' }}>
-      <div className="container" style={{ 
-        maxWidth: '800px', 
+    <div style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '60px 20px' }}>
+      <div style={{ 
+        maxWidth: '850px', 
         margin: '0 auto', 
         lineHeight: '1.8', 
         color: '#e4e4e7', 
@@ -14,100 +14,139 @@ export default function IadeVeTeslimatPage() {
       }}>
         
         {/* Başlık Bölümü */}
-        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#ef4444', marginBottom: '15px' }}>
+            <RotateCcw size={20} />
+            <span style={{ fontWeight: '700', letterSpacing: '1px', fontSize: '13px' }}>POLİTİKALARIMIZ</span>
+          </div>
           <h1 style={{ 
             color: '#ffffff', 
-            fontSize: '2.2rem', 
-            fontWeight: '800', 
+            fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', 
+            fontWeight: '900', 
             letterSpacing: '-1px',
-            marginBottom: '10px'
+            margin: 0
           }}>
             İptal, İade ve Teslimat
           </h1>
-          <div style={{ width: '60px', height: '4px', backgroundColor: '#ef4444', margin: '0 auto', borderRadius: '2px' }}></div>
+          <p style={{ fontSize: '0.9rem', color: '#71717a', marginTop: '10px' }}>
+            Son Güncelleme: 19 Ocak 2026
+          </p>
         </div>
 
-        <section style={{ marginBottom: '30px' }}>
-          <p>
-            <strong style={{ color: '#fff' }}>Serhat Can Çaylan</strong> üzerinden satın alınan dijital hizmetlerin (AI Araç Analiz Raporu) süreçleri, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri uyarınca düzenlenmiştir.
+        {/* Giriş Notu */}
+        <section style={{ marginBottom: '40px', padding: '20px', backgroundColor: '#111', borderRadius: '16px', border: '1px solid #222' }}>
+          <p style={{ margin: 0, fontSize: '0.95rem' }}>
+            <strong style={{ color: '#fff' }}>Serhat Can Çaylan (Carvix)</strong> üzerinden satın alınan dijital hizmetler, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında aşağıdaki şartlara tabidir.
           </p>
         </section>
 
         {/* 1. Teslimat */}
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-            <PackageCheck size={24} color="#3b82f6" />
-            <h3 style={{ color: '#fff', margin: 0 }}>1. Teslimat Koşulları</h3>
+        <div style={{ marginBottom: '50px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ padding: '10px', backgroundColor: 'rgba(59,130,246,0.1)', borderRadius: '12px' }}>
+              <PackageCheck size={24} color="#3b82f6" />
+            </div>
+            <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>1. Dijital Teslimat Koşulları</h3>
           </div>
-          <p>
-            Sunulan hizmetler tamamen <strong style={{ color: '#fff' }}>dijitaldir</strong>. Ödeme işlemi <strong style={{ color: '#fff' }}>İşyerimpos</strong> güvenli altyapısı üzerinden tamamlandığı anda analiz süreci başlar. Rapor, web sitemiz üzerinden <strong style={{ color: '#3b82f6' }}>anında (elektronik ortamda)</strong> sunulur. Fiziksel bir kargo veya materyal gönderimi yapılmamaktadır.
+          <p style={{ color: '#a1a1aa' }}>
+            Carvix tarafından sunulan hizmetler tamamen <strong>gayrimaddi (dijital)</strong> niteliktedir. 
+            Ödeme işlemi başarılı olduğu anda sistemimiz fotoğraf analiz sürecini başlatır. 
+            Oluşturulan rapor, web arayüzümüz üzerinden <strong>anında</strong> erişime açılır. 
+            Herhangi bir fiziksel kargo veya kurye gönderimi söz konusu değildir.
           </p>
         </div>
 
         {/* 2. İptal ve İade - Kritik Bölüm */}
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-            <RotateCcw size={24} color="#ef4444" />
-            <h3 style={{ color: '#fff', margin: 0 }}>2. İptal ve İade Politikası</h3>
+        <div style={{ marginBottom: '50px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ padding: '10px', backgroundColor: 'rgba(239,68,68,0.1)', borderRadius: '12px' }}>
+              <RotateCcw size={24} color="#ef4444" />
+            </div>
+            <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>2. İptal ve İade Politikası</h3>
           </div>
           <p style={{ marginBottom: '20px' }}>
-            Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ğ) bendi uyarınca; <em>"Elektronik ortamda anında ifa edilen hizmetler ve tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmeler"</em> kapsamında tüketicinin <strong>cayma hakkı bulunmamaktadır.</strong>
+            Mesafeli Sözleşmeler Yönetmeliği’nin 15. maddesi 1. fıkrası (ğ) bendi uyarınca: 
+            <em> "Elektronik ortamda anında ifa edilen hizmetler ve tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmeler"</em> 
+            kapsamında <strong>cayma hakkı kullanılamaz.</strong>
           </p>
           
           <div style={{ 
-            backgroundColor: 'rgba(239, 68, 68, 0.05)', 
+            backgroundColor: 'rgba(239, 68, 68, 0.03)', 
             padding: '25px', 
-            borderRadius: '16px', 
-            borderLeft: '4px solid #ef4444' 
+            borderRadius: '24px', 
+            border: '1px solid rgba(239, 68, 68, 0.1)' 
           }}>
-            <ul style={{ margin: 0, paddingLeft: '20px', color: '#fca5a5' }}>
-              <li style={{ marginBottom: '10px' }}>Satın alınan dijital rapor kişiye özel ve anında oluşturulduğu için işlem tamamlandıktan sonra ücret iadesi mümkün değildir.</li>
-              <li>Kullanıcı, ödeme onay sayfasında bu dijital teslimat ve iade koşulunu kabul etmiş sayılır.</li>
+            <h4 style={{ color: '#ef4444', marginTop: 0, fontSize: '1rem' }}>Önemli Notlar:</h4>
+            <ul style={{ margin: 0, paddingLeft: '20px', color: '#d1d1d6', fontSize: '0.95rem' }}>
+              <li style={{ marginBottom: '10px' }}>Rapor üretimi anlık olarak başladığından, ödeme sonrası işlem iptali yapılamaz.</li>
+              <li>Hatalı paket seçimi veya yanlış fotoğraf yüklenmesi durumunda sorumluluk kullanıcıya aittir.</li>
+              <li>Ödeme sayfasında "Dijital teslimat şartlarını kabul ediyorum" onayı alınarak işlem tamamlanır.</li>
             </ul>
           </div>
         </div>
 
-        {/* 3. Teknik Aksaklıklar */}
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-            <AlertTriangle size={24} color="#f59e0b" />
-            <h3 style={{ color: '#fff', margin: 0 }}>3. Teknik Aksaklıklar</h3>
+        {/* 3. Teknik Aksaklıklar ve İade Süreci */}
+        <div style={{ marginBottom: '50px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ padding: '10px', backgroundColor: 'rgba(245,158,11,0.1)', borderRadius: '12px' }}>
+              <AlertTriangle size={24} color="#f59e0b" />
+            </div>
+            <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>3. Teknik Telafi ve Geri Ödeme</h3>
           </div>
-          <p>
-            Sistem kaynaklı bir hata nedeniyle raporun oluşturulamaması veya erişilememesi durumunda:
+          <p style={{ color: '#a1a1aa' }}>
+            Sistemimizden kaynaklı teknik bir hata sebebiyle raporun oluşturulamaması durumunda:
           </p>
-          <ul style={{ color: '#a1a1aa', paddingLeft: '20px' }}>
-            <li style={{ marginBottom: '8px' }}>Teknik inceleme yapılarak hizmetin telafisi (raporun yeniden sunulması) sağlanır.</li>
-            <li>Hizmetin sunulmasının imkansız olduğu durumlarda, ödenen tutar <strong style={{ color: '#fff' }}>İşyerimpos</strong> aracılığıyla kartınıza iade edilir (Banka yansıma süresi 2-7 iş günüdür).</li>
-          </ul>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
+            <div style={{ padding: '20px', background: '#111', borderRadius: '16px', border: '1px solid #222' }}>
+              <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Telafi Hizmeti</h5>
+              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Raporun manuel olarak hazırlanıp tarafınıza e-posta ile iletilmesi önceliğimizdir.</p>
+            </div>
+            <div style={{ padding: '20px', background: '#111', borderRadius: '16px', border: '1px solid #222' }}>
+              <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Ücret İadesi</h5>
+              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Telafinin mümkün olmadığı durumlarda <strong>İşyerimpos</strong> üzerinden kartınıza tam iade sağlanır.</p>
+            </div>
+          </div>
         </div>
 
-        {/* 4. İletişim */}
+        {/* Alt Destek Kartı */}
         <div style={{ 
           marginTop: '60px', 
-          padding: '30px', 
-          backgroundColor: '#18181b', 
-          borderRadius: '20px', 
-          border: '1px solid #27272a',
-          textAlign: 'center'
+          padding: '40px', 
+          backgroundColor: '#fff', 
+          borderRadius: '32px', 
+          textAlign: 'center',
+          color: '#000'
         }}>
-          <MessageSquare size={24} color="#3b82f6" style={{ marginBottom: '15px' }} />
-          <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>Destek ve Uyuşmazlık</h3>
-          <p style={{ color: '#a1a1aa', fontSize: '0.95rem', margin: 0 }}>
-            Tüm soru ve iade talepleriniz için bize <strong style={{ color: '#fff' }}>info@carvix.site</strong> üzerinden ulaşabilirsiniz. <br />
-            <strong>Adres:</strong> Çayiçi Mah. Toker Sk. No: 16 İç Kapı No: 1 Sapanca / SAKARYA
+          <MessageSquare size={32} color="#3b82f6" style={{ marginBottom: '20px', margin: '0 auto 15px' }} />
+          <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem', fontWeight: '800' }}>Destek Hattı</h3>
+          <p style={{ fontSize: '1rem', marginBottom: '20px', opacity: 0.8 }}>
+            İade talepleri veya teknik sorunlar için 7/24 bize ulaşabilirsiniz.
           </p>
+          <a href="mailto:info@carvix.site" style={{ 
+            color: '#3b82f6', 
+            textDecoration: 'none', 
+            fontWeight: '900', 
+            fontSize: '1.2rem',
+            borderBottom: '2px solid #3b82f6'
+          }}>
+            info@carvix.site
+          </a>
+          <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'center', gap: '20px', opacity: 0.6 }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px' }}><CreditCard size={14}/> Güvenli İade Altyapısı</div>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px' }}><ShieldCheck size={14}/> 256-bit SSL</div>
+          </div>
         </div>
 
         <footer style={{ 
           marginTop: '60px', 
-          paddingTop: '20px', 
-          borderTop: '1px solid #27272a', 
-          fontSize: '0.85rem', 
+          paddingTop: '30px', 
+          borderTop: '1px solid #18181b', 
+          fontSize: '0.8rem', 
           color: '#52525b',
           textAlign: 'center'
         }}>
-          <p>Son Güncelleme: 19 Ocak 2026 - Serhat Can Çaylan</p>
+          <p>© 2026 Serhat Can Çaylan - Tüm Hakları Saklıdır.</p>
+          <p>Çayiçi Mah. Toker Sk. No: 16 Sapanca / SAKARYA</p>
         </footer>
       </div>
     </div>

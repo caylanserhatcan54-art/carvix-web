@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { 
   Car, 
@@ -12,7 +12,9 @@ import {
   ChevronRight, 
   Info,
   Layers,
-  Sparkles
+  Sparkles,
+  CheckCircle2,
+  ArrowLeft
 } from "lucide-react";
 
 const VEHICLES = [
@@ -25,15 +27,25 @@ const VEHICLES = [
 ] as const;
 
 type VehicleKey = (typeof VEHICLES)[number]["key"];
-type PackageKey = "quick" | "detailed";
 
 export default function VehicleSelectPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [selected, setSelected] = useState<VehicleKey | null>(null);
-  const [pkg, setPkg] = useState<PackageKey>("quick");
+  const [pkg, setPkg] = useState<string>("standard");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // URL'den gelen 'p' (paket) parametresini yakalıyoruz
+  useEffect(() => {
+    const planParam = searchParams.get("p");
+    if (planParam === "detailed") {
+      setPkg("detailed");
+    } else {
+      setPkg("standard");
+    }
+  }, [searchParams]);
 
   function handleContinue() {
     if (!selected || loading) return;
@@ -42,6 +54,7 @@ export default function VehicleSelectPage() {
 
     try {
       const token = crypto.randomUUID();
+      // Seçilen araç ve paketi upload sayfasına gönderiyoruz
       router.push(`/upload/${token}?v=${selected}&p=${pkg}`);
     } catch {
       setError("Analiz başlatılamadı. Lütfen tekrar deneyin.");
@@ -53,105 +66,119 @@ export default function VehicleSelectPage() {
     <main style={{ backgroundColor: "#050505", minHeight: "100vh", color: "#fff", padding: "60px 20px" }}>
       <div className="container" style={{ maxWidth: "900px", margin: "0 auto" }}>
         
-        {/* Başlık Bölümü */}
+        {/* Üst Kısım / Geri Dönüş */}
+        <Link href="/pricing" style={{ 
+          display: "inline-flex", 
+          alignItems: "center", 
+          gap: "8px", 
+          color: "#71717a", 
+          textDecoration: "none",
+          fontSize: "14px",
+          marginBottom: "30px",
+          transition: "color 0.2s"
+        }}>
+          <ArrowLeft size={16} /> Paket Seçimine Dön
+        </Link>
+
         <div style={{ marginBottom: "40px" }}>
           <h1 style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)", fontWeight: 900, marginBottom: "10px", letterSpacing: "-1px" }}>
             Analiz Edilecek <span style={{ color: "#3b82f6" }}>Aracı Seç</span>
           </h1>
           <p style={{ color: "#a1a1aa", fontSize: "16px" }}>
-            Seçtiğiniz araç tipine göre yapay zeka algoritmalarımız fotoğraf rehberini optimize eder.
+            Seçtiğiniz pakete göre yapay zeka rehberini hazırlıyoruz. Lütfen araç tipini belirleyin.
           </p>
         </div>
 
+        {/* Paket Özet Kartı (Yeni ve Şık) */}
+        <div style={{
+          background: "linear-gradient(90deg, rgba(59,130,246,0.1) 0%, rgba(139,92,246,0.1) 100%)",
+          border: "1px solid rgba(59,130,246,0.2)",
+          padding: "20px 25px",
+          borderRadius: "24px",
+          marginBottom: "30px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backdropFilter: "blur(10px)"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <div style={{ 
+              width: "45px", 
+              height: "45px", 
+              backgroundColor: pkg === "detailed" ? "#8b5cf6" : "#3b82f6", 
+              borderRadius: "12px", 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "center",
+              boxShadow: "0 0 20px rgba(59,130,246,0.3)"
+            }}>
+              {pkg === "detailed" ? <Layers size={22} color="#fff" /> : <CheckCircle2 size={22} color="#fff" />}
+            </div>
+            <div>
+              <div style={{ fontSize: "12px", color: "#a1a1aa", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Seçili Paket</div>
+              <div style={{ fontSize: "18px", fontWeight: 800, color: "#fff" }}>
+                {pkg === "detailed" ? "Detaylı Analiz" : "Standart Analiz"}
+              </div>
+            </div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "20px", fontWeight: 900, color: "#fff" }}>
+              ₺{pkg === "detailed" ? "129,90" : "89,90"}
+            </div>
+            <div style={{ fontSize: "11px", color: "#3b82f6", fontWeight: 700 }}>KDV DAHİL</div>
+          </div>
+        </div>
+
         <div className="glass" style={{ 
-          padding: "30px", 
+          padding: "40px", 
           borderRadius: "32px", 
           border: "1px solid rgba(255,255,255,0.08)",
           background: "rgba(15, 15, 15, 0.6)",
-          backdropFilter: "blur(20px)"
+          backdropFilter: "blur(20px)",
+          position: "relative",
+          overflow: "hidden"
         }}>
           
-          {/* Paket Seçimi - Daha Modern Pill Tasarımı */}
           <div style={{ marginBottom: "35px" }}>
-            <label style={{ fontSize: "14px", fontWeight: 700, color: "#71717a", marginBottom: "12px", display: "block", textTransform: "uppercase" }}>
-              Analiz Derinliği
+            <label style={{ fontSize: "14px", fontWeight: 700, color: "#71717a", marginBottom: "20px", display: "block", textTransform: "uppercase", letterSpacing: "1px" }}>
+              Araç Tipi Belirleyin
             </label>
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <button
-                type="button"
-                className={`pill ${pkg === "quick" ? "pillActive" : ""}`}
-                onClick={() => setPkg("quick")}
-                disabled={loading}
-                style={{ flex: 1, minWidth: "200px", display: "flex", flexDirection: "column", alignItems: "flex-start", padding: "15px 20px", borderRadius: "16px" }}
-              >
-                <span style={{ fontWeight: 800, fontSize: "16px" }}>Hızlı Paket</span>
-                <span style={{ fontSize: "12px", opacity: 0.7 }}>Temel risk ve ton analizi</span>
-              </button>
-
-              <button
-                type="button"
-                className={`pill ${pkg === "detailed" ? "pillActive" : ""}`}
-                onClick={() => setPkg("detailed")}
-                disabled={loading}
-                style={{ flex: 1, minWidth: "200px", display: "flex", flexDirection: "column", alignItems: "flex-start", padding: "15px 20px", borderRadius: "16px" }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                   <span style={{ fontWeight: 800, fontSize: "16px" }}>Detaylı Paket</span>
-                   <Layers size={14} color="#3b82f6" />
-                </div>
-                <span style={{ fontSize: "12px", opacity: 0.7 }}>Vida, menteşe ve derin tarama</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Araç Seçimi - Grid Tasarımı */}
-          <div style={{ marginBottom: "35px" }}>
-            <label style={{ fontSize: "14px", fontWeight: 700, color: "#71717a", marginBottom: "12px", display: "block", textTransform: "uppercase" }}>
-              Araç Tipi
-            </label>
-            <div
-              style={{ 
-                display: "grid", 
-                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", 
-                gap: "15px" 
-              }}
-            >
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "15px" }}>
               {VEHICLES.map((v) => {
                 const active = selected === v.key;
                 return (
                   <button
                     key={v.key}
                     type="button"
-                    className={`card hoverLift ${active ? "cardActive" : ""}`}
                     onClick={() => setSelected(v.key)}
                     disabled={loading}
                     style={{ 
-                      padding: "20px", 
+                      padding: "24px", 
                       textAlign: "left", 
                       display: "flex", 
                       alignItems: "center", 
-                      gap: "15px",
-                      borderRadius: "20px",
+                      gap: "20px",
+                      borderRadius: "24px",
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
                       border: active ? "2px solid #3b82f6" : "1px solid rgba(255,255,255,0.05)",
-                      background: active ? "rgba(59, 130, 246, 0.05)" : "rgba(255,255,255,0.02)"
+                      background: active ? "rgba(59, 130, 246, 0.08)" : "rgba(255,255,255,0.02)",
+                      color: "#fff",
+                      transform: active ? "translateY(-2px)" : "none",
                     }}
                   >
                     <div style={{ 
-                      width: "48px", 
-                      height: "48px", 
-                      borderRadius: "12px", 
+                      width: "54px", height: "54px", borderRadius: "16px", 
                       background: active ? "#3b82f6" : "rgba(255,255,255,0.05)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      display: "flex", alignItems: "center", justifyContent: "center",
                       color: active ? "#fff" : "#71717a",
-                      transition: "0.2s"
+                      transition: "all 0.3s ease"
                     }}>
                       {v.icon}
                     </div>
                     <div>
-                      <div style={{ fontWeight: 800, fontSize: "15px", color: active ? "#fff" : "#e4e4e7" }}>{v.title}</div>
-                      <div style={{ fontSize: "12px", color: "#71717a" }}>{v.desc}</div>
+                      <div style={{ fontWeight: 800, fontSize: "16px", color: active ? "#fff" : "#e4e4e7" }}>{v.title}</div>
+                      <div style={{ fontSize: "13px", color: "#71717a" }}>{v.desc}</div>
                     </div>
                   </button>
                 );
@@ -159,47 +186,47 @@ export default function VehicleSelectPage() {
             </div>
           </div>
 
-          {/* Alt Aksiyonlar */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
               <button
-                className="btn btnPrimary"
                 disabled={!selected || loading}
                 onClick={handleContinue}
-                style={{ padding: "16px 40px", fontSize: "16px", flex: 2, justifyContent: "center" }}
+                style={{ 
+                    padding: "20px 40px", fontSize: "18px", flex: 2, justifyContent: "center",
+                    backgroundColor: "#3b82f6", color: "white", border: "none", borderRadius: "20px",
+                    fontWeight: "900", cursor: selected ? "pointer" : "not-allowed", 
+                    opacity: selected ? 1 : 0.5,
+                    display: "flex", alignItems: "center",
+                    boxShadow: selected ? "0 10px 30px rgba(59,130,246,0.3)" : "none",
+                    transition: "all 0.2s ease"
+                }}
               >
-                {loading ? "Sistem Hazırlanıyor..." : "Analize Başla"}
-                {!loading && <ChevronRight size={18} style={{ marginLeft: "8px" }} />}
+                {loading ? "Sistem Hazırlanıyor..." : "Fotoğraf Yüklemeye Geç"}
+                {!loading && <ChevronRight size={20} style={{ marginLeft: "10px" }} />}
               </button>
 
-              <Link href="/photo-guide" className="btn btnGhost" style={{ padding: "16px 24px", flex: 1, justifyContent: "center" }}>
-                Fotoğraf Rehberi
+              <Link href="/guide" style={{ 
+                  padding: "20px 30px", flex: 1, justifyContent: "center", display: "flex", alignItems: "center",
+                  border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", color: "#fff", textDecoration: "none",
+                  fontWeight: "700", fontSize: "15px"
+                }}>
+                Nasıl Çekilir?
               </Link>
             </div>
 
             {error && (
-              <div style={{ 
-                padding: "12px", 
-                borderRadius: "12px", 
-                background: "rgba(239, 68, 68, 0.1)", 
-                border: "1px solid rgba(239, 68, 68, 0.2)",
-                color: "#ef4444",
-                fontSize: "14px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px"
-              }}>
-                <Info size={16} /> {error}
+              <div style={{ padding: "15px", borderRadius: "16px", background: "rgba(239, 68, 68, 0.1)", border: "1px solid rgba(239, 68, 68, 0.2)", color: "#ef4444", fontSize: "14px", display: "flex", alignItems: "center", gap: "10px" }}>
+                <Info size={18} /> {error}
               </div>
             )}
           </div>
 
-          <div style={{ margin: "30px 0", height: "1px", background: "rgba(255,255,255,0.05)" }} />
+          <div style={{ margin: "40px 0 30px 0", height: "1px", background: "rgba(255,255,255,0.05)" }} />
 
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", color: "#52525b" }}>
-            <ShieldCheck size={18} style={{ marginTop: "2px", flexShrink: 0 }} />
-            <p style={{ fontSize: "12px", margin: 0, lineHeight: "1.5" }}>
-              <b>Önemli Uyarı:</b> Carvix, derin öğrenme temelli bir ön analiz aracıdır. Elde edilen raporlar profesyonel bir ekspertiz yerine geçmez, fiziksel inceleme öncesi riskleri filtrelemenize yardımcı olur.
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "#52525b" }}>
+            <ShieldCheck size={20} style={{ marginTop: "2px", flexShrink: 0, color: "#22c55e" }} />
+            <p style={{ fontSize: "13px", margin: 0, lineHeight: "1.6" }}>
+              <b>Kesintisiz Deneyim:</b> Seçtiğiniz <b>{pkg === "detailed" ? "Detaylı" : "Standart"}</b> paket gereksinimleri yapay zekaya iletildi. Görsel yükleme adımında size rehberlik edeceğiz.
             </p>
           </div>
         </div>

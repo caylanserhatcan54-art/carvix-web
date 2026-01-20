@@ -1,64 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Badge } from "@/components/marketing/SiteShell";
 import { 
   ShieldCheck, 
   Zap, 
-  CheckCircle2, 
   Car, 
-  Search, 
-  Activity, 
   Cpu, 
   ScanLine,
-  Crosshair 
+  Crosshair,
+  Lock,
+  ArrowRight,
+  FileText
 } from "lucide-react";
 
 export default function HomePage() {
-  const router = useRouter();
-
-  const handleStartRedirect = (e: React.MouseEvent) => {
-    e.preventDefault();
-    router.push("/vehicle");
-  };
-
   return (
     <main style={{ backgroundColor: "#050505", color: "#fff" }}>
       {/* HERO SECTION */}
-      <section className="section" style={{ 
+      <section style={{ 
         paddingTop: "clamp(80px, 15vh, 120px)", 
         paddingBottom: "80px", 
         position: 'relative', 
         overflow: 'hidden' 
       }}>
         
+        {/* Arka Plan Işığı */}
         <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, transparent 70%)', filter: 'blur(80px)', zIndex: 0 }}></div>
         
-        <div className="container" style={{ 
-          display: 'flex', 
-          flexDirection: 'column', // Mobilde alt alta
-          gap: 40, 
-          position: 'relative', 
-          zIndex: 1 
-        }}>
-          
-          {/* Masaüstü için yan yana düzeni sağlayan wrapper (Global CSS'deki heroGrid'e alternatif) */}
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '1fr', // Varsayılan mobil
+            gridTemplateColumns: '1fr', 
             gap: '40px',
             alignItems: 'center'
           }} className="responsiveHeroGrid"> 
             
-            {/* Sol Taraf: Teknik Mesaj */}
+            {/* Sol Taraf: Mesaj ve Yeni Butonlar */}
             <div style={{ textAlign: 'left' }}>
               <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
                 <Badge tone="ok" text="YOLOv8 Motoru" />
-                <Badge tone="muted" text="v8.0.x Segmentasyon" />
+                <Badge tone="muted" text="Yeni: PDF Rapor Desteği" />
               </div>
 
-              <h1 style={{ fontSize: 'clamp(2rem, 8vw, 3.8rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: 20 }}>
+              <h1 style={{ fontSize: 'clamp(2.2rem, 8vw, 3.8rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: 20 }}>
                 YOLOv8 Mimari ile <br /> 
                 <span style={{ color: '#3b82f6', background: 'linear-gradient(to right, #3b82f6, #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Derin Panel Analizi.
@@ -66,21 +51,38 @@ export default function HomePage() {
               </h1>
               
               <p style={{ fontSize: 'clamp(16px, 4vw, 18px)', color: "#a1a1aa", lineHeight: 1.6, maxWidth: 580, marginBottom: 35 }}>
-                Yapay zeka tabanlı YOLOv8 segmentasyon motoru, araç gövdesini milimetrik olarak tarar. 
-                Gözle görülmeyen ton farklarını ve sök-tak işlemlerini anında raporlar.
+                Yapay zeka tabanlı segmentasyon motoru, araç gövdesini milimetrik olarak tarar. 
+                Hemen bir paket seçin ve saniyeler içinde <span style={{ color: '#fff' }}>detaylı PDF raporunuzu</span> alın.
               </p>
 
-              <div style={{ display: "flex", gap: 12, marginBottom: 44, flexWrap: "wrap" }}>
-                <button 
-                  className="btn btnPrimary" 
-                  onClick={handleStartRedirect}
-                  style={{ padding: '14px 28px', fontSize: 16, fontWeight: 700, borderRadius: 12, flex: '1 1 auto', minWidth: '200px' }}
-                >
-                  AI Analizini Başlat →
-                </button>
-                <Link className="btn btnGhost" href="/photo-guide" style={{ padding: '14px 28px', fontSize: 16, borderRadius: 12, flex: '1 1 auto', minWidth: '200px', textAlign: 'center' }}>
-                  Teknik Rehber
-                </Link>
+              {/* GÜNCELLENEN BUTON ALANI */}
+              <div style={{ display: "flex", flexDirection: 'column', gap: 16, marginBottom: 44 }}>
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                  <Link 
+                    href="/pricing" 
+                    style={{ 
+                      padding: '16px 32px', 
+                      fontSize: 17, 
+                      fontWeight: 800, 
+                      borderRadius: 14, 
+                      backgroundColor: '#3b82f6',
+                      color: '#fff',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)'
+                    }}
+                  >
+                    Paketleri İncele <ArrowRight size={20} />
+                  </Link>
+                </div>
+                
+                {/* Buton Altı Küçük Bilgi Yazısı */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#71717a', fontSize: '13px', marginLeft: '4px' }}>
+                  <FileText size={14} />
+                  <span>Tüm analizler indirilebilir PDF formatında sunulur.</span>
+                </div>
               </div>
 
               <div style={{ display: 'flex', gap: 24 }}>
@@ -96,53 +98,46 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Sağ Taraf: Canlı YOLO Rapor Görseli (Mobilde sığması için optimize edildi) */}
+            {/* Sağ Taraf: Rapor Görseli (Aynı Kaldı) */}
             <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
-              <div className="glass" style={{ 
-                padding: 'clamp(16px, 4vw, 24px)', 
+              <div style={{ 
+                padding: '24px', 
                 borderRadius: '24px', 
                 border: '1px solid rgba(255,255,255,0.08)', 
                 background: 'rgba(15, 15, 15, 0.7)',
                 backdropFilter: 'blur(20px)',
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ width: 28, height: 28, borderRadius: 6, background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Cpu size={16} color="#fff" />
                     </div>
-                    <span style={{ fontWeight: 800, fontSize: 12 }}>YOLOv8x-SEG ÇIKTISI</span>
+                    <span style={{ fontWeight: 800, fontSize: 12 }}>YOLOv8x-SEG SİSTEMİ</span>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 9, color: '#71717a' }}>300 EPOCH</div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#3b82f6' }}>KARARLI</div>
-                  </div>
+                  <Badge tone="ok" text="AKTİF" />
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {[
-                    { p: "ÖN ÇAMURLUK", s: "ORİJİNAL", c: "#22c55e", d: "Doku: 0.99", g: "%88" },
-                    { p: "ARKA KAPI (R)", s: "BOYALI", c: "#ef4444", d: "Renk Sapması", g: "%84" },
-                    { p: "KAPUT", s: "SÖK-TAK", c: "#f59e0b", d: "Civata Def.", g: "%81" }
+                    { p: "ÖN ÇAMURLUK", s: "ORİJİNAL", c: "#22c55e", g: "%99" },
+                    { p: "ARKA KAPI (R)", s: "BOYALI", c: "#ef4444", g: "%84" },
+                    { p: "KAPUT", s: "SÖK-TAK", c: "#f59e0b", g: "%81" }
                   ].map((item, idx) => (
                     <div key={idx} style={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: '1.2fr 1fr 0.5fr', 
+                      display: 'flex', 
+                      justifyContent: 'space-between',
                       alignItems: 'center', 
-                      gap: 10, 
-                      padding: '10px 14px', 
+                      padding: '12px 16px', 
                       background: 'rgba(255,255,255,0.02)', 
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       border: '1px solid rgba(255,255,255,0.03)'
                     }}>
-                      <div style={{ overflow: 'hidden' }}>
-                        <div style={{ fontSize: 10, fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{item.p}</div>
-                        <div style={{ fontSize: 9, color: '#71717a' }}>{item.d}</div>
+                      <div style={{ fontSize: 11, fontWeight: 700 }}>{item.p}</div>
+                      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                        <div style={{ fontSize: 9, fontWeight: 800, color: item.c }}>{item.s}</div>
+                        <div style={{ fontSize: 10, color: '#3b82f6' }}>{item.g}</div>
                       </div>
-                      <div style={{ fontSize: 9, fontWeight: 700, background: `${item.c}15`, color: item.c, padding: '3px 6px', borderRadius: '5px', textAlign: 'center' }}>
-                        {item.s}
-                      </div>
-                      <div style={{ fontSize: 10, fontWeight: 600, color: '#3b82f6', textAlign: 'right' }}>{item.g}</div>
                     </div>
                   ))}
                 </div>
@@ -153,7 +148,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ekstra CSS eklemeye gerek kalmadan responsive yapı için stil etiketi */}
       <style jsx>{`
         @media (min-width: 992px) {
           .responsiveHeroGrid {
@@ -163,46 +157,58 @@ export default function HomePage() {
         }
       `}</style>
 
-      {/* ÖZELLİKLER SECTION (YOLOv8 Detaylı) */}
-      <section className="section" style={{ backgroundColor: '#080808', padding: '80px 0', borderTop: '1px solid rgba(255,255,255,0.03)' }}>
+      {/* ÖZELLİKLER SECTION (Kısa Tutuldu) */}
+      <section style={{ backgroundColor: '#080808', padding: '80px 0', borderTop: '1px solid rgba(255,255,255,0.03)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <Badge tone="ok" text="Teknik Altyapı" />
-            <h2 style={{ fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: 900, marginTop: '15px' }}>YOLOv8 ile Gelişmiş Tespit</h2>
-          </div>
-
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-            {/* Kartlar buraya gelecek (Yukarıdakiyle aynı, sadece padding mobilde biraz azaldı) */}
             {[
-              { icon: <ScanLine size={24} color="#3b82f6" />, title: "Nesne Segmentasyonu", text: "YOLOv8-SEG ile her paneli piksel düzeyinde bağımsız maskelerle analiz ediyoruz.", color: "#3b82f6" },
-              { icon: <Cpu size={24} color="#3b82f6" />, title: "Darknet53 Omurgası", text: "Derin sinir ağımız, fabrika boya dokusunu analiz eder ve mikroskopik sapmaları yakalar.", color: "#3b82f6" },
-              { icon: <Crosshair size={24} color="#22c55e" />, title: "Vida Başı Analizi", text: "Menteşe noktalarındaki anahtar izlerini nesne tanıma ile saptar ve değişim riskini hesaplar.", color: "#22c55e" },
-              { icon: <Zap size={24} color="#f59e0b" />, title: "Dinamik Web Raporu", text: "Analiz sonuçlarınız interaktif ve her cihazdan erişilebilir bir panelde sunulur.", color: "#f59e0b" }
+              { icon: <ScanLine size={24} color="#3b82f6" />, title: "Hassas Tarama", text: "YOLOv8-SEG ile her paneli piksel düzeyinde analiz ediyoruz." },
+              { icon: <FileText size={24} color="#3b82f6" />, title: "PDF Rapor", text: "Analiz sonuçlarını profesyonel bir PDF dosyası olarak indirin." },
+              { icon: <ShieldCheck size={24} color="#22c55e" />, title: "Güvenli Ödeme", text: "Ödemeleriniz Garanti BBVA altyapısı ile güvence altındadır." }
             ].map((feature, i) => (
-              <div key={i} className="glass" style={{ padding: 24, borderRadius: 20, border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ width: 44, height: 44, background: `${feature.color}15`, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                  {feature.icon}
-                </div>
-                <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 10 }}>{feature.title}</h3>
-                <p style={{ color: '#a1a1aa', fontSize: 14, lineHeight: 1.5 }}>{feature.text}</p>
+              <div key={i} style={{ padding: 24, borderRadius: 20, border: '1px solid rgba(255,255,255,0.05)', backgroundColor: '#0c0c0c' }}>
+                <div style={{ marginBottom: 16 }}>{feature.icon}</div>
+                <h3 style={{ fontSize: 17, fontWeight: 800, marginBottom: 8 }}>{feature.title}</h3>
+                <p style={{ color: '#71717a', fontSize: 14, lineHeight: 1.5 }}>{feature.text}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section id="pricing" className="section" style={{ padding: '80px 0' }}>
+      {/* ALT CTA - PAKETLERE YÖNLENDİRME */}
+      <section style={{ padding: '100px 0' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <div style={{ maxWidth: 700, margin: '0 auto', background: 'linear-gradient(180deg, #18181b 0%, #09090b 100%)', padding: 'clamp(30px, 8vw, 60px) 20px', borderRadius: 32, border: '1px solid #27272a' }}>
-            <h2 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 900, marginBottom: 15 }}>Analizi Başlat</h2>
-            <p style={{ color: '#a1a1aa', marginBottom: 35, fontSize: 15 }}>YOLOv8 tabanlı profesyonel araç raporuna anında ulaşın.</p>
-            <div style={{ fontSize: 'clamp(36px, 10vw, 44px)', fontWeight: 900, marginBottom: 30, color: '#fff' }}>
-              129,90 <span style={{ fontSize: 20, fontWeight: 500, color: '#71717a' }}>₺</span>
+          <div style={{ maxWidth: 800, margin: '0 auto', background: '#111', padding: '60px 20px', borderRadius: '40px', border: '1px solid #222' }}>
+            <h2 style={{ fontSize: 'clamp(24px, 5vw, 36px)', fontWeight: 900, marginBottom: 20 }}>Hazırsanız Başlayalım</h2>
+            <p style={{ color: '#a1a1aa', marginBottom: 40, fontSize: 16 }}>Aracınızın geçmişini saniyeler içinde şeffaf bir raporla öğrenin.</p>
+            
+            <Link 
+              href="/pricing" 
+              style={{ 
+                padding: '18px 48px', 
+                fontSize: 18, 
+                fontWeight: 800, 
+                borderRadius: '16px', 
+                backgroundColor: '#fff', 
+                color: '#000',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}
+            >
+              Paket Seç ve Analizi Başlat <ArrowRight size={20} />
+            </Link>
+
+            <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', gap: 20, opacity: 0.5 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+                <ShieldCheck size={16} color="#22c55e" /> Garanti BBVA Güvencesi
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+                <Lock size={14} /> SSL Şifreleme
+              </div>
             </div>
-            <button className="btn btnPrimary" onClick={handleStartRedirect} style={{ padding: '16px 40px', fontSize: 17, fontWeight: 700, borderRadius: 14, width: '100%', maxWidth: '300px' }}>
-              Paketi Satın Al →
-            </button>
           </div>
         </div>
       </section>
