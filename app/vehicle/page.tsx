@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react"; // Suspense eklendi
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { 
@@ -19,7 +19,6 @@ const VEHICLES = [
 
 type VehicleKey = (typeof VEHICLES)[number]["key"];
 
-// 1. Mantığı ayrı bir bileşene alıyoruz
 function VehicleSelectContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,9 +43,13 @@ function VehicleSelectContent() {
     setError(null);
 
     try {
+      // Klasör yapın [token] olduğu için rastgele bir ID oluşturuyoruz
       const token = crypto.randomUUID();
-      router.push(`/upload?v=${selected}&p=${pkg}`); // Önceki kodda /upload/${token} idi, eğer upload sayfan klasör yapısındaysa öyle bırakabilirsin
-    } catch {
+      
+      // Yönlendirme: /upload/[token] yapısına uygun hale getirildi
+      router.push(`/upload/${token}?v=${selected}&p=${pkg}`);
+    } catch (err) {
+      console.error("Yönlendirme hatası:", err);
       setError("Analiz başlatılamadı. Lütfen tekrar deneyin.");
       setLoading(false);
     }
@@ -209,25 +212,15 @@ function VehicleSelectContent() {
               </div>
             )}
           </div>
-
-          <div style={{ margin: "40px 0 30px 0", height: "1px", background: "rgba(255,255,255,0.05)" }} />
-
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "#52525b" }}>
-            <ShieldCheck size={20} style={{ marginTop: "2px", flexShrink: 0, color: "#22c55e" }} />
-            <p style={{ fontSize: "13px", margin: 0, lineHeight: "1.6" }}>
-              <b>Kesintisiz Deneyim:</b> Seçtiğiniz <b>{pkg === "detailed" ? "Detaylı" : "Standart"}</b> paket gereksinimleri yapay zekaya iletildi. Görsel yükleme adımında size rehberlik edeceğiz.
-            </p>
-          </div>
         </div>
       </div>
     </main>
   );
 }
 
-// 2. Ana export Suspense ile sarmalanır
 export default function VehicleSelectPage() {
   return (
-    <Suspense fallback={<div style={{ color: "#fff", textAlign: "center", padding: "100px" }}>Yükleniyor...</div>}>
+    <Suspense fallback={<div style={{ backgroundColor: "#050505", minHeight: "100vh", color: "#fff", textAlign: "center", padding: "100px" }}>Yükleniyor...</div>}>
       <VehicleSelectContent />
     </Suspense>
   );
