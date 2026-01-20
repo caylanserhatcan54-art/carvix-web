@@ -1,20 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react"; // Suspense eklendi
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { 
-  Car, 
-  Zap, 
-  Bike, 
-  Truck, 
-  ShieldCheck, 
-  ChevronRight, 
-  Info,
-  Layers,
-  Sparkles,
-  CheckCircle2,
-  ArrowLeft
+  Car, Zap, Bike, Truck, ShieldCheck, ChevronRight, 
+  Info, Layers, Sparkles, CheckCircle2, ArrowLeft 
 } from "lucide-react";
 
 const VEHICLES = [
@@ -28,7 +19,8 @@ const VEHICLES = [
 
 type VehicleKey = (typeof VEHICLES)[number]["key"];
 
-export default function VehicleSelectPage() {
+// 1. Mantığı ayrı bir bileşene alıyoruz
+function VehicleSelectContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -37,7 +29,6 @@ export default function VehicleSelectPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // URL'den gelen 'p' (paket) parametresini yakalıyoruz
   useEffect(() => {
     const planParam = searchParams.get("p");
     if (planParam === "detailed") {
@@ -54,8 +45,7 @@ export default function VehicleSelectPage() {
 
     try {
       const token = crypto.randomUUID();
-      // Seçilen araç ve paketi upload sayfasına gönderiyoruz
-      router.push(`/upload/${token}?v=${selected}&p=${pkg}`);
+      router.push(`/upload?v=${selected}&p=${pkg}`); // Önceki kodda /upload/${token} idi, eğer upload sayfan klasör yapısındaysa öyle bırakabilirsin
     } catch {
       setError("Analiz başlatılamadı. Lütfen tekrar deneyin.");
       setLoading(false);
@@ -66,7 +56,6 @@ export default function VehicleSelectPage() {
     <main style={{ backgroundColor: "#050505", minHeight: "100vh", color: "#fff", padding: "60px 20px" }}>
       <div className="container" style={{ maxWidth: "900px", margin: "0 auto" }}>
         
-        {/* Üst Kısım / Geri Dönüş */}
         <Link href="/pricing" style={{ 
           display: "inline-flex", 
           alignItems: "center", 
@@ -89,7 +78,7 @@ export default function VehicleSelectPage() {
           </p>
         </div>
 
-        {/* Paket Özet Kartı (Yeni ve Şık) */}
+        {/* Paket Özet Kartı */}
         <div style={{
           background: "linear-gradient(90deg, rgba(59,130,246,0.1) 0%, rgba(139,92,246,0.1) 100%)",
           border: "1px solid rgba(59,130,246,0.2)",
@@ -232,5 +221,14 @@ export default function VehicleSelectPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+// 2. Ana export Suspense ile sarmalanır
+export default function VehicleSelectPage() {
+  return (
+    <Suspense fallback={<div style={{ color: "#fff", textAlign: "center", padding: "100px" }}>Yükleniyor...</div>}>
+      <VehicleSelectContent />
+    </Suspense>
   );
 }
