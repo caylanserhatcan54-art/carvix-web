@@ -1,217 +1,168 @@
 "use client";
 
-import Link from "next/link";
-import { Badge } from "@/components/marketing/SiteShell";
 import { 
-  ShieldCheck, 
-  Zap, 
-  Car, 
-  Cpu, 
-  ScanLine,
-  Crosshair,
-  Lock,
-  ArrowRight,
-  FileText
+  ShieldCheck, Zap, Cpu, ScanLine, FileText, Lock, Sparkles, Check, Car, MousePointerClick, BarChart3, Smartphone 
 } from "lucide-react";
 
-export default function HomePage() {
+export default function LandingPage() {
   return (
-    <main style={{ backgroundColor: "#050505", color: "#fff" }}>
+    <main style={{ backgroundColor: "#050505", color: "#fff", fontFamily: 'Inter, sans-serif', minHeight: '100vh' }}>
+      
       {/* HERO SECTION */}
-      <section style={{ 
-        paddingTop: "clamp(80px, 15vh, 120px)", 
-        paddingBottom: "80px", 
-        position: 'relative', 
-        overflow: 'hidden' 
-      }}>
+      <section style={{ paddingTop: "clamp(100px, 18vh, 150px)", paddingBottom: "100px", textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '0', left: '50%', transform: 'translateX(-50%)', width: '100%', height: '500px', background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)', zIndex: 0 }} />
         
-        {/* Arka Plan Işığı */}
-        <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, transparent 70%)', filter: 'blur(80px)', zIndex: 0 }}></div>
-        
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr', 
-            gap: '40px',
-            alignItems: 'center'
-          }} className="responsiveHeroGrid"> 
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1000px', margin: '0 auto', padding: '0 20px' }}>
+          <div style={{ display: "inline-flex", alignItems: 'center', gap: 10, marginBottom: 30, backgroundColor: 'rgba(59,130,246,0.08)', padding: '10px 24px', borderRadius: '100px', border: '1px solid rgba(59,130,246,0.2)' }}>
+            <Sparkles size={16} color="#60a5fa" />
+            <span style={{ fontSize: '13px', fontWeight: 900, color: '#60a5fa', letterSpacing: '0.5px' }}>YOLOv8x-SEGMENTATION TEKNOLOJİSİ</span>
+          </div>
+
+          <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.8rem)', fontWeight: 950, lineHeight: 0.95, letterSpacing: '-0.05em', marginBottom: 30 }}>
+            Aracınızın Kaportasını <br /> <span style={{ color: '#3b82f6' }}>Yapay Zeka</span> Tarasın
+          </h1>
+          
+          <p style={{ fontSize: '20px', color: "#a1a1aa", lineHeight: 1.6, maxWidth: 750, margin: '0 auto 20px' }}>
+            Carvix AI, otomobillerin dijital röntgenini çeker. Boyalı parçaları, değişenleri ve sök-tak işlemlerini milimetrik hassasiyetle raporlar.
+          </p>
+
+          <p style={{ fontSize: '14px', color: '#3b82f6', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
+            Analize Başlamak İçin Yukarıdaki Panelden Giriş Yapın
+          </p>
+        </div>
+      </section>
+
+      {/* İSTATİSTİK BÖLÜMÜ */}
+      <section style={{ padding: '40px 8%', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '40px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>%99.2</div>
+          <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase' }}>Tespit Doğruluğu</div>
+        </div>
+        <div style={{ width: '1px', backgroundColor: '#222' }}></div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>0.012s</div>
+          <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase' }}>İşlem Hızı</div>
+        </div>
+        <div style={{ width: '1px', backgroundColor: '#222' }}></div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>10k+</div>
+          <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase' }}>Analiz Edilen Araç</div>
+        </div>
+      </section>
+
+      {/* NASIL ÇALIŞIR? */}
+      <section style={{ padding: '100px 8%' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 900, marginBottom: '60px' }}>3 Adımda Dijital Ekspertiz</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '25px' }}>
+          {[
+            { icon: <Car size={32} color="#3b82f6" />, title: "Araç Türünü Seç", desc: "Sisteme giriş yaptıktan sonra araç türünü belirleyin." },
+            { icon: <MousePointerClick size={32} color="#3b82f6" />, title: "Fotoğrafları Yükle", desc: "Aracın dış fotoğraflarını güvenle buluta aktarın." },
+            { icon: <Zap size={32} color="#3b82f6" />, title: "AI Analizi Al", desc: "Yapay zeka saniyeler içinde raporunuzu PDF olarak hazırlasın." }
+          ].map((f, i) => (
+            <div key={i} style={{ padding: '40px', borderRadius: '28px', backgroundColor: '#0c0c0c', border: '1px solid #1a1a1a', position: 'relative' }}>
+               <div style={{ position: 'absolute', top: '20px', right: '30px', fontSize: '40px', fontWeight: 900, color: 'rgba(255,255,255,0.03)' }}>0{i+1}</div>
+              <div style={{ marginBottom: '25px' }}>{f.icon}</div>
+              <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px' }}>{f.title}</h3>
+              <p style={{ color: '#71717a', fontSize: '15px', lineHeight: 1.6 }}>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* NEDEN CARVIX? */}
+      <section style={{ padding: '100px 8%', backgroundColor: '#080808' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '50px', alignItems: 'center' }}>
+          <div>
+            <h2 style={{ fontSize: '36px', fontWeight: 900, marginBottom: '20px' }}>Neden Geleneksel Yöntemler Yerine Carvix?</h2>
+            <p style={{ color: '#a1a1aa', marginBottom: '30px', lineHeight: 1.6 }}>İnsan gözünün kaçırabileceği mikron düzeyindeki boya farklarını yapay zeka saniyeler içinde yakalar.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              {[
+                "Piksel tabanlı derin öğrenme analizi",
+                "Hile yapılamaz dijital raporlama",
+                "7/24 kesintisiz hizmet",
+                "Uygun fiyatlı profesyonel çözüm"
+              ].map((text, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', padding: '4px', borderRadius: '50%' }}>
+                    <Check size={14} color="#22c55e" />
+                  </div>
+                  <span style={{ fontSize: '15px', fontWeight: 600 }}>{text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div style={{ background: 'linear-gradient(45deg, #0c0c0c, #111)', padding: '40px', borderRadius: '30px', border: '1px solid #222' }}>
+            <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
+              <BarChart3 color="#3b82f6" />
+              <span style={{ fontWeight: 800 }}>Sistem Karşılaştırması</span>
+            </div>
             
-            {/* Sol Taraf: Mesaj ve Yeni Butonlar */}
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-                <Badge tone="ok" text="YOLOv8 Motoru" />
-                <Badge tone="muted" text="Yeni: PDF Rapor Desteği" />
-              </div>
-
-              <h1 style={{ fontSize: 'clamp(2.2rem, 8vw, 3.8rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: 20 }}>
-                YOLOv8 Mimari ile <br /> 
-                <span style={{ color: '#3b82f6', background: 'linear-gradient(to right, #3b82f6, #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  Derin Panel Analizi.
-                </span>
-              </h1>
-              
-              <p style={{ fontSize: 'clamp(16px, 4vw, 18px)', color: "#a1a1aa", lineHeight: 1.6, maxWidth: 580, marginBottom: 35 }}>
-                Yapay zeka tabanlı segmentasyon motoru, araç gövdesini milimetrik olarak tarar. 
-                Hemen bir paket seçin ve saniyeler içinde <span style={{ color: '#fff' }}>detaylı PDF raporunuzu</span> alın.
-              </p>
-
-              {/* GÜNCELLENEN BUTON ALANI */}
-              <div style={{ display: "flex", flexDirection: 'column', gap: 16, marginBottom: 44 }}>
-                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                  <Link 
-                    href="/pricing" 
-                    style={{ 
-                      padding: '16px 32px', 
-                      fontSize: 17, 
-                      fontWeight: 800, 
-                      borderRadius: 14, 
-                      backgroundColor: '#3b82f6',
-                      color: '#fff',
-                      textDecoration: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)'
-                    }}
-                  >
-                    Paketleri İncele <ArrowRight size={20} />
-                  </Link>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '8px' }}>
+                    <span>İnsan Gözü</span>
+                    <span style={{ color: '#a1a1aa' }}>%65 Güven</span>
+                  </div>
+                  <div style={{ height: '8px', background: '#222', borderRadius: '10px', overflow: 'hidden' }}>
+                    <div style={{ width: '65%', height: '100%', background: '#555' }}></div>
+                  </div>
                 </div>
                 
-                {/* Buton Altı Küçük Bilgi Yazısı */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#71717a', fontSize: '13px', marginLeft: '4px' }}>
-                  <FileText size={14} />
-                  <span>Tüm analizler indirilebilir PDF formatında sunulur.</span>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', gap: 24 }}>
                 <div>
-                  <span style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>0.012 sn</span>
-                  <div style={{ fontSize: 11, color: '#71717a', textTransform: 'uppercase' }}>Analiz Hızı</div>
-                </div>
-                <div style={{ width: '1px', backgroundColor: '#27272a' }}></div>
-                <div>
-                  <span style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>%86.4</span>
-                  <div style={{ fontSize: 11, color: '#71717a', textTransform: 'uppercase' }}>Tespit Hassasiyeti</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Sağ Taraf: Rapor Görseli (Aynı Kaldı) */}
-            <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
-              <div style={{ 
-                padding: '24px', 
-                borderRadius: '24px', 
-                border: '1px solid rgba(255,255,255,0.08)', 
-                background: 'rgba(15, 15, 15, 0.7)',
-                backdropFilter: 'blur(20px)',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 28, height: 28, borderRadius: 6, background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Cpu size={16} color="#fff" />
-                    </div>
-                    <span style={{ fontWeight: 800, fontSize: 12 }}>YOLOv8x-SEG SİSTEMİ</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '8px' }}>
+                    <span>Carvix AI</span>
+                    <span style={{ color: '#3b82f6', fontWeight: 800 }}>%99.2 Güven</span>
                   </div>
-                  <Badge tone="ok" text="AKTİF" />
+                  <div style={{ height: '8px', background: '#222', borderRadius: '10px', overflow: 'hidden' }}>
+                    <div style={{ width: '99.2%', height: '100%', background: '#3b82f6', boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}></div>
+                  </div>
                 </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {[
-                    { p: "ÖN ÇAMURLUK", s: "ORİJİNAL", c: "#22c55e", g: "%99" },
-                    { p: "ARKA KAPI (R)", s: "BOYALI", c: "#ef4444", g: "%84" },
-                    { p: "KAPUT", s: "SÖK-TAK", c: "#f59e0b", g: "%81" }
-                  ].map((item, idx) => (
-                    <div key={idx} style={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between',
-                      alignItems: 'center', 
-                      padding: '12px 16px', 
-                      background: 'rgba(255,255,255,0.02)', 
-                      borderRadius: '12px',
-                      border: '1px solid rgba(255,255,255,0.03)'
-                    }}>
-                      <div style={{ fontSize: 11, fontWeight: 700 }}>{item.p}</div>
-                      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                        <div style={{ fontSize: 9, fontWeight: 800, color: item.c }}>{item.s}</div>
-                        <div style={{ fontSize: 10, color: '#3b82f6' }}>{item.g}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <style jsx>{`
-        @media (min-width: 992px) {
-          .responsiveHeroGrid {
-            grid-template-columns: 1.1fr 0.9fr !important;
-            gap: 60px !important;
-          }
-        }
-      `}</style>
-
-      {/* ÖZELLİKLER SECTION (Kısa Tutuldu) */}
-      <section style={{ backgroundColor: '#080808', padding: '80px 0', borderTop: '1px solid rgba(255,255,255,0.03)' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-            {[
-              { icon: <ScanLine size={24} color="#3b82f6" />, title: "Hassas Tarama", text: "YOLOv8-SEG ile her paneli piksel düzeyinde analiz ediyoruz." },
-              { icon: <FileText size={24} color="#3b82f6" />, title: "PDF Rapor", text: "Analiz sonuçlarını profesyonel bir PDF dosyası olarak indirin." },
-              { icon: <ShieldCheck size={24} color="#22c55e" />, title: "Güvenli Ödeme", text: "Ödemeleriniz Garanti BBVA altyapısı ile güvence altındadır." }
-            ].map((feature, i) => (
-              <div key={i} style={{ padding: 24, borderRadius: 20, border: '1px solid rgba(255,255,255,0.05)', backgroundColor: '#0c0c0c' }}>
-                <div style={{ marginBottom: 16 }}>{feature.icon}</div>
-                <h3 style={{ fontSize: 17, fontWeight: 800, marginBottom: 8 }}>{feature.title}</h3>
-                <p style={{ color: '#71717a', fontSize: 14, lineHeight: 1.5 }}>{feature.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ALT CTA - PAKETLERE YÖNLENDİRME */}
-      <section style={{ padding: '100px 0' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <div style={{ maxWidth: 800, margin: '0 auto', background: '#111', padding: '60px 20px', borderRadius: '40px', border: '1px solid #222' }}>
-            <h2 style={{ fontSize: 'clamp(24px, 5vw, 36px)', fontWeight: 900, marginBottom: 20 }}>Hazırsanız Başlayalım</h2>
-            <p style={{ color: '#a1a1aa', marginBottom: 40, fontSize: 16 }}>Aracınızın geçmişini saniyeler içinde şeffaf bir raporla öğrenin.</p>
-            
-            <Link 
-              href="/pricing" 
-              style={{ 
-                padding: '18px 48px', 
-                fontSize: 18, 
-                fontWeight: 800, 
-                borderRadius: '16px', 
-                backgroundColor: '#fff', 
-                color: '#000',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}
-            >
-              Paket Seç ve Analizi Başlat <ArrowRight size={20} />
-            </Link>
-
-            <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', gap: 20, opacity: 0.5 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-                <ShieldCheck size={16} color="#22c55e" /> Garanti BBVA Güvencesi
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-                <Lock size={14} /> SSL Şifreleme
-              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* FİYATLANDIRMA TABLOSU (TAMAMEN BUTONSUZ) */}
+      <section style={{ padding: '100px 8%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2 style={{ fontSize: '42px', fontWeight: 950 }}>Şeffaf Paketler</h2>
+          <p style={{ color: '#71717a', marginTop: '10px' }}>Tüm işlemler panel üzerinden güvenli bir şekilde gerçekleştirilir.</p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px', maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ padding: '50px 40px', borderRadius: '40px', backgroundColor: '#0c0c0c', border: '1px solid #222' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#a1a1aa' }}>Standart Paket</h3>
+            <div style={{ fontSize: '56px', fontWeight: 950, margin: '20px 0' }}>89.90 <span style={{ fontSize: '20px' }}>TL</span></div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '15px' }}><Check size={18} color="#22c55e" /> Kaporta Analizi</div>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '15px' }}><Check size={18} color="#22c55e" /> Dijital Rapor</div>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '15px' }}><Check size={18} color="#22c55e" /> PDF İndirme</div>
+            </div>
+          </div>
+
+          <div style={{ padding: '50px 40px', borderRadius: '40px', backgroundColor: '#0c0c0c', border: '1px solid #3b82f6', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '30px', right: '40px', backgroundColor: '#3b82f6', color: '#fff', padding: '6px 14px', borderRadius: '100px', fontSize: '11px', fontWeight: 900 }}>ÖNERİLEN</div>
+            <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#3b82f6' }}>Detaylı Paket</h3>
+            <div style={{ fontSize: '56px', fontWeight: 950, margin: '20px 0' }}>129.90 <span style={{ fontSize: '20px' }}>TL</span></div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '15px' }}><Check size={18} color="#3b82f6" /> Boya Kalınlık Tahmini</div>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '15px' }}><Check size={18} color="#3b82f6" /> Sök-Tak Kontrolü</div>
+              <div style={{ display: 'flex', gap: '10px', fontSize: '15px' }}><Check size={18} color="#3b82f6" /> Detaylı AI Görüşü</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ padding: '80px 8%', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', color: '#52525b', fontSize: '13px', flexWrap: 'wrap' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><ShieldCheck size={18} color="#22c55e" /> Garanti BBVA Altyapısı</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={18} /> Güvenli Ödeme</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Smartphone size={18} /> Mobil Uyumlu</span>
+        </div>
+        <div style={{ marginTop: '30px', color: '#3f3f46', fontSize: '12px' }}>© 2026 Carvix AI Tüm Hakları Saklıdır.</div>
+      </footer>
     </main>
   );
 }

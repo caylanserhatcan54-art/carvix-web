@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck, Lock, EyeOff, FileText } from "lucide-react";
+import { ShieldCheck, Lock, EyeOff, FileText, UserCheck } from "lucide-react";
 
 export default function GizlilikPolitikasiPage() {
   return (
@@ -67,22 +67,25 @@ export default function GizlilikPolitikasiPage() {
           
           <section>
             <h3 style={{ color: '#fff' }}>2. Hangi Verileri İşliyoruz?</h3>
-            <p>Hizmetimizi kullanırken sağladığınız şu veriler işlenmektedir:</p>
+            <p>Hizmetimizi kullanırken ve üyelik oluştururken sağladığınız şu veriler işlenmektedir:</p>
             <ul style={{ color: '#a1a1aa' }}>
+              <li><strong>Kimlik ve Üyelik:</strong> Kayıt sırasında paylaştığınız ad-soyad, e-posta adresi ve şifreniz.</li>
               <li><strong>Görsel Veriler:</strong> Analiz edilmek üzere sisteme yüklenen araç fotoğrafları.</li>
-              <li><strong>İletişim Verileri:</strong> Raporun gönderilmesi için kullanılan e-posta adresi.</li>
-              <li><strong>Teknik Veriler:</strong> IP adresi, çerezler (cookies) ve kullanım istatistikleri.</li>
+              <li><strong>İşlem Geçmişi:</strong> Panelinizde görüntülenen geçmiş analizleriniz ve rapor sonuçlarınız.</li>
+              <li><strong>Teknik Veriler:</strong> IP adresi, çerezler (cookies) ve oturum kullanım istatistikleri.</li>
             </ul>
           </section>
 
           <section style={{ padding: '25px', borderLeft: '4px solid #3b82f6', backgroundColor: 'rgba(59,130,246,0.05)' }}>
             <h3 style={{ color: '#fff', marginTop: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Lock size={20} color="#3b82f6" /> 3. Ödeme Güvenliği Hakkında
+              <Lock size={20} color="#3b82f6" /> 3. Ödeme ve Hesap Güvenliği
             </h3>
-            <p style={{ margin: 0 }}>
+            <p style={{ marginBottom: '15px' }}>
               Ödeme işlemleriniz yüksek güvenlikli <strong>İşyerimpos / Garanti BBVA</strong> altyapısı üzerinden gerçekleştirilir. 
-              Kredi kartı veya banka kartı bilgileriniz 256-bit SSL sertifikası ile doğrudan ödeme kuruluşuna iletilir. 
               <strong> Kart bilgileriniz Carvix sunucularında asla tutulmaz ve işlenmez.</strong>
+            </p>
+            <p style={{ margin: 0 }}>
+              Hesap şifreleriniz, veritabanımızda modern kriptolama yöntemleri ile saklanmakta olup; şifre gizliliğini korumak kullanıcının sorumluluğundadır.
             </p>
           </section>
 
@@ -90,15 +93,25 @@ export default function GizlilikPolitikasiPage() {
             <h3 style={{ color: '#fff' }}>4. Verilerin Üçüncü Şahıslarla Paylaşımı</h3>
             <p>
               Kişisel verileriniz, yasal zorunluluklar haricinde asla üçüncü şahıslara satılmaz veya ticari amaçla paylaşılmaz. 
-              Sadece hizmetin ifası için gerekli olan (Örn: Ödeme kuruluşu, faturalandırma sistemleri) iş ortaklarımızla sınırlı olarak paylaşılmaktadır.
+              Sadece hizmetin ifası için gerekli olan (Örn: Supabase veri saklama, ödeme kuruluşu, e-posta gönderim sistemleri) iş ortaklarımızla sınırlı olarak paylaşılmaktadır.
             </p>
           </section>
 
           <section>
             <h3 style={{ color: '#fff' }}>5. Haklarınız (KVKK Madde 11)</h3>
             <p>
-              Dilediğiniz zaman <strong>info@carvix.site</strong> adresine yazarak; verilerinizin işlenip işlenmediğini öğrenme, 
-              eksik/yanlış verilerin düzeltilmesini isteme ve verilerinizin silinmesini talep etme hakkına sahipsiniz.
+              Dilediğiniz zaman <strong>info@carvix.site</strong> adresine yazarak; hesabınızın silinmesini, 
+              verilerinizin işlenip işlenmediğini öğrenmeyi veya yanlış verilerin düzeltilmesini talep etme hakkına sahipsiniz.
+            </p>
+          </section>
+
+          <section style={{ backgroundColor: '#111', padding: '20px', borderRadius: '16px' }}>
+            <h3 style={{ color: '#fff', marginTop: 0, display: 'flex', alignItems: 'center', gap: '10px', fontSize: '16px' }}>
+              <UserCheck size={18} color="#3b82f6" /> Veri Saklama Süresi
+            </h3>
+            <p style={{ margin: 0, fontSize: '14px', color: '#a1a1aa' }}>
+              Üyelik bilgileriniz ve analiz raporlarınız, üyeliğiniz aktif olduğu sürece panelinizde erişilebilir olması için saklanır. 
+              Hesabınızı sildiğiniz takdirde, yasal olarak saklanması zorunlu olmayan tüm verileriniz sistemlerimizden kalıcı olarak temizlenir.
             </p>
           </section>
 

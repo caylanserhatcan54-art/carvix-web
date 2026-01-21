@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { 
   ShoppingCart, X, Trash2, CreditCard, ShieldCheck, 
   Ticket, CheckCircle2, ShoppingBag, Search, 
@@ -13,12 +13,12 @@ import { supabase } from "@/lib/supabase";
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   
-  // Auth Form State'leri
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -28,7 +28,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<{name: string, email: string} | null>(null);
   const [cartItems, setCartItems] = useState<any[]>([]);
 
-  // Sayfa yüklendiğinde verileri getir
   useEffect(() => {
     const loadData = () => {
       const savedCart = localStorage.getItem("cart");
@@ -116,6 +115,8 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         localStorage.setItem("carvix_user", JSON.stringify(userData));
         setIsAuthOpen(false);
         setEmail(""); setPassword(""); setFullName("");
+
+        router.push("/dashboard"); 
       }
     } catch (err: any) {
       setAuthError(err.message);
@@ -128,6 +129,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     setUser(null);
     localStorage.removeItem("carvix_user");
     setIsUserMenuOpen(false);
+    router.push("/");
   };
 
   return (
@@ -135,8 +137,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'rgba(5, 5, 5, 0.9)', backdropFilter: 'blur(15px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="container" style={{ height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px' }}>
           
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-            {/* Orijinal Logo Alanı */}
+          <Link href={user ? "/dashboard" : "/"} style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
             <img 
               src="/logo.png" 
               alt="Carvix Logo" 
@@ -200,7 +201,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
                 <input type="password" placeholder="Şifre" value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: '100%', backgroundColor: '#161616', border: '1px solid #262626', borderRadius: '14px', padding: '15px 15px 15px 45px', color: '#fff', outline: 'none' }} />
               </div>
 
-              {/* Şifremi Unuttum Bağlantısı */}
               {authMode === "login" && (
                 <div style={{ textAlign: 'right', marginTop: '-5px' }}>
                   <Link 

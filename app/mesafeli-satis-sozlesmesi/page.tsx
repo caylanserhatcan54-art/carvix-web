@@ -1,6 +1,6 @@
 "use client";
 
-import { Scale, Users, CreditCard, PlayCircle, ShieldCheck, FileText, Gavel } from "lucide-react";
+import { Scale, Users, CreditCard, PlayCircle, ShieldCheck, FileText, Gavel, LayoutDashboard } from "lucide-react";
 
 export default function MesafeliSatisSozlesmesiPage() {
   return (
@@ -39,7 +39,7 @@ export default function MesafeliSatisSozlesmesiPage() {
           </p>
         </section>
 
-        {/* 1. Taraflar - Kart Yapısı */}
+        {/* 1. Taraflar */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <Users size={24} color="#3b82f6" />
@@ -59,7 +59,7 @@ export default function MesafeliSatisSozlesmesiPage() {
             <div style={{ backgroundColor: '#111', padding: '25px', borderRadius: '20px', border: '1px solid #222' }}>
               <h4 style={{ color: '#3b82f6', marginTop: 0, fontSize: '15px', textTransform: 'uppercase' }}>ALICI</h4>
               <p style={{ fontSize: '14px', color: '#d1d1d6', margin: 0 }}>
-                Web sitesi üzerinden hizmet satın alan ve ödeme formunda bilgilerini beyan eden gerçek veya tüzel kişidir. Beyan edilen bilgilerin doğruluğu Alıcı sorumluluğundadır.
+                Web sitesine üye olan ve hizmet satın alan gerçek veya tüzel kişidir. Alıcı, üyelik bilgilerinin ve ödeme sırasında beyan ettiği verilerin doğruluğunu taahhüt eder.
               </p>
             </div>
           </div>
@@ -72,22 +72,22 @@ export default function MesafeliSatisSozlesmesiPage() {
             <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>2. Hizmet ve Ödeme</h3>
           </div>
           <p style={{ color: '#a1a1aa' }}>
-            Sözleşme konusu hizmet; Alıcı tarafından sisteme yüklenen araç fotoğraflarının yapay zeka algoritmaları ile taranarak bir dijital analiz raporu oluşturulmasıdır. Ödemeler <strong>İşyerimpos</strong> altyapısı üzerinden SSL korumalı olarak tahsil edilir.
+            Sözleşme konusu hizmet; Alıcı tarafından sisteme yüklenen araç fotoğraflarının yapay zeka algoritmaları (YOLOv8) ile taranarak bir dijital analiz raporu oluşturulmasıdır. Ödemeler <strong>İşyerimpos / Garanti BBVA</strong> altyapısı üzerinden SSL korumalı olarak tahsil edilir. Hizmet ücretine tüm vergiler dahildir.
           </p>
         </div>
 
-        {/* 3. İfa ve Teslimat */}
+        {/* 3. İfa ve Teslimat - GÜNCELLENDİ */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-            <PlayCircle size={24} color="#3b82f6" />
+            <LayoutDashboard size={24} color="#3b82f6" />
             <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>3. İfa ve Teslimat</h3>
           </div>
           <p style={{ color: '#a1a1aa' }}>
-            Satın alınan hizmet "Anında İfa Edilen Dijital İçerik" kapsamındadır. Ödeme onaylandığı anda rapor oluşturulur ve Alıcı'nın ekranına sunulur. <strong>Fiziksel kargo teslimatı yoktur.</strong>
+            Satın alınan dijital analiz hizmeti "Anında İfa Edilen Hizmet" kapsamındadır. Ödeme onaylandığı anda rapor üretilir ve Alıcı'nın <strong>"Kullanıcı Paneli" (Dashboard)</strong> sekmesine kalıcı olarak yüklenir. Alıcı, satın aldığı raporlara dilediği zaman üye girişi yaparak ulaşabilir. Fiziksel kargo teslimatı yapılmamaktadır.
           </p>
         </div>
 
-        {/* 4. Cayma Hakkı - Kırmızı Uyarı */}
+        {/* 4. Cayma Hakkı */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <Scale size={24} color="#ef4444" />
@@ -100,19 +100,19 @@ export default function MesafeliSatisSozlesmesiPage() {
             border: '1px solid rgba(239, 68, 68, 0.1)' 
           }}>
             <p style={{ margin: 0, color: '#fca5a5', fontSize: '0.95rem' }}>
-              Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ğ) bendi uyarınca; <strong>"Elektronik ortamda anında ifa edilen hizmetler ve tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</strong> cayma hakkı kullanılamaz. Alıcı, ödeme yaparak bu hizmetin iadesinin olmadığını kabul eder.
+              Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ğ) bendi uyarınca; <strong>"Elektronik ortamda anında ifa edilen hizmetler ve tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</strong> cayma hakkı kullanılamaz. Analiz süreci başladığı ve rapor Alıcı paneline tanımlandığı andan itibaren iade mümkün değildir.
             </p>
           </div>
         </div>
 
-        {/* 5. Uyuşmazlık ve Yetkili Mahkeme - Banka için Kritik */}
+        {/* 5. Uyuşmazlık ve Yetkili Mahkeme */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <Gavel size={24} color="#3b82f6" />
             <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>5. Uyuşmazlık Çözümü</h3>
           </div>
           <p style={{ color: '#a1a1aa' }}>
-            İşbu sözleşmeden doğan uyuşmazlıklarda, Sanayi ve Ticaret Bakanlığı'nca ilan edilen değere kadar Tüketici Hakem Heyetleri, bu değeri aşan durumlarda ise <strong>Sakarya Tüketici Mahkemeleri</strong> yetkilidir.
+            İşbu sözleşmeden doğan uyuşmazlıklarda, Sanayi ve Ticaret Bakanlığı'nca ilan edilen değere kadar Tüketici Hakem Heyetleri, bu değeri aşan durumlarda ise <strong>Sakarya Tüketici Mahkemeleri ve İcra Daireleri</strong> yetkilidir.
           </p>
         </div>
 
@@ -127,7 +127,7 @@ export default function MesafeliSatisSozlesmesiPage() {
         }}>
           <ShieldCheck size={32} color="#22c55e" style={{ margin: '0 auto 15px' }} />
           <p style={{ color: '#fff', fontWeight: 'bold', margin: 0 }}>
-            Ödeme işlemini tamamlayan Alıcı, işbu sözleşmenin tüm maddelerini kabul etmiş sayılır.
+            Üye olup ödeme işlemini tamamlayan Alıcı, işbu sözleşmenin tüm maddelerini kabul etmiş sayılır.
           </p>
         </div>
 

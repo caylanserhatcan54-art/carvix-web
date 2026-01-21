@@ -1,131 +1,127 @@
 "use client";
 
-import { FileText, ShieldCheck, Scale, Info } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle, Clock, ShieldCheck } from "lucide-react";
 
-export default function MesafeliSatisSozlesmesiPage() {
+export default function IletisimPage() {
   return (
     <div style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '60px 20px' }}>
       <div style={{ 
-        maxWidth: '850px', 
+        maxWidth: '900px', 
         margin: '0 auto', 
-        lineHeight: '1.7', 
-        color: '#e4e4e7', 
-        fontFamily: 'sans-serif' 
+        fontFamily: 'sans-serif',
+        color: '#e4e4e7'
       }}>
         
-        {/* Başlık ve İkon */}
-        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#3b82f6', marginBottom: '15px' }}>
-            <FileText size={24} />
-            <span style={{ fontWeight: '700', letterSpacing: '1px', fontSize: '14px' }}>YASAL METİN</span>
-          </div>
+        {/* Başlık Bölümü */}
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 style={{ 
             color: '#ffffff', 
-            fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', 
+            fontSize: 'clamp(2rem, 5vw, 3rem)', 
             fontWeight: '900', 
-            letterSpacing: '-1px',
-            margin: 0
+            letterSpacing: '-1.5px',
+            marginBottom: '10px'
           }}>
-            Mesafeli Satış Sözleşmesi
+            Bizimle İletişime Geçin
           </h1>
-          <p style={{ fontSize: '0.9rem', color: '#71717a', marginTop: '10px' }}>
-            Yürürlük Tarihi: 19 Ocak 2026
+          <p style={{ color: '#71717a', fontSize: '1.1rem' }}>
+            Sorularınız, teknik destek talepleriniz veya iş birlikleri için yanınızdayız.
           </p>
         </div>
 
-        {/* 1. TARAFLAR */}
-        <section style={{ marginBottom: '40px', padding: '30px', backgroundColor: '#111', borderRadius: '24px', border: '1px solid #222' }}>
-          <h3 style={{ color: '#fff', marginTop: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Scale size={20} color="#3b82f6" /> 1. Taraflar
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', marginTop: '20px' }}>
-            <div>
-              <h4 style={{ color: '#3b82f6', fontSize: '14px', marginBottom: '10px' }}>SATICI BİLGİLERİ</h4>
-              <p style={{ fontSize: '14px', color: '#a1a1aa', margin: 0 }}>
-                <strong style={{ color: '#fff' }}>Ünvan:</strong> Serhat Can Çaylan<br />
-                <strong style={{ color: '#fff' }}>Adres:</strong> Çayiçi Mah. Toker Sk. No: 16 İç Kapı No: 1 Sapanca / SAKARYA<br />
-                <strong style={{ color: '#fff' }}>E-posta:</strong> info@carvix.site<br />
-                <strong style={{ color: '#fff' }}>Telefon:</strong> 0533 523 99 54
-              </p>
-            </div>
-            <div>
-              <h4 style={{ color: '#3b82f6', fontSize: '14px', marginBottom: '10px' }}>ALICI BİLGİLERİ</h4>
-              <p style={{ fontSize: '14px', color: '#a1a1aa', margin: 0 }}>
-                www.carvix.site web sitesi üzerinden dijital hizmet satın alan, ödeme formunda beyan ettiği bilgileri esas alınan kullanıcıdır.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* SÖZLEŞME MADDELERİ */}
-        <div style={{ display: 'grid', gap: '35px', padding: '0 10px' }}>
-          
-          <section>
-            <h3 style={{ color: '#fff' }}>2. Sözleşmenin Konusu</h3>
-            <p style={{ color: '#a1a1aa' }}>
-              İşbu sözleşmenin konusu, Alıcı'nın Satıcı'ya ait web sitesi üzerinden elektronik ortamda siparişini verdiği "Yapay Zeka Destekli Araç Analiz Raporu" hizmetinin satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun hükümleri uyarınca tarafların hak ve yükümlülüklerinin belirlenmesidir.
-            </p>
-          </section>
-
-          <section>
-            <h3 style={{ color: '#fff' }}>3. Hizmet ve Ödeme</h3>
-            <p style={{ color: '#a1a1aa' }}>
-              Satın alınan hizmet, araç görsellerinin AI algoritmaları ile taranarak bir ön analiz raporu oluşturulmasıdır. Ödemeler <strong>İşyerimpos</strong> güvenli ödeme altyapısı ile tahsil edilir.
-            </p>
-          </section>
-
-          <section style={{ padding: '25px', backgroundColor: 'rgba(59,130,246,0.05)', borderRadius: '16px', borderLeft: '4px solid #3b82f6' }}>
-            <h3 style={{ color: '#fff', marginTop: 0 }}>4. Dijital Teslimat</h3>
-            <p style={{ color: '#a1a1aa', margin: 0 }}>
-              Sözleşme konusu hizmet dijital içerik niteliğindedir. Alıcı ödemeyi tamamladığı anda analiz süreci başlar ve rapor Alıcı'ya anında web tarayıcısı üzerinden sunulur. Fiziksel bir kargo teslimatı yapılmaz.
-            </p>
-          </section>
-
-          <section style={{ padding: '25px', backgroundColor: 'rgba(239,68,68,0.05)', borderRadius: '16px', borderLeft: '4px solid #ef4444' }}>
-            <h3 style={{ color: '#ef4444', marginTop: 0 }}>5. Cayma Hakkı İstisnası</h3>
-            <p style={{ color: '#a1a1aa', margin: 0 }}>
-              Mesafeli Sözleşmeler Yönetmeliği’nin 15. maddesi (ğ) bendi uyarınca; <strong>"Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</strong> tüketicinin cayma hakkı bulunmamaktadır. İşlem tamamlandığında ücret iadesi yapılmaz.
-            </p>
-          </section>
-
-          <section>
-            <h3 style={{ color: '#fff' }}>6. Genel Hükümler</h3>
-            <ul style={{ color: '#a1a1aa', paddingLeft: '20px' }}>
-              <li style={{ marginBottom: '10px' }}>Alıcı, sisteme yüklediği görsellerin doğruluğundan bizzat sorumludur.</li>
-              <li style={{ marginBottom: '10px' }}>Satıcı, teknik arıza nedeniyle raporun teslim edilememesi durumunda ücreti iade etmekle yükümlüdür.</li>
-              <li>Sözleşme konusu rapor, bir ön analiz olup resmi ekspertiz belgesi niteliği taşımaz.</li>
-            </ul>
-          </section>
-
-          <section>
-            <h3 style={{ color: '#fff' }}>7. Yetkili Mahkeme</h3>
-            <p style={{ color: '#a1a1aa' }}>
-              Uyuşmazlıklarda, T.C. Ticaret Bakanlığı tarafından belirlenen parasal sınırlar dahilinde Tüketici Hakem Heyetleri veya Sakarya Tüketici Mahkemeleri yetkilidir.
-            </p>
-          </section>
-        </div>
-
-        {/* Onay Notu */}
         <div style={{ 
-          marginTop: '60px', 
-          padding: '30px', 
-          textAlign: 'center', 
-          borderTop: '1px solid #222',
-          backgroundColor: '#0a0a0a',
-          borderRadius: '0 0 32px 32px'
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          gap: '30px' 
         }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '15px' }}>
-            <ShieldCheck color="#22c55e" size={20} />
-            <span style={{ color: '#22c55e', fontWeight: 'bold', fontSize: '14px' }}>ELEKTRONİK OLARAK ONAYLANMIŞTIR</span>
+          
+          {/* Sol Kolon: İletişim Bilgileri */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
+            <div style={{ backgroundColor: '#111', padding: '25px', borderRadius: '24px', border: '1px solid #222' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
+                <div style={{ backgroundColor: 'rgba(59,130,246,0.1)', padding: '10px', borderRadius: '12px' }}>
+                  <Mail size={24} color="#3b82f6" />
+                </div>
+                <h3 style={{ color: '#fff', margin: 0 }}>E-Posta</h3>
+              </div>
+              <p style={{ color: '#a1a1aa', margin: '0 0 5px 0' }}>Resmi destek kanalımız:</p>
+              <a href="mailto:info@carvix.site" style={{ color: '#fff', fontWeight: 'bold', textDecoration: 'none', fontSize: '1.1rem' }}>
+                info@carvix.site
+              </a>
+            </div>
+
+            <div style={{ backgroundColor: '#111', padding: '25px', borderRadius: '24px', border: '1px solid #222' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
+                <div style={{ backgroundColor: 'rgba(59,130,246,0.1)', padding: '10px', borderRadius: '12px' }}>
+                  <MapPin size={24} color="#3b82f6" />
+                </div>
+                <h3 style={{ color: '#fff', margin: 0 }}>Adres</h3>
+              </div>
+              <p style={{ color: '#a1a1aa', lineHeight: '1.6', margin: 0 }}>
+                Çayiçi Mah. Toker Sk. No: 16<br />
+                İç Kapı No: 1<br />
+                Sapanca / SAKARYA
+              </p>
+            </div>
+
+            <div style={{ backgroundColor: '#111', padding: '25px', borderRadius: '24px', border: '1px solid #222' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
+                <div style={{ backgroundColor: 'rgba(59,130,246,0.1)', padding: '10px', borderRadius: '12px' }}>
+                  <Phone size={24} color="#3b82f6" />
+                </div>
+                <h3 style={{ color: '#fff', margin: 0 }}>Telefon</h3>
+              </div>
+              <a href="tel:+905335239954" style={{ color: '#fff', fontWeight: 'bold', textDecoration: 'none', fontSize: '1.1rem' }}>
+                0533 523 99 54
+              </a>
+            </div>
+
           </div>
-          <p style={{ color: '#71717a', fontSize: '13px', maxWidth: '500px', margin: '0 auto' }}>
-            Ödeme işlemini gerçekleştiren kullanıcı, yukarıda yer alan tüm sözleşme maddelerini okumuş ve kabul etmiş sayılır.
-          </p>
+
+          {/* Sağ Kolon: Destek Bilgilendirmesi */}
+          <div style={{ 
+            backgroundColor: 'rgba(59, 130, 246, 0.03)', 
+            padding: '40px', 
+            borderRadius: '32px', 
+            border: '1px solid rgba(59, 130, 246, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}>
+            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+              <MessageCircle size={48} color="#3b82f6" style={{ margin: '0 auto 20px' }} />
+              <h3 style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '10px' }}>Üyelik ve Destek</h3>
+              <p style={{ color: '#a1a1aa' }}>
+                Hesabınıza giriş yaparken veya analizlerinizi görüntülerken sorun yaşıyorsanız, lütfen kayıtlı e-posta adresinizle bize ulaşın.
+              </p>
+            </div>
+
+            <div style={{ borderTop: '1px solid #222', paddingTop: '30px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px' }}>
+                <Clock size={18} color="#3b82f6" />
+                <span style={{ fontSize: '0.9rem' }}>Ortalama Yanıt Süresi: <strong>2-4 Saat</strong></span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <ShieldCheck size={18} color="#22c55e" />
+                <span style={{ fontSize: '0.9rem' }}>KVKK Uyumlu Veri İşleme</span>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <footer style={{ marginTop: '40px', textAlign: 'center', color: '#3f3f46', fontSize: '12px' }}>
-          © 2026 Serhat Can Çaylan - Carvix Dijital Hizmetler
+        {/* Alt Bilgi */}
+        <footer style={{ 
+          marginTop: '80px', 
+          paddingTop: '40px', 
+          borderTop: '1px solid #18181b', 
+          textAlign: 'center',
+          color: '#52525b',
+          fontSize: '0.9rem'
+        }}>
+          <p>© 2026 Carvix - Serhat Can Çaylan. Tüm hakları saklıdır.</p>
         </footer>
+
       </div>
     </div>
   );

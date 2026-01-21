@@ -1,6 +1,6 @@
 "use client";
 
-import { PackageCheck, RotateCcw, AlertTriangle, MessageSquare, CreditCard, ShieldCheck } from "lucide-react";
+import { PackageCheck, RotateCcw, AlertTriangle, MessageSquare, CreditCard, ShieldCheck, LayoutDashboard } from "lucide-react";
 
 export default function IadeVeTeslimatPage() {
   return (
@@ -40,7 +40,7 @@ export default function IadeVeTeslimatPage() {
           </p>
         </section>
 
-        {/* 1. Teslimat */}
+        {/* 1. Teslimat - GÜNCELLENDİ */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div style={{ padding: '10px', backgroundColor: 'rgba(59,130,246,0.1)', borderRadius: '12px' }}>
@@ -50,13 +50,13 @@ export default function IadeVeTeslimatPage() {
           </div>
           <p style={{ color: '#a1a1aa' }}>
             Carvix tarafından sunulan hizmetler tamamen <strong>gayrimaddi (dijital)</strong> niteliktedir. 
-            Ödeme işlemi başarılı olduğu anda sistemimiz fotoğraf analiz sürecini başlatır. 
-            Oluşturulan rapor, web arayüzümüz üzerinden <strong>anında</strong> erişime açılır. 
-            Herhangi bir fiziksel kargo veya kurye gönderimi söz konusu değildir.
+            Ödeme işlemi başarılı olduğu anda yapay zeka analiz süreci başlar. 
+            Oluşturulan rapor, kullanıcının <strong>"Dashboard / Geçmiş Analizlerim"</strong> paneline anında tanımlanır. 
+            Kullanıcı, hesabına giriş yaparak raporuna 7/24 erişebilir. Fiziksel kargo veya kurye gönderimi söz konusu değildir.
           </p>
         </div>
 
-        {/* 2. İptal ve İade - Kritik Bölüm */}
+        {/* 2. İptal ve İade */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div style={{ padding: '10px', backgroundColor: 'rgba(239,68,68,0.1)', borderRadius: '12px' }}>
@@ -79,13 +79,14 @@ export default function IadeVeTeslimatPage() {
             <h4 style={{ color: '#ef4444', marginTop: 0, fontSize: '1rem' }}>Önemli Notlar:</h4>
             <ul style={{ margin: 0, paddingLeft: '20px', color: '#d1d1d6', fontSize: '0.95rem' }}>
               <li style={{ marginBottom: '10px' }}>Rapor üretimi anlık olarak başladığından, ödeme sonrası işlem iptali yapılamaz.</li>
-              <li>Hatalı paket seçimi veya yanlış fotoğraf yüklenmesi durumunda sorumluluk kullanıcıya aittir.</li>
-              <li>Ödeme sayfasında "Dijital teslimat şartlarını kabul ediyorum" onayı alınarak işlem tamamlanır.</li>
+              <li style={{ marginBottom: '10px' }}>Analiz için yüklenen fotoğrafların kalitesi ve doğruluğu kullanıcı sorumluluğundadır; düşük kaliteli yüklemeler nedeniyle iade yapılmaz.</li>
+              <li style={{ marginBottom: '10px' }}>Hatalı üyelik bilgileri veya yanlış paket seçimi durumunda sorumluluk kullanıcıya aittir.</li>
+              <li>Ödeme sayfasında dijital teslimat şartlarının onaylanması ile süreç kesinleşir.</li>
             </ul>
           </div>
         </div>
 
-        {/* 3. Teknik Aksaklıklar ve İade Süreci */}
+        {/* 3. Teknik Aksaklıklar */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div style={{ padding: '10px', backgroundColor: 'rgba(245,158,11,0.1)', borderRadius: '12px' }}>
@@ -94,16 +95,16 @@ export default function IadeVeTeslimatPage() {
             <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>3. Teknik Telafi ve Geri Ödeme</h3>
           </div>
           <p style={{ color: '#a1a1aa' }}>
-            Sistemimizden kaynaklı teknik bir hata sebebiyle raporun oluşturulamaması durumunda:
+            Sistemimizden kaynaklı teknik bir hata sebebiyle raporun oluşturulamaması veya kullanıcı paneline tanımlanamaması durumunda:
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
             <div style={{ padding: '20px', background: '#111', borderRadius: '16px', border: '1px solid #222' }}>
               <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Telafi Hizmeti</h5>
-              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Raporun manuel olarak hazırlanıp tarafınıza e-posta ile iletilmesi önceliğimizdir.</p>
+              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Sistemsel hata durumunda rapor manuel olarak hazırlanır ve 24 saat içinde kullanıcı paneline eklenir.</p>
             </div>
             <div style={{ padding: '20px', background: '#111', borderRadius: '16px', border: '1px solid #222' }}>
               <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Ücret İadesi</h5>
-              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Telafinin mümkün olmadığı durumlarda <strong>İşyerimpos</strong> üzerinden kartınıza tam iade sağlanır.</p>
+              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Teknik sorunun 48 saat içinde giderilemediği durumlarda <strong>İşyerimpos</strong> üzerinden kartınıza tam iade sağlanır.</p>
             </div>
           </div>
         </div>
@@ -120,7 +121,7 @@ export default function IadeVeTeslimatPage() {
           <MessageSquare size={32} color="#3b82f6" style={{ marginBottom: '20px', margin: '0 auto 15px' }} />
           <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem', fontWeight: '800' }}>Destek Hattı</h3>
           <p style={{ fontSize: '1rem', marginBottom: '20px', opacity: 0.8 }}>
-            İade talepleri veya teknik sorunlar için 7/24 bize ulaşabilirsiniz.
+            İade talepleri veya üyelik paneli sorunları için 7/24 bize ulaşabilirsiniz.
           </p>
           <a href="mailto:info@carvix.site" style={{ 
             color: '#3b82f6', 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, Cpu, Zap, ShieldAlert, Target, Users } from "lucide-react";
+import { Info, Cpu, Zap, ShieldAlert, Target, Users, LayoutDashboard, History } from "lucide-react";
 
 export default function HakkimizdaPage() {
   return (
@@ -33,11 +33,11 @@ export default function HakkimizdaPage() {
           </p>
           <p style={{ marginTop: '20px', color: '#a1a1aa' }}>
             Türkiye merkezli girişimimiz, araç alım-satım süreçlerindeki belirsizlikleri ortadan kaldırmak ve 
-            kullanıcılara fiziksel ekspertiz öncesinde "veri odaklı bir filtreleme" imkanı sunmak için kurulmuştur.
+            kullanıcılara fiziksel ekspertiz öncesinde veri odaklı bir ön eleme imkanı sunmak için kurulmuştur.
           </p>
         </section>
 
-        {/* Özellikler Grid - Responsive hale getirildi */}
+        {/* Özellikler Grid */}
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
@@ -53,23 +53,23 @@ export default function HakkimizdaPage() {
           </div>
           
           <div style={{ backgroundColor: '#111', padding: '30px', borderRadius: '24px', border: '1px solid #222' }}>
-            <Target size={28} color="#3b82f6" style={{ marginBottom: '15px' }} />
-            <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>Şeffaf Veri</h3>
+            <LayoutDashboard size={28} color="#3b82f6" style={{ marginBottom: '15px' }} />
+            <h3 style={{ color: '#fff', margin: '0 0 10px 0' }}>Kişisel Dashboard</h3>
             <p style={{ fontSize: '0.95rem', color: '#a1a1aa', margin: 0 }}>
-              Amacımız, alıcı ve satıcı arasındaki bilgi asimetrisini azaltmak. Kullanıcının gereksiz ekspertiz maliyetlerinden kurtulmasını sağlıyoruz.
+              Üyelik sistemimiz sayesinde tüm analizlerinizi profilinizde saklar, dilediğiniz zaman geçmiş raporlarınıza ulaşmanıza olanak tanırız.
             </p>
           </div>
         </div>
 
-        {/* Vizyon/Misyon Kısa Not */}
+        {/* Vizyon/Misyon */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px', marginBottom: '50px', padding: '10px' }}>
           <div style={{ flex: '1 1 300px' }}>
             <h4 style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={18} color="#3b82f6"/> Biz Kimiz?</h4>
-            <p style={{ fontSize: '0.9rem', color: '#71717a' }}>Yapay zeka mühendisliği ve otomotiv tecrübesini birleştiren, Sakarya merkezli Serhat Can Çaylan tarafından hayata geçirilmiş bir dijital danışmanlık projesiyiz.</p>
+            <p style={{ fontSize: '0.9rem', color: '#71717a' }}>Yapay zeka mühendisliği ve otomotiv tecrübesini birleştiren, Sakarya merkezli Serhat Can Çaylan tarafından hayata geçirilmiş bir dijital teknoloji projesiyiz.</p>
           </div>
           <div style={{ flex: '1 1 300px' }}>
-            <h4 style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}><Zap size={18} color="#3b82f6"/> Hedefimiz</h4>
-            <p style={{ fontSize: '0.9rem', color: '#71717a' }}>Türkiye'den dünyaya açılan, en hızlı ve güvenilir araç ön analiz motoru olmak için algoritmalarımızı her gün geliştiriyoruz.</p>
+            <h4 style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}><History size={18} color="#3b82f6"/> Amacımız</h4>
+            <p style={{ fontSize: '0.9rem', color: '#71717a' }}>Araç alım-satım geçmişini şeffaflaştırarak, kullanıcılarımızın gereksiz ekspertiz maliyetlerinden ve zaman kaybından kurtulmasını sağlıyoruz.</p>
           </div>
         </div>
 
@@ -86,7 +86,7 @@ export default function HakkimizdaPage() {
             <div>
               <h4 style={{ margin: '0 0 8px 0', color: '#fff', fontSize: '1rem' }}>Yasal Bilgilendirme</h4>
               <p style={{ margin: 0, fontSize: '0.9rem', color: '#a1a1aa', lineHeight: '1.5' }}>
-                Carvix, dijital bir analiz aracıdır. Sunulan sonuçlar yapay zeka tahminlerine dayanmaktadır ve <strong>resmi ekspertiz raporu (TSE onaylı) yerine geçmez.</strong> Kullanıcıların nihai kararlarını vermeden önce profesyonel bir servisten fiziksel kontrol almalarını tavsiye ederiz.
+                Carvix, dijital bir ön analiz aracıdır. Sunulan sonuçlar derin öğrenme modellerinin tahminlerine dayanmaktadır ve <strong>resmi ekspertiz raporu (TSE onaylı) yerine geçmez.</strong> Kullanıcıların nihai kararlarını vermeden önce profesyonel bir servisten fiziksel kontrol almalarını kesinlikle tavsiye ederiz.
               </p>
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function HakkimizdaPage() {
         {/* İletişim */}
         <div style={{ textAlign: 'center', paddingTop: '40px', borderTop: '1px solid #18181b' }}>
           <p style={{ color: '#52525b', fontSize: '0.85rem', marginBottom: '15px' }}>
-            CARVIX — Yapay Zeka Tabanlı Araç Analiz Platformu
+            CARVIX — Geleceğin Otomotiv Analiz Platformu
           </p>
           <a href="mailto:info@carvix.site" style={{ 
             color: '#fff', 
@@ -106,7 +106,8 @@ export default function HakkimizdaPage() {
             padding: '12px 30px',
             borderRadius: '100px',
             border: '1px solid #222',
-            display: 'inline-block'
+            display: 'inline-block',
+            transition: 'all 0.3s ease'
           }}>
             info@carvix.site
           </a>
