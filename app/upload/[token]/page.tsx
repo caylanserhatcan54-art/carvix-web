@@ -19,7 +19,7 @@ export default function UploadPage() {
 
   const [items, setItems] = useState<{file: File, part: PartKey | ""}[]>([]);
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [userEmail, setUserEmail] = useState(""); // Giriş yapan kullanıcının maili
   const [showCart, setShowCart] = useState(false); 
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [coupon, setCoupon] = useState("");
@@ -37,6 +37,13 @@ export default function UploadPage() {
   }, [config, pkg]);
 
   useEffect(() => {
+    // Giriş yapmış kullanıcıyı kontrol et
+    const savedUser = localStorage.getItem("carvix_user");
+    if (savedUser) {
+      const userData = JSON.parse(savedUser);
+      setUserEmail(userData.email);
+    }
+
     async function initFlow() {
       try {
         const res = await fetch(`${API}/flows`, { method: "POST" });
@@ -62,28 +69,28 @@ export default function UploadPage() {
     setItems((prev) => [...prev, ...next]);
   };
 
-  // --- BURASI KRİTİK: SEPETE EKLEME MANTIĞI ---
   const handleAddToCart = () => {
-    if (!email || !email.includes("@")) return alert("Lütfen önce e-posta adresinizi girin.");
+    // Giriş kontrolü
+    if (!userEmail) {
+      alert("Lütfen önce giriş yapın veya kayıt olun.");
+      return;
+    }
+    
     if (items.length === 0) return alert("Lütfen analiz için fotoğraf yükleyin.");
     if (items.some(it => !it.part)) return alert("Lütfen tüm fotoğrafların parçalarını seçin.");
     
-    // 1. Ürün bilgisini oluştur
     const newItem = {
       id: Date.now(),
       name: `${pkg === "standard" ? "Standart" : "Detaylı"} Analiz Raporu`,
       price: basePrice,
-      email: email,
+      email: userEmail, // Artık otomatik olarak geliyor
       vehicle: config.title
     };
 
-    // 2. LocalStorage'a yaz (SiteShell buradan okuyacak)
     const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
     localStorage.setItem("cart", JSON.stringify([...existingCart, newItem]));
 
-    // 3. SiteShell'i tetikle (Event gönder)
     window.dispatchEvent(new Event("cartUpdated"));
-
     setIsAddedToCart(true);
   };
 
@@ -104,7 +111,7 @@ export default function UploadPage() {
       }
       await fetch(`${API}/flows/${flowToken}/submit`, { 
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, package_type: pkg }) 
+        body: JSON.stringify({ email: userEmail, package_type: pkg }) 
       });
       window.location.href = pkg === "standard" ? "https://www.shopier.com/carvix/standard_link" : "https://www.shopier.com/carvix/43380964";
     } catch (err) {
@@ -116,10 +123,8 @@ export default function UploadPage() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', padding: '60px 20px', position: 'relative', fontFamily: 'Inter, system-ui, sans-serif' }}>
       
-      {/* Arka Plan Dekorasyonu */}
       <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }} />
 
-      {/* SEPET PANELİ */}
       {showCart && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end' }}>
           <div style={{ width: '100%', maxWidth: '420px', backgroundColor: '#0a0a0a', height: '100%', padding: '40px', borderLeft: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', boxShadow: '-20px 0 50px rgba(0,0,0,1)' }}>
@@ -167,7 +172,6 @@ export default function UploadPage() {
         </div>
       )}
 
-      {/* ANA İÇERİK */}
       <div style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(90deg, rgba(59,130,246,0.1) 0%, rgba(37,99,235,0.1) 100%)', padding: '8px 20px', borderRadius: '100px', color: '#60a5fa', fontSize: '12px', fontWeight: '800', marginBottom: '25px', border: '1px solid rgba(59,130,246,0.2)' }}>
@@ -177,17 +181,16 @@ export default function UploadPage() {
             Aracınızı Yükleyin
           </h1>
           <p style={{ color: '#71717a', fontSize: '16px', marginTop: '15px', fontWeight: '500' }}>AI motorumuzun detaylı ekspertiz yapabilmesi için net kareler seçin.</p>
+          {userEmail && (
+            <p style={{ color: '#3b82f6', fontSize: '13px', marginTop: '10px', fontWeight: '700' }}>
+              Raporunuz şu adrese gönderilecek: {userEmail}
+            </p>
+          )}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
           
-          {/* E-posta Alanı (Premium Look) */}
-          <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', padding: '24px', borderRadius: '28px', border: '1px solid rgba(255,255,255,0.06)', textAlign: 'left', backdropFilter: 'blur(5px)' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#a1a1aa', marginBottom: '12px', fontWeight: '600' }}><Mail size={18} color="#3b82f6" /> Rapor Teslimat Adresi</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="ornek@mail.com" style={{ width: '100%', padding: '16px', borderRadius: '16px', backgroundColor: '#000', border: '1px solid #222', color: '#fff', outline: 'none', transition: 'border-color 0.2s' }} />
-          </div>
-
-          {/* Dosya Seçme (Modern Animasyonlu) */}
+          {/* DOSYA SEÇME ALANI */}
           <div style={{ position: 'relative', border: '2px dashed rgba(59,130,246,0.3)', borderRadius: '28px', padding: '50px 20px', backgroundColor: 'rgba(59,130,246,0.02)', cursor: 'pointer', transition: 'all 0.3s' }}>
             <input type="file" multiple accept="image/*" onChange={(e) => onFilesSelected(e.target.files)} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
             <div className="upload-icon-box" style={{ marginBottom: '15px' }}>
@@ -197,7 +200,6 @@ export default function UploadPage() {
             <p style={{ fontSize: '13px', color: '#52525b', marginTop: '5px' }}>JPG, PNG veya WEBP (Max 10MB)</p>
           </div>
 
-          {/* Dosya Listesi (Şık Kartlar) */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {items.map((it, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '15px', backgroundColor: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', transition: 'transform 0.2s' }}>
@@ -218,7 +220,6 @@ export default function UploadPage() {
             ))}
           </div>
 
-          {/* İşlem Butonları */}
           {!isAddedToCart ? (
             <button onClick={handleAddToCart} style={{ padding: '22px', borderRadius: '22px', backgroundColor: '#3b82f6', color: '#fff', fontWeight: '900', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', fontSize: '18px', boxShadow: '0 15px 35px rgba(59,130,246,0.4)', transition: 'transform 0.2s' }}>
               <ShoppingCart size={22} /> Sepete Ekle
@@ -234,7 +235,6 @@ export default function UploadPage() {
             </div>
           )}
 
-          {/* Güvenlik Rozetleri */}
           <div style={{ marginTop: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', color: '#52525b', fontSize: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '30px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><ShieldCheck size={16} color="#22c55e" /> SSL Korumalı</div>
               <div style={{ width: '1px', height: '12px', backgroundColor: '#27272a' }} />
