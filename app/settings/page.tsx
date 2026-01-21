@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SiteShell } from "@/components/marketing/SiteShell";
 import { supabase } from "@/lib/supabase";
-import { Lock, ShieldCheck, Save, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Save, AlertCircle, CheckCircle2, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const [user, setUser] = useState<any>(null);
@@ -24,7 +24,6 @@ export default function SettingsPage() {
     e.preventDefault();
     setStatus({ type: "", message: "" });
 
-    // Kontroller
     if (passwords.new !== passwords.confirm) {
       return setStatus({ type: "error", message: "Yeni şifreler eşleşmiyor." });
     }
@@ -35,7 +34,6 @@ export default function SettingsPage() {
     setLoading(true);
 
     try {
-      // 1. Mevcut şifreyi doğrula
       const { data: checkUser, error: checkError } = await supabase
         .from('reports')
         .select('password')
@@ -47,7 +45,6 @@ export default function SettingsPage() {
         throw new Error("Mevcut şifreniz hatalı.");
       }
 
-      // 2. Şifreyi güncelle
       const { error: updateError } = await supabase
         .from('reports')
         .update({ password: passwords.new })
@@ -64,15 +61,32 @@ export default function SettingsPage() {
     }
   };
 
-  if (!user) return <SiteShell><div style={{padding: '100px', color: '#fff'}}>Yükleniyor...</div></SiteShell>;
+  if (!user) return <div style={{ backgroundColor: '#050505', minHeight: '100vh', color: '#fff', padding: '100px' }}>Yükleniyor...</div>;
 
   return (
-    <SiteShell>
-      <div style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '100px 20px 40px' }}>
+    <main style={{ backgroundColor: '#050505', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
+      
+      {/* MANUEL ÜST PANEL (SADECE BİR TANE) */}
+      <nav style={{ 
+        position: 'fixed', top: 0, width: '100%', zIndex: 50, 
+        backgroundColor: 'rgba(5,5,5,0.8)', backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '15px 20px' 
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 900, fontSize: '20px', letterSpacing: '-1px' }}>
+            CARVIX<span style={{ color: '#3b82f6' }}>AI</span>
+          </Link>
+          <Link href="/dashboard" style={{ color: '#a1a1aa', textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <ArrowLeft size={16} /> Panele Dön
+          </Link>
+        </div>
+      </nav>
+
+      <div style={{ padding: '120px 20px 40px' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           
           <div style={{ marginBottom: '30px' }}>
-            <h1 style={{ color: '#fff', fontSize: '28px', fontWeight: '900' }}>Hesap Ayarları</h1>
+            <h1 style={{ color: '#fff', fontSize: '28px', fontWeight: '900', letterSpacing: '-0.02em' }}>Hesap Ayarları</h1>
             <p style={{ color: '#71717a' }}>Güvenliğinizi sağlamak için şifrenizi düzenli olarak güncelleyin.</p>
           </div>
 
@@ -92,7 +106,7 @@ export default function SettingsPage() {
               )}
 
               <div>
-                <label style={{ color: '#a1a1aa', fontSize: '13px', display: 'block', marginBottom: '8px', marginLeft: '5px' }}>Mevcut Şifre</label>
+                <label style={{ color: '#a1a1aa', fontSize: '13px', display: 'block', marginBottom: '8px' }}>Mevcut Şifre</label>
                 <input 
                   type="password" 
                   required
@@ -105,7 +119,7 @@ export default function SettingsPage() {
               <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', margin: '10px 0' }} />
 
               <div>
-                <label style={{ color: '#a1a1aa', fontSize: '13px', display: 'block', marginBottom: '8px', marginLeft: '5px' }}>Yeni Şifre</label>
+                <label style={{ color: '#a1a1aa', fontSize: '13px', display: 'block', marginBottom: '8px' }}>Yeni Şifre</label>
                 <input 
                   type="password" 
                   required
@@ -116,7 +130,7 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <label style={{ color: '#a1a1aa', fontSize: '13px', display: 'block', marginBottom: '8px', marginLeft: '5px' }}>Yeni Şifre (Tekrar)</label>
+                <label style={{ color: '#a1a1aa', fontSize: '13px', display: 'block', marginBottom: '8px' }}>Yeni Şifre (Tekrar)</label>
                 <input 
                   type="password" 
                   required
@@ -146,6 +160,6 @@ export default function SettingsPage() {
 
         </div>
       </div>
-    </SiteShell>
+    </main>
   );
 }
