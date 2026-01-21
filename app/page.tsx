@@ -35,7 +35,7 @@ export default function LandingPage() {
       {/* İSTATİSTİK BÖLÜMÜ */}
       <section style={{ padding: '40px 8%', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '40px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>%99.2</div>
+          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>%86.4</div>
           <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase' }}>Tespit Doğruluğu</div>
         </div>
         <div style={{ width: '1px', backgroundColor: '#222' }}></div>
@@ -102,20 +102,20 @@ export default function LandingPage() {
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '8px' }}>
                     <span>İnsan Gözü</span>
-                    <span style={{ color: '#a1a1aa' }}>%65 Güven</span>
+                    <span style={{ color: '#a1a1aa' }}>%42 Güven</span>
                   </div>
                   <div style={{ height: '8px', background: '#222', borderRadius: '10px', overflow: 'hidden' }}>
-                    <div style={{ width: '65%', height: '100%', background: '#555' }}></div>
+                    <div style={{ width: '42%', height: '100%', background: '#555' }}></div>
                   </div>
                 </div>
                 
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '8px' }}>
                     <span>Carvix AI</span>
-                    <span style={{ color: '#3b82f6', fontWeight: 800 }}>%99.2 Güven</span>
+                    <span style={{ color: '#3b82f6', fontWeight: 800 }}>%86.4 Güven</span>
                   </div>
                   <div style={{ height: '8px', background: '#222', borderRadius: '10px', overflow: 'hidden' }}>
-                    <div style={{ width: '99.2%', height: '100%', background: '#3b82f6', boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}></div>
+                    <div style={{ width: '86.4%', height: '100%', background: '#3b82f6', boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}></div>
                   </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FİYATLANDIRMA TABLOSU (TAMAMEN BUTONSUZ) */}
+      {/* FİYATLANDIRMA TABLOSU */}
       <section style={{ padding: '100px 8%' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h2 style={{ fontSize: '42px', fontWeight: 950 }}>Şeffaf Paketler</h2>
@@ -161,7 +161,6 @@ export default function LandingPage() {
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={18} /> Güvenli Ödeme</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Smartphone size={18} /> Mobil Uyumlu</span>
         </div>
-        <div style={{ marginTop: '30px', color: '#3f3f46', fontSize: '12px' }}>© 2026 Carvix AI Tüm Hakları Saklıdır.</div>
       </footer>
     </main>
   );
