@@ -6,7 +6,7 @@ import {
   ShieldCheck, User, Mail, Calendar, AlertCircle
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { SiteShell, Badge } from "../../../web/components/marketing/SiteShell";
+import { SiteShell, Badge } from "@/components/marketing/SiteShell";
 
 export default function ProfilePage() {
   const [reports, setReports] = useState<any[]>([]);

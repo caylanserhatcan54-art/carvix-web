@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SiteShell } from "../../../web/components/marketing/SiteShell"; // Çalışan yolun
+import { SiteShell } from "@/components/marketing/SiteShell";
 import { supabase } from "@/lib/supabase";
 import { Lock, ShieldCheck, Save, AlertCircle, CheckCircle2 } from "lucide-react";
 
