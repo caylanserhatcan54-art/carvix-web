@@ -164,7 +164,7 @@ export default function HomePage() {
             {[
               { icon: <ScanLine size={24} color="#3b82f6" />, title: "Hassas Tarama", text: "YOLOv8-SEG ile her paneli piksel düzeyinde analiz ediyoruz." },
               { icon: <FileText size={24} color="#3b82f6" />, title: "PDF Rapor", text: "Analiz sonuçlarını profesyonel bir PDF dosyası olarak indirin." },
-              { icon: <ShieldCheck size={24} color="#22c55e" />, title: "Güvenli Ödeme", text: "Ödemeleriniz Garanti BBVA altyapısı ile güvence altındadır." }
+              { icon: <ShieldCheck size={24} color="#22c55e" />, title: "Güvenli Ödeme", text: "Ödemeleriniz Shopier güvencesi ile 256-bit SSL şifrelemelidir." }
             ].map((feature, i) => (
               <div key={i} style={{ padding: 24, borderRadius: 20, border: '1px solid rgba(255,255,255,0.05)', backgroundColor: '#0c0c0c' }}>
                 <div style={{ marginBottom: 16 }}>{feature.icon}</div>
@@ -203,10 +203,10 @@ export default function HomePage() {
 
             <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', gap: 20, opacity: 0.5 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-                <ShieldCheck size={16} color="#22c55e" /> Garanti BBVA Güvencesi
+                <ShieldCheck size={16} color="#22c55e" /> Shopier Altyapı Güvencesi
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-                <Lock size={14} /> SSL Şifreleme
+                <Lock size={14} /> 256-bit SSL Koruma
               </div>
             </div>
           </div>

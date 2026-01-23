@@ -29,18 +29,18 @@ export default function IadeVeTeslimatPage() {
             İptal, İade ve Teslimat
           </h1>
           <p style={{ fontSize: '0.9rem', color: '#71717a', marginTop: '10px' }}>
-            Son Güncelleme: 19 Ocak 2026
+            Son Güncelleme: 23 Ocak 2026
           </p>
         </div>
 
         {/* Giriş Notu */}
         <section style={{ marginBottom: '40px', padding: '20px', backgroundColor: '#111', borderRadius: '16px', border: '1px solid #222' }}>
           <p style={{ margin: 0, fontSize: '0.95rem' }}>
-            <strong style={{ color: '#fff' }}>Serhat Can Çaylan (Carvix)</strong> üzerinden satın alınan dijital hizmetler, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında aşağıdaki şartlara tabidir.
+            <strong style={{ color: '#fff' }}>Carvix — Yapay Zeka Analiz Hizmetleri</strong> üzerinden satın alınan dijital hizmetler, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında aşağıdaki şartlara tabidir.
           </p>
         </section>
 
-        {/* 1. Teslimat - GÜNCELLENDİ */}
+        {/* 1. Teslimat */}
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div style={{ padding: '10px', backgroundColor: 'rgba(59,130,246,0.1)', borderRadius: '12px' }}>
@@ -51,8 +51,8 @@ export default function IadeVeTeslimatPage() {
           <p style={{ color: '#a1a1aa' }}>
             Carvix tarafından sunulan hizmetler tamamen <strong>gayrimaddi (dijital)</strong> niteliktedir. 
             Ödeme işlemi başarılı olduğu anda yapay zeka analiz süreci başlar. 
-            Oluşturulan rapor, kullanıcının <strong>"Dashboard / Geçmiş Analizlerim"</strong> paneline anında tanımlanır. 
-            Kullanıcı, hesabına giriş yaparak raporuna 7/24 erişebilir. Fiziksel kargo veya kurye gönderimi söz konusu değildir.
+            Oluşturulan rapor, kullanıcının paneline veya belirttiği iletişim kanallarına anında tanımlanır/iletilir. 
+            Fiziksel bir kargo veya kurye gönderimi söz konusu değildir; teslimat elektronik ortamda gerçekleşir.
           </p>
         </div>
 
@@ -76,12 +76,12 @@ export default function IadeVeTeslimatPage() {
             borderRadius: '24px', 
             border: '1px solid rgba(239, 68, 68, 0.1)' 
           }}>
-            <h4 style={{ color: '#ef4444', marginTop: 0, fontSize: '1rem' }}>Önemli Notlar:</h4>
+            <h4 style={{ color: '#ef4444', marginTop: 0, fontSize: '1rem' }}>Önemli Hususlar:</h4>
             <ul style={{ margin: 0, paddingLeft: '20px', color: '#d1d1d6', fontSize: '0.95rem' }}>
-              <li style={{ marginBottom: '10px' }}>Rapor üretimi anlık olarak başladığından, ödeme sonrası işlem iptali yapılamaz.</li>
-              <li style={{ marginBottom: '10px' }}>Analiz için yüklenen fotoğrafların kalitesi ve doğruluğu kullanıcı sorumluluğundadır; düşük kaliteli yüklemeler nedeniyle iade yapılmaz.</li>
-              <li style={{ marginBottom: '10px' }}>Hatalı üyelik bilgileri veya yanlış paket seçimi durumunda sorumluluk kullanıcıya aittir.</li>
-              <li>Ödeme sayfasında dijital teslimat şartlarının onaylanması ile süreç kesinleşir.</li>
+              <li style={{ marginBottom: '10px' }}>Yapay zeka analiz süreci ödeme ile eş zamanlı başladığından, satın alım sonrası işlem iptali yapılamaz.</li>
+              <li style={{ marginBottom: '10px' }}>Kullanıcının yüklediği düşük çözünürlüklü veya hatalı fotoğraflardan kaynaklanan analiz hataları iade kapsamında değildir.</li>
+              <li style={{ marginBottom: '10px' }}>Dijital raporun kullanıcıya sunulmuş olması, hizmetin tam ifa edildiği anlamına gelir.</li>
+              <li>Tüm ödeme ve onay süreçleri dijital imza niteliğindedir.</li>
             </ul>
           </div>
         </div>
@@ -95,16 +95,16 @@ export default function IadeVeTeslimatPage() {
             <h3 style={{ color: '#fff', margin: 0, fontSize: '1.4rem' }}>3. Teknik Telafi ve Geri Ödeme</h3>
           </div>
           <p style={{ color: '#a1a1aa' }}>
-            Sistemimizden kaynaklı teknik bir hata sebebiyle raporun oluşturulamaması veya kullanıcı paneline tanımlanamaması durumunda:
+            Carvix sisteminden kaynaklanan ve 48 saat içerisinde giderilemeyen teknik hatalar nedeniyle raporun oluşturulamadığı durumlarda:
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
             <div style={{ padding: '20px', background: '#111', borderRadius: '16px', border: '1px solid #222' }}>
-              <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Telafi Hizmeti</h5>
-              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Sistemsel hata durumunda rapor manuel olarak hazırlanır ve 24 saat içinde kullanıcı paneline eklenir.</p>
+              <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Sistem Arızası Telafisi</h5>
+              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Hata düzeltildiğinde kullanıcıya ücretsiz analiz hakkı veya raporun manuel iletimi sağlanır.</p>
             </div>
             <div style={{ padding: '20px', background: '#111', borderRadius: '16px', border: '1px solid #222' }}>
-              <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Ücret İadesi</h5>
-              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Teknik sorunun 48 saat içinde giderilemediği durumlarda <strong>İşyerimpos</strong> üzerinden kartınıza tam iade sağlanır.</p>
+              <h5 style={{ color: '#fff', margin: '0 0 10px 0' }}>Shopier İadesi</h5>
+              <p style={{ fontSize: '0.85rem', color: '#71717a', margin: 0 }}>Hizmetin teknik imkansızlık nedeniyle sunulamadığı kesinleşirse, ödeme <strong>Shopier</strong> altyapısı üzerinden karta iade edilir.</p>
             </div>
           </div>
         </div>
@@ -119,9 +119,9 @@ export default function IadeVeTeslimatPage() {
           color: '#000'
         }}>
           <MessageSquare size={32} color="#3b82f6" style={{ marginBottom: '20px', margin: '0 auto 15px' }} />
-          <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem', fontWeight: '800' }}>Destek Hattı</h3>
+          <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem', fontWeight: '800' }}>Müşteri Desteği</h3>
           <p style={{ fontSize: '1rem', marginBottom: '20px', opacity: 0.8 }}>
-            İade talepleri veya üyelik paneli sorunları için 7/24 bize ulaşabilirsiniz.
+            Teslimat sorunları veya teknik destek talepleriniz için bize e-posta yoluyla ulaşabilirsiniz.
           </p>
           <a href="mailto:info@carvix.site" style={{ 
             color: '#3b82f6', 
@@ -133,8 +133,8 @@ export default function IadeVeTeslimatPage() {
             info@carvix.site
           </a>
           <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'center', gap: '20px', opacity: 0.6 }}>
-             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px' }}><CreditCard size={14}/> Güvenli İade Altyapısı</div>
-             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px' }}><ShieldCheck size={14}/> 256-bit SSL</div>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px' }}><CreditCard size={14}/> Güvenli Ödeme</div>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px' }}><ShieldCheck size={14}/> Shopier Güvencesi</div>
           </div>
         </div>
 
@@ -143,11 +143,11 @@ export default function IadeVeTeslimatPage() {
           paddingTop: '30px', 
           borderTop: '1px solid #18181b', 
           fontSize: '0.8rem', 
-          color: '#52525b',
+          color: '#52525b', 
           textAlign: 'center'
         }}>
-          <p>© 2026 Serhat Can Çaylan - Tüm Hakları Saklıdır.</p>
-          <p>Çayiçi Mah. Toker Sk. No: 16 Sapanca / SAKARYA</p>
+          <p>© 2026 Carvix — Yapay Zeka Analiz Hizmetleri. Tüm Hakları Saklıdır.</p>
+          <p>Adapazarı Merkez, Sakarya, Türkiye</p>
         </footer>
       </div>
     </div>

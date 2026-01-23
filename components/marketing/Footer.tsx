@@ -28,37 +28,49 @@ export default function Footer() {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
               
-              {/* Güvenlik Sertifikası Kutusu (Tami yerine PCI-DSS eklendi) */}
-              <div style={{ border: '1px solid rgba(255,255,255,0.3)', padding: '2px 5px', borderRadius: '3px' }}>
-                <span style={{ fontSize: '9px', fontWeight: 'bold', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>PCI-DSS COMPLIANT</span>
+              {/* SHOPIER ORİJİNAL RENKLİ LOGO */}
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                backgroundColor: '#7000FF', // Shopier Moru
+                padding: '4px 10px', 
+                borderRadius: '6px',
+                boxShadow: '0 0 15px rgba(112, 0, 255, 0.3)'
+              }}>
+                <span style={{ color: '#fff', fontSize: '11px', fontWeight: '900', fontFamily: 'sans-serif', letterSpacing: '-0.3px' }}>shopier</span>
+              </div>
+
+              {/* Güvenlik Sertifikası */}
+              <div style={{ border: '1px solid rgba(255,255,255,0.2)', padding: '3px 6px', borderRadius: '4px' }}>
+                <span style={{ fontSize: '9px', fontWeight: 'bold', color: 'rgba(255,255,255,0.4)', letterSpacing: '1px' }}>PCI-DSS</span>
               </div>
               
               {/* Visa */}
-              <img src="/visa-logo.svg" alt="Visa" style={{ height: '10px', width: 'auto' }} />
+              <img src="/visa-logo.svg" alt="Visa" style={{ height: '10px', opacity: 0.8 }} />
               
               {/* Mastercard */}
-              <img src="/mastercard-logo.svg" alt="Mastercard" style={{ height: '16px', width: 'auto' }} />
+              <img src="/mastercard-logo.svg" alt="Mastercard" style={{ height: '16px', opacity: 0.8 }} />
               
               {/* Masterpass */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', opacity: 0.8 }}>
                 <div style={{ display: 'flex' }}>
                   <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#EB001B', marginRight: '-4px' }}></div>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#F79E1B', opacity: 0.9 }}></div>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#F79E1B' }}></div>
                 </div>
-                <span style={{ fontSize: '11px', color: '#fff', fontWeight: '600', fontFamily: 'sans-serif' }}>masterpass</span>
+                <span style={{ fontSize: '10px', color: '#fff', fontWeight: '600' }}>masterpass</span>
               </div>
 
             </div>
             
             <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-              256-bit SSL Güvenli Ödeme Altyapısı
+              Shopier Güvencesiyle 256-bit SSL Koruma
             </p>
           </div>
         </div>
 
         {/* TELİF */}
-        <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
-          © 2026 Serhat Can Çaylan — Carvix Yapay Zeka Analiz Hizmetleri. Tüm hakları saklıdır.
+        <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>
+          © 2026 Carvix — Yapay Zeka Analiz Hizmetleri. Tüm hakları saklıdır.
         </div>
       </div>
     </footer>

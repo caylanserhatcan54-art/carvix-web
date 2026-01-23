@@ -58,9 +58,8 @@ export default function IletisimPage() {
                 <h3 style={{ color: '#fff', margin: 0 }}>Adres</h3>
               </div>
               <p style={{ color: '#a1a1aa', lineHeight: '1.6', margin: 0 }}>
-                Çayiçi Mah. Toker Sk. No: 16<br />
-                İç Kapı No: 1<br />
-                Sapanca / SAKARYA
+                Adapazarı Merkez<br />
+                Sakarya, Türkiye
               </p>
             </div>
 
@@ -69,11 +68,15 @@ export default function IletisimPage() {
                 <div style={{ backgroundColor: 'rgba(59,130,246,0.1)', padding: '10px', borderRadius: '12px' }}>
                   <Phone size={24} color="#3b82f6" />
                 </div>
-                <h3 style={{ color: '#fff', margin: 0 }}>Telefon</h3>
+                <h3 style={{ color: '#fff', margin: 0 }}>Telefon & WhatsApp</h3>
               </div>
-              <a href="tel:+905335239954" style={{ color: '#fff', fontWeight: 'bold', textDecoration: 'none', fontSize: '1.1rem' }}>
-                0533 523 99 54
-              </a>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <a href="https://wa.me/905335239954" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '1.5rem' }}>🟢</span> 
+                  <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.1rem' }}>0533 523 99 54</span>
+                </a>
+              </div>
+              <p style={{ color: '#52525b', fontSize: '0.8rem', marginTop: '5px' }}>Hızlı destek için WhatsApp üzerinden yazabilirsiniz.</p>
             </div>
 
           </div>
@@ -90,9 +93,9 @@ export default function IletisimPage() {
           }}>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
               <MessageCircle size={48} color="#3b82f6" style={{ margin: '0 auto 20px' }} />
-              <h3 style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '10px' }}>Üyelik ve Destek</h3>
+              <h3 style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '10px' }}>Hızlı Destek Hattı</h3>
               <p style={{ color: '#a1a1aa' }}>
-                Hesabınıza giriş yaparken veya analizlerinizi görüntülerken sorun yaşıyorsanız, lütfen kayıtlı e-posta adresinizle bize ulaşın.
+                Analizlerinizle ilgili teknik bir sorun yaşıyorsanız WhatsApp veya E-posta üzerinden bize ulaşabilirsiniz.
               </p>
             </div>
 
@@ -103,7 +106,7 @@ export default function IletisimPage() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <ShieldCheck size={18} color="#22c55e" />
-                <span style={{ fontSize: '0.9rem' }}>KVKK Uyumlu Veri İşleme</span>
+                <span style={{ fontSize: '0.9rem' }}>Güvenli ve KVKK Uyumlu İletişim</span>
               </div>
             </div>
           </div>
@@ -119,7 +122,7 @@ export default function IletisimPage() {
           color: '#52525b',
           fontSize: '0.9rem'
         }}>
-          <p>© 2026 Carvix - Serhat Can Çaylan. Tüm hakları saklıdır.</p>
+          <p>© 2026 Carvix — Yapay Zeka Analiz Hizmetleri. Tüm hakları saklıdır.</p>
         </footer>
 
       </div>

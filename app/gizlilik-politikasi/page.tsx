@@ -28,7 +28,7 @@ export default function GizlilikPolitikasiPage() {
             Gizlilik Politikası ve KVKK
           </h1>
           <p style={{ fontSize: '0.9rem', color: '#71717a', marginTop: '10px' }}>
-            Yürürlük Tarihi: 19 Ocak 2026
+            Yürürlük Tarihi: 23 Ocak 2026
           </p>
         </div>
 
@@ -48,8 +48,8 @@ export default function GizlilikPolitikasiPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginTop: '20px' }}>
             <div>
-              <small style={{ color: '#52525b', display: 'block', textTransform: 'uppercase' }}>Yasal Ünvan</small>
-              <strong style={{ color: '#fff' }}>Serhat Can Çaylan</strong>
+              <small style={{ color: '#52525b', display: 'block', textTransform: 'uppercase' }}>Kurumsal Ünvan</small>
+              <strong style={{ color: '#fff' }}>Carvix — Yapay Zeka Analiz Hizmetleri</strong>
             </div>
             <div>
               <small style={{ color: '#52525b', display: 'block', textTransform: 'uppercase' }}>İletişim</small>
@@ -57,7 +57,7 @@ export default function GizlilikPolitikasiPage() {
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
               <small style={{ color: '#52525b', display: 'block', textTransform: 'uppercase' }}>Adres</small>
-              <strong style={{ color: '#fff' }}>Çayiçi Mah. Toker Sk. No: 16 Sapanca / SAKARYA</strong>
+              <strong style={{ color: '#fff' }}>Adapazarı Merkez, Sakarya, Türkiye</strong>
             </div>
           </div>
         </section>
@@ -67,25 +67,25 @@ export default function GizlilikPolitikasiPage() {
           
           <section>
             <h3 style={{ color: '#fff' }}>2. Hangi Verileri İşliyoruz?</h3>
-            <p>Hizmetimizi kullanırken ve üyelik oluştururken sağladığınız şu veriler işlenmektedir:</p>
+            <p>Hizmetimizi kullanırken ve analiz yaptırırken sağladığınız şu veriler işlenmektedir:</p>
             <ul style={{ color: '#a1a1aa' }}>
-              <li><strong>Kimlik ve Üyelik:</strong> Kayıt sırasında paylaştığınız ad-soyad, e-posta adresi ve şifreniz.</li>
+              <li><strong>İletişim Bilgileri:</strong> Raporun gönderilmesi için paylaştığınız e-posta adresi.</li>
               <li><strong>Görsel Veriler:</strong> Analiz edilmek üzere sisteme yüklenen araç fotoğrafları.</li>
-              <li><strong>İşlem Geçmişi:</strong> Panelinizde görüntülenen geçmiş analizleriniz ve rapor sonuçlarınız.</li>
-              <li><strong>Teknik Veriler:</strong> IP adresi, çerezler (cookies) ve oturum kullanım istatistikleri.</li>
+              <li><strong>İşlem Geçmişi:</strong> Satın aldığınız paket türü ve rapor sonuçlarınız.</li>
+              <li><strong>Teknik Veriler:</strong> Güvenlik amacıyla IP adresi ve temel tarayıcı bilgileri.</li>
             </ul>
           </section>
 
           <section style={{ padding: '25px', borderLeft: '4px solid #3b82f6', backgroundColor: 'rgba(59,130,246,0.05)' }}>
             <h3 style={{ color: '#fff', marginTop: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Lock size={20} color="#3b82f6" /> 3. Ödeme ve Hesap Güvenliği
+              <Lock size={20} color="#3b82f6" /> 3. Ödeme Güvenliği
             </h3>
             <p style={{ marginBottom: '15px' }}>
-              Ödeme işlemleriniz yüksek güvenlikli <strong>İşyerimpos / Garanti BBVA</strong> altyapısı üzerinden gerçekleştirilir. 
-              <strong> Kart bilgileriniz Carvix sunucularında asla tutulmaz ve işlenmez.</strong>
+              Ödeme işlemleriniz yüksek güvenlikli <strong>Shopier</strong> altyapısı üzerinden gerçekleştirilir. 
+              <strong> Kart bilgileriniz Carvix sunucularında asla tutulmaz, işlenmez ve saklanmaz.</strong>
             </p>
             <p style={{ margin: 0 }}>
-              Hesap şifreleriniz, veritabanımızda modern kriptolama yöntemleri ile saklanmakta olup; şifre gizliliğini korumak kullanıcının sorumluluğundadır.
+              Tüm ödeme süreci Shopier'ın 256-bit SSL korumalı ve PCI-DSS uyumlu güvenli sayfalarında tamamlanmaktadır.
             </p>
           </section>
 
@@ -93,25 +93,24 @@ export default function GizlilikPolitikasiPage() {
             <h3 style={{ color: '#fff' }}>4. Verilerin Üçüncü Şahıslarla Paylaşımı</h3>
             <p>
               Kişisel verileriniz, yasal zorunluluklar haricinde asla üçüncü şahıslara satılmaz veya ticari amaçla paylaşılmaz. 
-              Sadece hizmetin ifası için gerekli olan (Örn: Supabase veri saklama, ödeme kuruluşu, e-posta gönderim sistemleri) iş ortaklarımızla sınırlı olarak paylaşılmaktadır.
+              Verileriniz sadece analiz işleminin gerçekleştirilmesi (AI Worker sistemleri) ve ödemenin doğrulanması amacıyla ilgili iş ortaklarımızla sınırlı olarak paylaşılmaktadır.
             </p>
           </section>
 
           <section>
             <h3 style={{ color: '#fff' }}>5. Haklarınız (KVKK Madde 11)</h3>
             <p>
-              Dilediğiniz zaman <strong>info@carvix.site</strong> adresine yazarak; hesabınızın silinmesini, 
-              verilerinizin işlenip işlenmediğini öğrenmeyi veya yanlış verilerin düzeltilmesini talep etme hakkına sahipsiniz.
+              Dilediğiniz zaman <strong>info@carvix.site</strong> adresine yazarak; verilerinizin sistemlerimizden silinmesini, 
+              verilerinizin işlenip işlenmediğini öğrenmeyi veya hatalı verilerin düzeltilmesini talep etme hakkına sahipsiniz.
             </p>
           </section>
 
           <section style={{ backgroundColor: '#111', padding: '20px', borderRadius: '16px' }}>
             <h3 style={{ color: '#fff', marginTop: 0, display: 'flex', alignItems: 'center', gap: '10px', fontSize: '16px' }}>
-              <UserCheck size={18} color="#3b82f6" /> Veri Saklama Süresi
+              <UserCheck size={18} color="#3b82f6" /> Veri Saklama Politikası
             </h3>
             <p style={{ margin: 0, fontSize: '14px', color: '#a1a1aa' }}>
-              Üyelik bilgileriniz ve analiz raporlarınız, üyeliğiniz aktif olduğu sürece panelinizde erişilebilir olması için saklanır. 
-              Hesabınızı sildiğiniz takdirde, yasal olarak saklanması zorunlu olmayan tüm verileriniz sistemlerimizden kalıcı olarak temizlenir.
+              Yüklediğiniz fotoğraflar analiz işlemi tamamlanıp rapor üretildikten sonra, kullanıcı talebi üzerine veya periyodik temizlik süreçlerinde sistemlerimizden kalıcı olarak silinmektedir. Yasal faturalandırma ve işlem kayıtları mevzuatın öngördüğü süre boyunca saklanır.
             </p>
           </section>
 
@@ -127,7 +126,7 @@ export default function GizlilikPolitikasiPage() {
           textAlign: 'center'
         }}>
           <p>Bu politika, www.carvix.site kullanıcılarının şeffaf bir şekilde bilgilendirilmesi amacıyla hazırlanmıştır.</p>
-          <p>© 2026 Carvix - Serhat Can Çaylan. Tüm Hakları Saklıdır.</p>
+          <p>© 2026 Carvix — Yapay Zeka Analiz Hizmetleri. Tüm Hakları Saklıdır.</p>
         </footer>
       </div>
     </div>

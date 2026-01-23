@@ -157,8 +157,8 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer style={{ padding: '80px 8%', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', color: '#52525b', fontSize: '13px', flexWrap: 'wrap' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><ShieldCheck size={18} color="#22c55e" /> Garanti BBVA Altyapısı</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={18} /> Güvenli Ödeme</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><ShieldCheck size={18} color="#22c55e" /> Shopier Altyapı Güvencesi</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={18} /> Güvenli Ödeme (SSL)</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Smartphone size={18} /> Mobil Uyumlu</span>
         </div>
       </footer>
