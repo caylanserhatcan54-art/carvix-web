@@ -7,18 +7,19 @@ import {
   Camera, 
   Lightbulb, 
   CheckCircle2, 
-  AlertCircle, 
   LayoutGrid, 
-  ArrowLeft 
+  ArrowLeft,
+  Scan,
+  Zap
 } from "lucide-react";
 import Link from "next/link";
 
 export default function GuidePage() {
   return (
-    <main style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '60px 20px' }}>
+    <main style={{ backgroundColor: '#050505', minHeight: '100vh', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         
-        {/* Geri Dönüş ve Üst Navigasyon */}
+        {/* Geri Dönüş */}
         <Link href="/pricing" style={{ 
           display: "inline-flex", 
           alignItems: "center", 
@@ -27,9 +28,9 @@ export default function GuidePage() {
           textDecoration: "none",
           fontSize: "14px",
           marginBottom: "30px",
-          fontWeight: "500"
+          fontWeight: "600"
         }}>
-          <ArrowLeft size={16} /> Geri Dön
+          <ArrowLeft size={16} /> Paketlere Dön
         </Link>
 
         {/* Başlık Bölümü */}
@@ -39,119 +40,123 @@ export default function GuidePage() {
             alignItems: 'center', 
             gap: '8px', 
             color: '#3b82f6', 
-            background: 'rgba(59,130,246,0.08)',
+            background: 'rgba(59,130,246,0.1)',
             padding: '8px 20px',
             borderRadius: '100px',
-            border: '1px solid rgba(59,130,246,0.2)',
             fontSize: '13px',
-            fontWeight: '700',
+            fontWeight: '800',
             marginBottom: '20px'
           }}>
-            <Camera size={14} />
-            <span>AI FOTOĞRAF REHBERİ</span>
+            <Zap size={14} />
+            <span>KULLANICI DOSTU ANALİZ REHBERİ</span>
           </div>
           
           <h1 style={{ 
             color: '#ffffff', 
-            fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', 
-            fontWeight: '900', 
+            fontSize: 'clamp(2rem, 5vw, 3.2rem)', 
+            fontWeight: '950', 
             letterSpacing: '-2px',
             lineHeight: '1.1',
             marginBottom: '20px'
           }}>
-            Kusursuz Analiz İçin <br />
-            <span style={{ color: '#3b82f6' }}>Doğru Fotoğraflama</span>
+            Ekspertiz Öncesi <br />
+            <span style={{ color: '#3b82f6' }}>Hızlı Hazırlık Rehberi</span>
           </h1>
           
           <p style={{ 
             color: '#a1a1aa', 
             fontSize: '1.1rem', 
-            maxWidth: '600px', 
-            lineHeight: '1.6'
+            maxWidth: '650px', 
+            lineHeight: '1.6',
+            fontWeight: '500'
           }}>
-            {PHOTO_GUIDE.intro} Yapay zekamızın en doğru sonucu vermesi için aşağıdaki kuralları takip edin.
+            Zorlu teknik detaylarla uğraşmanıza gerek yok. Aracınızın etrafında bir tur atarak doğru analiz sonucunu almanız için bu basit adımları izleyin.
           </p>
         </div>
 
         {/* Bilgi Kartları Grubu */}
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
           gap: '24px',
           marginBottom: '60px'
         }}>
           
-          {/* Altın Kurallar Kartı */}
+          {/* Standart Paket Kartı */}
           <div style={{ 
             backgroundColor: '#0f0f0f', 
             padding: '35px', 
             borderRadius: '32px', 
-            border: '1px solid #1a1a1a',
-            position: 'relative',
-            overflow: 'hidden'
+            border: '1px solid rgba(255,255,255,0.05)',
           }}>
-            <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.05 }}>
-              <CheckCircle2 size={100} color="#fff" />
-            </div>
-            
-            <h3 style={{ color: '#fff', fontSize: '1.3rem', fontWeight: '800', marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle2 size={24} color="#22c55e" /> Altın Kurallar
+            <h3 style={{ color: '#fff', fontSize: '1.3rem', fontWeight: '800', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <LayoutGrid size={24} color="#3b82f6" /> Standart Analiz Modu
             </h3>
-            
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '16px' }}>
-              {PHOTO_GUIDE.rules.map((r) => (
-                <li key={r} style={{ display: 'flex', gap: '12px', color: '#d4d4d8', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                  <span style={{ color: '#22c55e', fontWeight: 'bold' }}>•</span>
+            <p style={{ color: '#71717a', fontSize: '14px', marginBottom: '20px' }}>Sadece aracın dış yüzeyine odaklanın. Kapıları açmanıza gerek yok.</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '12px' }}>
+              {["Ön Kaput (Geniş Açı)", "Arka Bagaj ve Tampon", "Sağ Yan (Boydan)", "Sol Yan (Boydan)", "Tavan (Üstten Görünüm)"].map((r) => (
+                <li key={r} style={{ display: 'flex', gap: '10px', color: '#d4d4d8', fontSize: '0.9rem' }}>
+                  <CheckCircle2 size={16} color="#3b82f6" style={{ flexShrink: 0, marginTop: '2px' }} />
                   <span>{r}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Hızlı İpuçları Kartı */}
+          {/* Detaylı Paket Kartı */}
           <div style={{ 
             background: 'linear-gradient(145deg, #0f0f0f 0%, #0a0a0a 100%)', 
             padding: '35px', 
             borderRadius: '32px', 
-            border: '1px solid #1a1a1a'
+            border: '1px solid rgba(59,130,246,0.2)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
           }}>
-            <h3 style={{ color: '#fff', fontSize: '1.3rem', fontWeight: '800', marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Lightbulb size={24} color="#eab308" /> Profesyonel İpucu
+            <h3 style={{ color: '#fff', fontSize: '1.3rem', fontWeight: '800', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Scan size={24} color="#60a5fa" /> Detaylı (Full) Mod
             </h3>
-            
-            <div style={{ color: '#d4d4d8', fontSize: '0.95rem', lineHeight: '1.7' }}>
-              <p style={{ marginBottom: '20px' }}>
-                Boya analizi için <strong>en az 2 paneli</strong> aynı karede çekin. Bu, yapay zekanın doku ve ton farkını kıyaslamasını sağlar.
-              </p>
-              
-              <div style={{ 
-                backgroundColor: 'rgba(59,130,246,0.05)', 
-                padding: '20px', 
-                borderRadius: '20px', 
-                border: '1px dashed rgba(59,130,246,0.2)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-              }}>
-                <span style={{ fontSize: '12px', color: '#3b82f6', fontWeight: '700', letterSpacing: '1px' }}>ÖRNEK YÜKLEME</span>
-                <code style={{ color: '#fff', fontSize: '13px', fontFamily: 'monospace' }}>
-                  SOL_ON_KAPI + SAG_ON_KAPI + MENTESE
-                </code>
-              </div>
-            </div>
+            <p style={{ color: '#71717a', fontSize: '14px', marginBottom: '20px' }}>Kapıları açarak menteşe ve direklerdeki gizli detayları çekin.</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '12px' }}>
+              {["Kapı Menteşe Vidaları (Yakın)", "A-B-C Sütunları (İç Saclar)", "Kapı İç Fitil Altı Puntaları", "Kaput İç Bağlantı Noktaları", "Tavan ve Direk Birleşimleri"].map((r) => (
+                <li key={r} style={{ display: 'flex', gap: '10px', color: '#d4d4d8', fontSize: '0.9rem' }}>
+                  <CheckCircle2 size={16} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span>{r}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Örnek Kartlar Başlığı */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-           <h2 style={{ color: '#fff', fontSize: '1.8rem', fontWeight: '800', marginBottom: '10px' }}>Görsel Referanslar</h2>
-           <p style={{ color: '#71717a' }}>Sisteme yüklemeniz gereken ideal açılar aşağıda belirtilmiştir.</p>
+        {/* Önemli İpucu Kutusu */}
+        <div style={{ 
+          backgroundColor: 'rgba(234, 179, 8, 0.05)', 
+          border: '1px solid rgba(234, 179, 8, 0.2)', 
+          padding: '25px', 
+          borderRadius: '24px', 
+          display: 'flex', 
+          gap: '20px', 
+          alignItems: 'center',
+          marginBottom: '60px'
+        }}>
+          <div style={{ background: '#eab308', padding: '12px', borderRadius: '12px' }}>
+            <Lightbulb size={24} color="#000" />
+          </div>
+          <div>
+            <h4 style={{ color: '#fff', margin: 0, fontWeight: '800' }}>Kritik İpucu: Işığı Doğru Kullanın</h4>
+            <p style={{ color: '#a1a1aa', margin: '5px 0 0 0', fontSize: '14px' }}>
+              Gölgede veya çok karanlıkta çekim yapmayın. Güneş ışığı veya parlak bir lamba, boyadaki mikron farklarını AI'nın daha iyi yakalamasını sağlar.
+            </p>
+          </div>
         </div>
 
-        {/* PhotoGuideCards Bileşeni */}
+        {/* Görsel Referanslar */}
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+           <h2 style={{ color: '#fff', fontSize: '2rem', fontWeight: '900', letterSpacing: '-1px' }}>Örnek Çekim Açıları</h2>
+           <p style={{ color: '#71717a' }}>Aşağıdaki örnekler gibi çekim yaparak en net analizi alabilirsiniz.</p>
+        </div>
+
         <div style={{ 
-          backgroundColor: 'rgba(255,255,255,0.02)', 
-          padding: '40px', 
+          backgroundColor: 'rgba(255,255,255,0.01)', 
+          padding: '20px', 
           borderRadius: '40px', 
           border: '1px solid rgba(255,255,255,0.05)' 
         }}>
