@@ -2,9 +2,9 @@
 
 import { useMemo, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { VEHICLE_CONFIG, VehicleType, PackageType } from "@/lib/vehicleConfig";
+import { VEHICLE_CONFIG, PackageType } from "@/lib/vehicleConfig";
 import { 
-  Upload, Trash2, Image as ImageIcon, X, ArrowRight, Sparkles, Camera, AlertTriangle, CheckCircle2, XCircle, Sun, Mail, ShieldAlert, Focus, Maximize, Zap
+  Upload, Sparkles, Camera, ShieldAlert, Zap, Info, ScanEye, CheckCircle2, XCircle, ArrowRight, Focus
 } from "lucide-react";
 
 const API = (process.env.NEXT_PUBLIC_API_BASE || "https://ai-arac-analiz-backend.onrender.com").replace(/\/$/, "");
@@ -42,38 +42,49 @@ function UploadContent() {
     initFlow();
   }, []);
 
-  const getInstructions = () => {
+  const instructions = useMemo(() => {
     const isDetayli = pkg === "detailed";
-    switch (vehicleType) {
-      case "motorcycle":
-        return isDetayli 
-          ? ["Ön Far", "Sağ/Sol Grenaj", "Sele Altı Şasi", "Gidon Bağlantısı", "Amortisör Vidaları", "Egzoz Bağlantısı"]
-          : ["Ön Taraf", "Arka Taraf", "Sağ Yan", "Sol Yan"];
-      default:
-        return isDetayli
-          ? ["Ön Kaput", "4 Kapı", "Tavan", "Bagaj Kapağı", "Kapı Direkleri", "Menteşe ve Vida Detayları"]
-          : ["Ön Taraf", "Arka Taraf", "Sağ Yan", "Sol Yan"];
-    }
-  };
+    const lists = {
+      car: {
+        standard: [
+          "1️⃣ Önden – Tam karşıdan (2–3 metre mesafe)",
+          "2️⃣ Arkadan – Tam karşıdan",
+          "3️⃣ Sol yandan – Aracın tamamı",
+          "4️⃣ Sağ yandan – Aracın tamamı"
+        ],
+        detailed: [
+          "🔹 PARÇA BAZLI YAKIN PLAN (ÖNERİLEN)",
+          "Kapılar (Tek tek ve yakından)",
+          "Ön / Arka Çamurluklar",
+          "Kaput & Bagaj Kapağı",
+          "🔹 DETAY FOTOĞRAFLAR (KRİTİK)",
+          "Kapı Menteşeleri & Vidaları",
+          "Direk İçleri & Kaput İç Bağlantıları"
+        ]
+      },
+      pickup: {
+        standard: ["Kabin Önü", "Kasa Arkası", "Sağ Profil", "Sol Profil"],
+        detailed: ["Kasa İç Sacı", "Kabin-Kasa Birleşim Hattı", "Arka Kapak Mekanizması", "Kabin Tavanı", "Kapı Menteşeleri", "İç Direkler"]
+      },
+      motorcycle: {
+        standard: ["Ön Bakış", "Arka Bakış", "Sağ Yan", "Sol Yan"],
+        detailed: ["Ön Grenaj & Far", "Sağ/Sol Yan Paneller", "Yakıt Deposu", "Kuyruk & Şasi Görünür Alanlar"]
+      }
+    };
 
-  const instructions = getInstructions();
+    const currentVehicle = (lists as any)[vehicleType] || lists.car;
+    const selectedList = isDetayli ? currentVehicle.detailed : currentVehicle.standard;
+    return Array.isArray(selectedList) ? selectedList : [];
+  }, [vehicleType, pkg]);
 
   const handleAddToCart = () => {
     if (!userEmail) return alert("Lütfen giriş yapın.");
-    if (items.length === 0) return alert("Lütfen en az bir fotoğraf yükleyin.");
+    if (items.length < 4) return alert("Hatalı analiz almamak için en az 4 ana yön fotoğrafı şart.");
     setIsAddedToCart(true);
   };
 
   const handleFinalPayment = async () => {
-    if (!flowToken) return alert("Sistem hazır değil.");
-
-    // SHOPIER ÖNCESİ KRİTİK UYARI
-    const confirmPayment = window.confirm(
-      `DİKKAT: Raporunuzun sisteme düşmesi için Shopier ödeme sayfasında e-posta adresi kısmına "${userEmail}" adresinizi yazmalısınız. Hazır mısınız?`
-    );
-    
-    if (!confirmPayment) return;
-
+    if (!flowToken) return alert("Sistem henüz hazır değil, lütfen bekleyin.");
     setLoading(true);
     try {
       const form = new FormData();
@@ -92,117 +103,120 @@ function UploadContent() {
         window.location.href = `${shopierLink}?platform_order_id=${flowToken}`; 
       }, 1500);
     } catch (err) { 
-      alert("Yükleme sırasında hata oluştu!"); 
+      alert("Yükleme sırasında bir bağlantı hatası oluştu."); 
       setLoading(false); 
     }
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', padding: '40px 20px', fontFamily: 'sans-serif' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', padding: '40px 20px', fontFamily: 'Inter, sans-serif' }}>
       
       {showCart && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end' }}>
-          <div style={{ width: '100%', maxWidth: '400px', backgroundColor: '#0a0a0a', padding: '40px', borderLeft: '1px solid #222' }}>
-            <h2 style={{ fontWeight: '900', marginBottom: '30px', fontSize: '24px' }}>Sipariş Özeti</h2>
-            
-            <div style={{ padding: '20px', background: '#111', borderRadius: '15px', border: '1px solid #1a1a1a', marginBottom: '20px' }}>
-              <p style={{ fontSize: '12px', color: '#777' }}>{config.title}</p>
-              <p style={{ fontWeight: '800', fontSize: '18px' }}>{pkg === "standard" ? "Standart" : "Detaylı"} Paket</p>
-              <p style={{ fontSize: '22px', fontWeight: '900', marginTop: '15px', color: '#3b82f6' }}>{basePrice.toFixed(2)} TL</p>
-            </div>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.98)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end', backdropFilter: 'blur(10px)' }}>
+          <div style={{ width: '100%', maxWidth: '420px', backgroundColor: '#0a0a0a', padding: '50px 40px', borderLeft: '1px solid #222', display: 'flex', flexDirection: 'column' }}>
+             <h2 style={{ fontWeight: '900', marginBottom: '10px', fontSize: '28px', letterSpacing: '-1px' }}>Siparişiniz</h2>
+             <p style={{ color: '#555', marginBottom: '30px', fontSize: '14px' }}>Analiz işlemi ödeme sonrası anlık başlar.</p>
+             
+             <div style={{ padding: '25px', background: 'linear-gradient(145deg, #111, #080808)', borderRadius: '20px', border: '1px solid #1a1a1a', marginBottom: '25px' }}>
+               <p style={{ fontSize: '12px', color: '#3b82f6', fontWeight: '800', marginBottom: '5px' }}>{config.title.toUpperCase()}</p>
+               <p style={{ fontWeight: '800', fontSize: '20px' }}>{pkg === "standard" ? "Standart" : "Detaylı"} Paket</p>
+               <div style={{ height: '1px', background: '#222', margin: '15px 0' }} />
+               <p style={{ fontSize: '26px', fontWeight: '900', color: '#fff' }}>{basePrice.toFixed(2)} TL</p>
+             </div>
 
-            {/* SHOPIER E-POSTA UYARI KARTU */}
-            <div style={{ padding: '20px', background: 'rgba(234,179,8,0.1)', borderRadius: '15px', border: '1px solid #eab308', marginBottom: '30px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#eab308', marginBottom: '10px' }}>
-                <ShieldAlert size={20} />
-                <h4 style={{ fontWeight: '900', fontSize: '14px' }}>KRİTİK HATIRLATMA</h4>
-              </div>
-              <p style={{ fontSize: '12px', color: '#ccc', lineHeight: '1.5' }}>
-                Ödeme sayfasında <b>e-posta</b> kısmına mutlaka Carvix'e kayıt olduğunuz şu adresi girmelisiniz:
-              </p>
-              <div style={{ marginTop: '10px', padding: '10px', background: '#000', borderRadius: '8px', textAlign: 'center', border: '1px dashed #eab308' }}>
-                <code style={{ color: '#eab308', fontWeight: '800', fontSize: '13px' }}>{userEmail}</code>
-              </div>
-            </div>
+             <div style={{ padding: '20px', background: 'rgba(234,179,8,0.05)', borderRadius: '20px', border: '1px solid rgba(234,179,8,0.2)', marginBottom: '40px' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#eab308', marginBottom: '10px' }}>
+                 <ShieldAlert size={20} />
+                 <h4 style={{ fontWeight: '900', fontSize: '14px' }}>E-POSTA DOĞRULAMA</h4>
+               </div>
+               <p style={{ fontSize: '12px', color: '#aaa', lineHeight: '1.6' }}>Raporun size ulaşması için Shopier ödeme ekranında bu adresi kullanmalısınız:</p>
+               <div style={{ marginTop: '12px', padding: '12px', background: '#000', borderRadius: '10px', textAlign: 'center', border: '1px dashed #eab308' }}>
+                 <code style={{ color: '#eab308', fontWeight: '800', fontSize: '14px' }}>{userEmail}</code>
+               </div>
+             </div>
 
-            <button onClick={handleFinalPayment} disabled={loading} style={{ width: '100%', padding: '20px', background: '#3b82f6', border: 'none', borderRadius: '15px', color: '#fff', fontWeight: '900', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '16px' }}>
-              {loading ? "Analiz Hazırlanıyor..." : "Ödemeye Geç"}
-            </button>
-            <button onClick={() => setShowCart(false)} style={{ width: '100%', marginTop: '15px', background: 'none', border: 'none', color: '#555', cursor: 'pointer' }}>Vazgeç</button>
+             <button onClick={handleFinalPayment} disabled={loading} style={{ width: '100%', padding: '22px', background: '#3b82f6', border: 'none', borderRadius: '18px', color: '#fff', fontWeight: '900', fontSize: '16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+               {loading ? "Bağlanıyor..." : <>{pkg === "detailed" ? "Detaylı Analizi Başlat" : "Ödemeye Geç"} <ArrowRight size={18} /></>}
+             </button>
+             <button onClick={() => setShowCart(false)} style={{ width: '100%', marginTop: '20px', background: 'none', border: 'none', color: '#444', fontWeight: '600', cursor: 'pointer' }}>Geri Dön</button>
           </div>
         </div>
       )}
 
-      <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-        <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'inline-block', padding: '6px 15px', background: 'rgba(59,130,246,0.1)', color: '#3b82f6', borderRadius: '100px', fontSize: '12px', fontWeight: '800' }}>
-            {config.title.toUpperCase()} - {pkg.toUpperCase()} ANALİZ
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'rgba(59,130,246,0.1)', color: '#3b82f6', borderRadius: '100px', fontSize: '11px', fontWeight: '900', letterSpacing: '1px' }}>
+            <Sparkles size={14} /> {config.title.toUpperCase()} • {pkg.toUpperCase()} ANALİZ SİSTEMİ
           </div>
-          <h1 style={{ fontSize: '36px', fontWeight: '900', marginTop: '10px' }}>Fotoğrafları Yükle</h1>
+          <h1 style={{ fontSize: '36px', fontWeight: '900', marginTop: '15px', letterSpacing: '-1.5px' }}>Ekspertiz Görselleri</h1>
+          <p style={{ color: '#555', fontSize: '15px', marginTop: '8px' }}>Yapay zeka, santim santim tarama yaparak kusurları raporlayacak.</p>
         </div>
 
-        {/* Yüklenmesi Gereken Alanlar */}
-        <div style={{ textAlign: 'left', background: '#0a0a0a', padding: '25px', borderRadius: '25px', border: '1px solid #111', marginBottom: '30px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#3b82f6', marginBottom: '15px' }}>
-            <Camera size={20} />
-            <h3 style={{ fontWeight: '900' }}>Yüklenmesi Gereken Alanlar</h3>
+        {/* ANALİZ KAPSAMI - TAM LİSTE */}
+        <div style={{ background: '#0a0a0a', padding: '30px', borderRadius: '30px', border: '1px solid #111', marginBottom: '25px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#3b82f6', marginBottom: '20px' }}>
+            <div style={{ padding: '10px', background: 'rgba(59,130,246,0.1)', borderRadius: '12px' }}><ScanEye size={22} /></div>
+            <h3 style={{ fontWeight: '900', fontSize: '18px' }}>Gerekli Görseller</h3>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            {instructions.map((item, i) => (
-              <div key={i} style={{ padding: '10px', background: '#111', borderRadius: '10px', fontSize: '12px', border: '1px solid #1a1a1a' }}>
-                <span style={{ color: '#3b82f6', marginRight: '5px' }}>✓</span> {item}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            {Array.isArray(instructions) && instructions.map((item, i) => (
+              <div key={i} style={{ padding: '15px', background: '#0d0d0d', borderRadius: '15px', fontSize: '12px', border: '1px solid #161616', color: '#999', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '6px', height: '6px', background: '#3b82f6', borderRadius: '50%' }} />
+                {item}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Upload Alanı */}
-        <div style={{ border: '2px dashed #222', padding: '50px', borderRadius: '30px', position: 'relative', cursor: 'pointer' }}>
-          <input type="file" multiple accept="image/*" onChange={(e) => setItems(Array.from(e.target.files || []).map(f => ({file: f})))} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
-          <Upload size={32} color="#3b82f6" />
-          <p style={{ marginTop: '15px', fontWeight: '700' }}>{items.length > 0 ? `${items.length} Dosya Seçildi` : "Dosyaları Seçin"}</p>
+        {/* DETAYLI ÇEKİM REHBERİ */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '25px' }}>
+           <div style={{ padding: '25px', background: '#0a0a0a', borderRadius: '25px', border: '1px solid #111' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                <CheckCircle2 size={24} color="#22c55e" />
+                <h4 style={{ fontWeight: '800', fontSize: '15px' }}>📸 Doğru Çekim</h4>
+              </div>
+              <ul style={{ padding: 0, listStyle: 'none', fontSize: '12px', color: '#888', lineHeight: '1.8' }}>
+                <li>✅ <b>Mesafe:</b> Tam boy için 2–3 metre</li>
+                <li>✅ <b>Kadraj:</b> Araç ekranı tamamen doldurmalı</li>
+                <li>✅ <b>Açı:</b> Kamera yüzeye tam paralel (dik)</li>
+                <li>✅ <b>Işık:</b> Flash kapalı, güneş arkada olmalı</li>
+              </ul>
+           </div>
+           <div style={{ padding: '25px', background: '#0a0a0a', borderRadius: '25px', border: '1px solid #111' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                <XCircle size={24} color="#ef4444" />
+                <h4 style={{ fontWeight: '800', fontSize: '15px' }}>❌ Hatalı Çekim</h4>
+              </div>
+              <ul style={{ padding: 0, listStyle: 'none', fontSize: '12px', color: '#888', lineHeight: '1.8' }}>
+                <li>🚫 <b>Eğiklik:</b> Telefonu eğik tutmayın</li>
+                <li>🚫 <b>Gölge:</b> Kendi gölgenizi düşürmeyin</li>
+                <li>🚫 <b>Kir:</b> Aşırı kirli yüzey analiz yapılamaz</li>
+                <li>🚫 <b>Gece:</b> Karanlık kareler kabul edilmez</li>
+              </ul>
+           </div>
         </div>
 
-        {/* ÇEKİM REHBERİ - Geliştirilmiş Versiyon */}
-        <div style={{ marginTop: '40px', padding: '25px', background: '#0a0a0a', borderRadius: '25px', border: '1px solid #111', textAlign: 'left' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#eab308', marginBottom: '20px' }}>
-            <Zap size={20} />
-            <h3 style={{ fontWeight: '900' }}>Kritik Analiz Rehberi (Okuyunuz)</h3>
-          </div>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
-            {/* Doğru Çekim İpuçları */}
-            <div style={{ padding: '15px', background: 'rgba(34,197,94,0.05)', borderRadius: '15px', border: '1px solid rgba(34,197,94,0.1)' }}>
-              <div style={{ color: '#22c55e', fontSize: '11px', fontWeight: '800', marginBottom: '8px' }}>✓ YÜKSEK KALİTE</div>
-              <ul style={{ fontSize: '10px', color: '#aaa', paddingLeft: '15px', lineHeight: '1.6', margin: 0 }}>
-                <li>Güneşli/Parlak ışık altında çekim.</li>
-                <li>Parçayı tam karşıdan, dik açı ile yakalama.</li>
-                <li>Kamerayı sabitleyip net odaklama.</li>
-                <li>Temiz ve kurulanmış araç yüzeyi.</li>
-              </ul>
-            </div>
-
-            {/* Yanlış Çekim İpuçları */}
-            <div style={{ padding: '15px', background: 'rgba(239,68,68,0.05)', borderRadius: '15px', border: '1px solid rgba(239,68,68,0.1)' }}>
-              <div style={{ color: '#ef4444', fontSize: '11px', fontWeight: '800', marginBottom: '8px' }}>✕ HATALI SONUÇ</div>
-              <ul style={{ fontSize: '10px', color: '#aaa', paddingLeft: '15px', lineHeight: '1.6', margin: 0 }}>
-                <li>Gece çekimi veya karanlık otopark.</li>
-                <li>Bulanık, titretilmiş ve kaymış kareler.</li>
-                <li>Çok uzaktan veya çok eğik açılar.</li>
-                <li>Çamurlu veya aşırı kirli kaporta.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div style={{ background: '#111', padding: '15px', borderRadius: '15px', border: '1px solid #1a1a1a' }}>
-            <p style={{ fontSize: '11px', color: '#777', lineHeight: '1.5', fontStyle: 'italic', margin: 0 }}>
-              <b>Önemli Not:</b> Yapay zeka sistemleri (Gemini veya ChatGPT gibi) onlara verdiğiniz verinin kalitesi kadar iyi çalışır. Eksik veya kalitesiz görsel paylaştığınızda analiz hatalı sonuç verebilir. En doğru rapor için yukarıdaki kurallara uymanız zorunludur.
-            </p>
+        {/* PARÇA BAZLI REHBER NOTU */}
+        <div style={{ padding: '20px', background: 'rgba(59,130,246,0.05)', borderRadius: '25px', border: '1px solid rgba(59,130,246,0.1)', marginBottom: '25px', display: 'flex', gap: '15px', alignItems: 'center' }}>
+          <Focus size={24} color="#3b82f6" style={{ flexShrink: 0 }} />
+          <div>
+             <h5 style={{ fontWeight: '800', fontSize: '13px', margin: '0 0 5px 0' }}>Yakın Plan & Detay Çekimi (50–80 cm)</h5>
+             <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Parça değişimi tespiti için menteşe ve vida bağlantılarını net şekilde fotoğraflayın.</p>
           </div>
         </div>
 
-        <button onClick={isAddedToCart ? () => setShowCart(true) : handleAddToCart} style={{ width: '100%', marginTop: '30px', padding: '22px', borderRadius: '20px', background: isAddedToCart ? '#fff' : '#3b82f6', color: isAddedToCart ? '#000' : '#fff', fontWeight: '900', border: 'none', cursor: 'pointer', fontSize: '18px' }}>
-          {isAddedToCart ? "Ödemeye Geç" : "Fotoğrafları Onayla"}
+        {/* GÖRSEL YÜKLEME ALANI */}
+        <div style={{ border: '2px dashed #222', padding: '80px 20px', borderRadius: '35px', position: 'relative', cursor: 'pointer', textAlign: 'center', transition: 'all 0.3s', backgroundColor: items.length > 0 ? 'rgba(59,130,246,0.02)' : 'transparent' }}>
+          <input type="file" multiple accept="image/*" onChange={(e) => setItems(Array.from(e.target.files || []).map(f => ({file: f})))} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
+          <div style={{ width: '80px', height: '80px', background: 'rgba(59,130,246,0.1)', borderRadius: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+            <Upload size={32} color="#3b82f6" />
+          </div>
+          <p style={{ fontWeight: '900', fontSize: '20px', margin: 0 }}>{items.length > 0 ? `${items.length} Fotoğraf Yüklendi` : "Fotoğrafları Seçin"}</p>
+          <p style={{ color: '#444', fontSize: '13px', marginTop: '8px' }}>Kurallara uygun çekilmiş görselleri yükleyin</p>
+        </div>
+
+        <button onClick={isAddedToCart ? () => setShowCart(true) : handleAddToCart} style={{ width: '100%', marginTop: '35px', padding: '25px', borderRadius: '22px', background: isAddedToCart ? '#fff' : '#3b82f6', color: isAddedToCart ? '#000' : '#fff', fontWeight: '900', border: 'none', cursor: 'pointer', fontSize: '18px', boxShadow: '0 20px 40px rgba(59,130,246,0.2)', transition: 'transform 0.2s' }}>
+          {isAddedToCart ? "Siparişi Onayla ve Öde" : "Görselleri Kaydet"}
         </button>
       </div>
     </div>
@@ -211,7 +225,7 @@ function UploadContent() {
 
 export default function UploadPage() {
   return (
-    <Suspense fallback={<div style={{ color: 'white', textAlign: 'center', padding: '50px' }}>Hazırlanıyor...</div>}>
+    <Suspense fallback={<div style={{ color: 'white', textAlign: 'center', padding: '100px' }}>Analiz Hazırlanıyor...</div>}>
       <UploadContent />
     </Suspense>
   );
