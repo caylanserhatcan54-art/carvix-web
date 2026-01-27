@@ -1,58 +1,105 @@
 "use client";
 
+import React, { useState } from "react";
 import { 
-  ShieldCheck, Zap, Cpu, ScanLine, FileText, Lock, Sparkles, Check, Car, MousePointerClick, BarChart3, Smartphone 
+  ShieldCheck, Zap, Cpu, ScanLine, FileText, Lock, Sparkles, Check, Car, 
+  MousePointerClick, BarChart3, Smartphone, ExternalLink, Eye
 } from "lucide-react";
 
 export default function LandingPage() {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <main style={{ backgroundColor: "#050505", color: "#fff", fontFamily: 'Inter, sans-serif', minHeight: '100vh' }}>
       
       {/* HERO SECTION */}
-      <section style={{ paddingTop: "clamp(100px, 18vh, 150px)", paddingBottom: "100px", textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ paddingTop: "clamp(100px, 15vh, 120px)", paddingBottom: "40px", textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '0', left: '50%', transform: 'translateX(-50%)', width: '100%', height: '500px', background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)', zIndex: 0 }} />
         
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '1000px', margin: '0 auto', padding: '0 20px' }}>
-          <div style={{ display: "inline-flex", alignItems: 'center', gap: 10, marginBottom: 30, backgroundColor: 'rgba(59,130,246,0.08)', padding: '10px 24px', borderRadius: '100px', border: '1px solid rgba(59,130,246,0.2)' }}>
+          <div style={{ display: "inline-flex", alignItems: 'center', gap: 10, marginBottom: 20, backgroundColor: 'rgba(59,130,246,0.08)', padding: '10px 24px', borderRadius: '100px', border: '1px solid rgba(59,130,246,0.2)' }}>
             <Sparkles size={16} color="#60a5fa" />
             <span style={{ fontSize: '13px', fontWeight: 900, color: '#60a5fa', letterSpacing: '0.5px' }}>YOLOv8x-SEGMENTATION TEKNOLOJİSİ</span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.8rem)', fontWeight: 950, lineHeight: 0.95, letterSpacing: '-0.05em', marginBottom: 30 }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 7vw, 4rem)', fontWeight: 950, lineHeight: 0.95, letterSpacing: '-0.05em', marginBottom: 25 }}>
             Aracınızın Kaportasını <br /> <span style={{ color: '#3b82f6' }}>Yapay Zeka</span> Tarasın
           </h1>
           
-          <p style={{ fontSize: '20px', color: "#a1a1aa", lineHeight: 1.6, maxWidth: 750, margin: '0 auto 20px' }}>
-            Carvix AI, otomobillerin dijital röntgenini çeker. Boyalı parçaları, değişenleri ve sök-tak işlemlerini milimetrik hassasiyetle raporlar.
+          <p style={{ fontSize: '18px', color: "#a1a1aa", lineHeight: 1.6, maxWidth: 650, margin: '0 auto 20px' }}>
+            Carvix AI, otomobillerin dijital röntgenini çeker. Boyalı parçaları ve değişimleri milimetrik hassasiyetle raporlar.
           </p>
+        </div>
+      </section>
 
-          <p style={{ fontSize: '14px', color: '#3b82f6', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Analize Başlamak İçin Yukarıdaki Panelden Giriş Yapın
-          </p>
+      {/* RAPOR ÖNİZLEME SECTION - KÜÇÜLTÜLDÜ */}
+      <section style={{ padding: '0 8% 60px', position: 'relative', zIndex: 2 }}>
+        <div style={{ maxWidth: '850px', margin: '0 auto' }}> {/* Genişlik 1100'den 850'ye çekildi */}
+           <div style={{ 
+              backgroundColor: '#0c0c0c', 
+              borderRadius: '24px', 
+              border: '1px solid rgba(59,130,246,0.3)', 
+              overflow: 'hidden',
+              boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.5)'
+           }}>
+              <div style={{ backgroundColor: '#161616', padding: '12px 25px', borderBottom: '1px solid #222', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ff5f56' }}></div>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#27c93f' }}></div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#60a5fa', fontSize: '12px', fontWeight: 700 }}>
+                  <Eye size={14} /> ÖRNEK AI RAPOR ÇIKTISI
+                </div>
+              </div>
+              
+              <div style={{ padding: '15px', position: 'relative', maxHeight: '550px', display: 'flex', justifyContent: 'center', backgroundColor: '#f8fafc', overflow: 'hidden' }}>
+                {!imageError ? (
+                  <img 
+                    src="/rapor-preview.png" 
+                    alt="Carvix AI Rapor Örneği"
+                    style={{ width: 'auto', maxWidth: '100%', height: 'auto', maxHeight: '500px', borderRadius: '4px', boxShadow: '0 5px 15px rgba(0,0,0,0.05)', display: 'block', objectFit: 'contain' }}
+                    onError={() => setImageError(true)}
+                  />
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#666', height: '300px' }}>
+                    <ScanLine size={40} style={{ marginBottom: 10, opacity: 0.2 }} />
+                    <p style={{ fontSize: '13px' }}>Rapor görseli (public/rapor-preview.png) bulunamadı.</p>
+                  </div>
+                )}
+                
+                {/* PDF Rozeti - Daha kompakt hale getirildi */}
+                <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+                   <div style={{ backgroundColor: '#3b82f6', color: '#fff', padding: '10px 18px', borderRadius: '10px', fontWeight: 800, fontSize: '12px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 8px 16px rgba(59,130,246,0.3)', cursor: 'pointer' }}>
+                      <FileText size={16} /> DETAYLI PDF
+                   </div>
+                </div>
+              </div>
+           </div>
         </div>
       </section>
 
       {/* İSTATİSTİK BÖLÜMÜ */}
-      <section style={{ padding: '40px 8%', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '40px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <section style={{ padding: '40px 8%', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>%86.4</div>
-          <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase' }}>Tespit Doğruluğu</div>
+          <div style={{ fontSize: '28px', fontWeight: 900, color: '#fff' }}>%86.4</div>
+          <div style={{ fontSize: '11px', color: '#71717a', textTransform: 'uppercase' }}>Tespit Doğruluğu</div>
         </div>
-        <div style={{ width: '1px', backgroundColor: '#222' }}></div>
+        <div style={{ width: '1px', backgroundColor: '#222', height: '35px' }}></div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>0.012s</div>
-          <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase' }}>İşlem Hızı</div>
+          <div style={{ fontSize: '28px', fontWeight: 900, color: '#fff' }}>0.012s</div>
+          <div style={{ fontSize: '11px', color: '#71717a', textTransform: 'uppercase' }}>İşlem Hızı</div>
         </div>
-        <div style={{ width: '1px', backgroundColor: '#222' }}></div>
+        <div style={{ width: '1px', backgroundColor: '#222', height: '35px' }}></div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>10k+</div>
-          <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase' }}>Analiz Edilen Araç</div>
+          <div style={{ fontSize: '28px', fontWeight: 900, color: '#fff' }}>10k+</div>
+          <div style={{ fontSize: '11px', color: '#71717a', textTransform: 'uppercase' }}>Analiz Edilen Araç</div>
         </div>
       </section>
 
       {/* NASIL ÇALIŞIR? */}
-      <section style={{ padding: '100px 8%' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 900, marginBottom: '60px' }}>3 Adımda Dijital Ekspertiz</h2>
+      <section style={{ padding: '80px 8%' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 900, marginBottom: '50px' }}>3 Adımda Dijital Ekspertiz</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '25px' }}>
           {[
             { icon: <Car size={32} color="#3b82f6" />, title: "Araç Türünü Seç", desc: "Sisteme giriş yaptıktan sonra araç türünü belirleyin." },
@@ -124,7 +171,7 @@ export default function LandingPage() {
       </section>
 
       {/* FİYATLANDIRMA TABLOSU */}
-      <section style={{ padding: '100px 8%' }}>
+      <section style={{ padding: '80px 8%' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h2 style={{ fontSize: '42px', fontWeight: 950 }}>Şeffaf Paketler</h2>
           <p style={{ color: '#71717a', marginTop: '10px' }}>Tüm işlemler panel üzerinden güvenli bir şekilde gerçekleştirilir.</p>
@@ -155,8 +202,8 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: '80px 8%', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', color: '#52525b', fontSize: '13px', flexWrap: 'wrap' }}>
+      <footer style={{ padding: '60px 8%', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', color: '#52525b', fontSize: '13px', flexWrap: 'wrap' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><ShieldCheck size={18} color="#22c55e" /> Shopier Altyapı Güvencesi</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={18} /> Güvenli Ödeme (SSL)</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Smartphone size={18} /> Mobil Uyumlu</span>
