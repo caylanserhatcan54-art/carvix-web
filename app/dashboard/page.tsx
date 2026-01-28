@@ -6,21 +6,34 @@ import Lottie from "lottie-react";
 
 // Lucide Icons
 import { 
-  Cpu, ArrowRight, CheckCircle2, Zap, Star, Users,
-  ShieldCheck, Activity, Truck, Car, Camera, Search, Award, Sparkles, RefreshCcw
+  Cpu, ArrowRight, CheckCircle2, Star,
+  ShieldCheck, Truck, Car, Camera, Search, Sparkles, RefreshCcw
 } from "lucide-react";
 
 export default function CarvixLanding() {
   const router = useRouter();
-  const [welcomeData, setWelcomeData] = useState(null);
-  const [wavingData, setWavingData] = useState(null);
+  const [welcomeData, setWelcomeData] = useState<any>(null);
+  const [wavingData, setWavingData] = useState<any>(null);
 
-  // Public klasöründeki JSON dosyalarını çekiyoruz
+  // JSON dosyalarını public klasöründen güvenli şekilde çekiyoruz
   useEffect(() => {
-    fetch("/welcome.json").then(res => res.json()).then(data => setWelcomeData(data));
-    fetch("/waving.json").then(res => res.json()).then(data => setWavingData(data));
+    const loadAnimations = async () => {
+      try {
+        const welcomeRes = await fetch("/welcome.json");
+        const welcomeJson = await welcomeRes.json();
+        setWelcomeData(welcomeJson);
+
+        const wavingRes = await fetch("/waving.json");
+        const wavingJson = await wavingRes.json();
+        setWavingData(wavingJson);
+      } catch (error) {
+        console.error("Animasyonlar yüklenemedi:", error);
+      }
+    };
+    loadAnimations();
   }, []);
 
+  // TypeScript hatasını önlemek için plan tipini belirledik
   const handleSelectPlan = (plan: "standard" | "detailed") => {
     router.push(`/vehicle?p=${plan}`);
   };
@@ -42,7 +55,7 @@ export default function CarvixLanding() {
         
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '1000px', margin: '0 auto' }}>
           
-          {/* ANIMASYONLAR: WELCOME VE ALTINDA WAVING (İstediğin gibi birleştirildi) */}
+          {/* ANIMASYONLAR */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}>
             <div style={{ width: '200px', height: '200px' }}>
                {welcomeData && <Lottie animationData={welcomeData} loop={true} />}
@@ -125,7 +138,6 @@ export default function CarvixLanding() {
       <section id="how-it-works" style={{ padding: "100px 20px", borderTop: '1px solid #111' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           
-          {/* ADIM 1 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '80px', alignItems: 'center', marginBottom: '120px' }}>
             <div>
               <div style={{ color: '#3b82f6', fontWeight: 900, marginBottom: '10px', fontSize: '14px' }}>01. ADIM: GİRİŞ</div>
@@ -139,7 +151,6 @@ export default function CarvixLanding() {
             </div>
           </div>
 
-          {/* ADIM 2 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '80px', alignItems: 'center', marginBottom: '120px' }}>
             <div style={{ order: 2 }}>
               <div style={{ color: '#3b82f6', fontWeight: 900, marginBottom: '10px', fontSize: '14px' }}>02. ADIM: İŞLEME</div>
@@ -153,7 +164,6 @@ export default function CarvixLanding() {
             </div>
           </div>
 
-          {/* ADIM 3: GÖRSEL EKLENEN KISIM */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '80px', alignItems: 'center' }}>
             <div>
               <div style={{ color: '#3b82f6', fontWeight: 900, marginBottom: '10px', fontSize: '14px' }}>03. ADIM: SONUÇ</div>
@@ -182,7 +192,6 @@ export default function CarvixLanding() {
         </div>
       </section>
 
-      {/* --- 3. KULLANIM SENARYOLARI --- */}
       <section style={{ padding: "100px 20px", background: '#030303' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '40px', fontWeight: 900, marginBottom: '60px' }}>Neden Carvix?</h2>
@@ -195,7 +204,6 @@ export default function CarvixLanding() {
         </div>
       </section>
 
-      {/* --- 4. FİYATLANDIRMA --- */}
       <section id="pricing" style={{ padding: '100px 20px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
@@ -226,7 +234,6 @@ export default function CarvixLanding() {
         </div>
       </section>
 
-      {/* --- 5. YORUMLAR --- */}
       <section style={{ padding: "100px 0 60px", borderTop: '1px solid #111' }}>
         <div style={{ textAlign: 'center', marginBottom: '50px' }}>
             <h2 style={{ fontSize: '32px', fontWeight: 900 }}>Kullanıcı Deneyimleri</h2>
@@ -266,19 +273,7 @@ export default function CarvixLanding() {
 }
 
 // --- ALT BİLEŞENLER ---
-function StatBox({ number, label, icon: Icon }: { number: string, label: string, icon: React.ElementType }) {
-    return (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-            <div style={{ color: '#3b82f6', marginBottom: '10px', display: 'flex', justifyContent: 'center' }}>
-                <Icon size={20} />
-            </div>
-            <div style={{ fontSize: '28px', fontWeight: 900, color: '#fff' }}>{number}</div>
-            <div style={{ fontSize: '14px', color: '#64748b', marginTop: '5px' }}>{label}</div>
-        </div>
-    );
-}
-
-function UsageBox({ icon: Icon, title, text }: { icon: React.ElementType, title: string, text: string }) {
+function UsageBox({ icon: Icon, title, text }: { icon: any, title: string, text: string }) {
   return (
     <div style={{ padding: '35px', background: '#09090b', borderRadius: '30px', border: '1px solid #18181b' }}>
       <div style={{ color: '#3b82f6', marginBottom: '20px' }}>
