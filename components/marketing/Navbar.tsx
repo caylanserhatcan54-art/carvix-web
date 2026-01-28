@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShoppingCart, X, Trash2, CreditCard, ShieldCheck, Menu } from "lucide-react";
+import { ShoppingCart, X, Trash2, CreditCard, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -31,13 +31,9 @@ export default function Navbar() {
           OTO<span style={{ color: '#3b82f6' }}>ANALİZ</span>
         </Link>
 
-        {/* Orta Linkler (Opsiyonel) */}
-        <div style={{ display: 'none', gap: '30px' }} className="md:flex">
-             <Link href="/pricing" style={{ color: '#a1a1aa', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Fiyatlandırma</Link>
-             <Link href="/guide" style={{ color: '#a1a1aa', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Rehber</Link>
-        </div>
+        {/* Orta Linkler ve Menü İkonu Kaldırıldı */}
 
-        {/* Sağ Taraf: SEPET BUTONU */}
+        {/* Sağ Taraf: SADECE SEPET BUTONU */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
           <button 
             onClick={() => setIsCartOpen(true)}
