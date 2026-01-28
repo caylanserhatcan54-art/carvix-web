@@ -3,9 +3,8 @@
 import { useMemo, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { VEHICLE_CONFIG, PackageType } from "@/lib/vehicleConfig";
-// Kütüphane adını düzelttik: lucide-react
 import { 
-  Upload, Sparkles, ShieldAlert, ScanEye, CheckCircle2, XCircle, ArrowRight, Focus, Mail
+  Upload, Sparkles, ShieldAlert, ScanEye, CheckCircle2, XCircle, ArrowRight, Focus, Mail, Info
 } from "lucide-react"; 
 
 const API = (process.env.NEXT_PUBLIC_API_BASE || "https://ai-arac-analiz-backend.onrender.com").replace(/\/$/, "");
@@ -44,16 +43,16 @@ function UploadContent() {
     const isDetayli = pkg === "detailed";
     const lists = {
       car: {
-        standard: ["1️⃣ Önden – Tam karşıdan", "2️⃣ Arkadan – Tam karşıdan", "3️⃣ Sol yandan – Tam", "4️⃣ Sağ yandan – Tam"],
-        detailed: ["🔹 PARÇA BAZLI YAKIN PLAN", "Kapılar", "Çamurluklar", "Kaput & Bagaj", "Menteşe & Vidalar"]
+        standard: ["Ön Cephe", "Arka Cephe", "Sol Yan", "Sağ Yan"],
+        detailed: ["Kapılar (Yakın)", "Çamurluklar", "Kaput & Bagaj", "Menteşeler"]
       },
       pickup: {
         standard: ["Kabin Önü", "Kasa Arkası", "Sağ Profil", "Sol Profil"],
-        detailed: ["Kasa İç Sacı", "Kabin-Kasa Birleşim Hattı", "Arka Kapak Mekanizması", "İç Direkler"]
+        detailed: ["Kasa İç Sacı", "Kabin-Kasa Birleşim", "Arka Kapak", "İç Direkler"]
       },
       motorcycle: {
         standard: ["Ön Bakış", "Arka Bakış", "Sağ Yan", "Sol Yan"],
-        detailed: ["Ön Grenaj & Far", "Sağ/Sol Yan Paneller", "Yakıt Deposu", "Şasi Alanları"]
+        detailed: ["Ön Grenaj", "Yan Paneller", "Yakıt Deposu", "Şasi Alanları"]
       }
     };
     const currentVehicle = (lists as any)[vehicleType] || lists.car;
@@ -95,58 +94,65 @@ function UploadContent() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#050505', color: '#fff', padding: '40px 20px', fontFamily: 'Inter, sans-serif' }}>
       
-      {/* SEPET VE E-POSTA ALANI */}
       {showCart && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.98)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end', backdropFilter: 'blur(10px)' }}>
           <div style={{ width: '100%', maxWidth: '420px', backgroundColor: '#0a0a0a', padding: '50px 40px', borderLeft: '1px solid #222', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-             <h2 style={{ fontWeight: '900', marginBottom: '10px', fontSize: '28px' }}>Sipariş Onayı</h2>
-             <div style={{ padding: '25px', background: 'linear-gradient(145deg, #111, #080808)', borderRadius: '20px', border: '1px solid #1a1a1a', marginBottom: '25px' }}>
-               <p style={{ fontWeight: '800', fontSize: '20px' }}>{pkg === "standard" ? "Standart" : "Detaylı"} Paket</p>
-               <p style={{ fontSize: '26px', fontWeight: '900', color: '#fff', marginTop: '10px' }}>{basePrice.toFixed(2)} TL</p>
-             </div>
+              <h2 style={{ fontWeight: '900', marginBottom: '10px', fontSize: '28px' }}>Sipariş Onayı</h2>
+              <div style={{ padding: '25px', background: 'linear-gradient(145deg, #111, #080808)', borderRadius: '20px', border: '1px solid #1a1a1a', marginBottom: '25px' }}>
+                <p style={{ fontWeight: '800', fontSize: '20px' }}>{pkg === "standard" ? "Standart" : "Detaylı"} Paket</p>
+                <p style={{ fontSize: '26px', fontWeight: '900', color: '#fff', marginTop: '10px' }}>{basePrice.toFixed(2)} TL</p>
+              </div>
 
-             <div style={{ padding: '25px', background: 'rgba(59,130,246,0.03)', borderRadius: '20px', border: '1px solid rgba(59,130,246,0.2)', marginBottom: '25px' }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#3b82f6', marginBottom: '15px' }}>
-                 <Mail size={20} />
-                 <h4 style={{ fontWeight: '900', fontSize: '14px' }}>RAPOR GÖNDERİM ADRESİ</h4>
-               </div>
-               <input 
-                 type="email" 
-                 placeholder="E-posta adresiniz..." 
-                 value={userEmail}
-                 onChange={(e) => setUserEmail(e.target.value)}
-                 style={{ width: '100%', padding: '15px', borderRadius: '12px', border: '1px solid #222', background: '#000', color: '#fff', outline: 'none' }}
-               />
-               <div style={{ display: 'flex', gap: '8px', marginTop: '15px', padding: '12px', background: 'rgba(234,179,8,0.1)', borderRadius: '10px', border: '1px solid rgba(234,179,8,0.2)' }}>
-                 <ShieldAlert size={28} color="#eab308" style={{ flexShrink: 0 }} />
-                 <p style={{ fontSize: '11px', color: '#eab308', margin: 0, fontWeight: '600' }}>
-                   ÖNEMLİ: Raporun size ulaşması için Shopier ödeme ekranında da <b>AYNI E-POSTA</b> adresini yazmalısınız.
-                 </p>
-               </div>
-             </div>
+              <div style={{ padding: '25px', background: 'rgba(59,130,246,0.03)', borderRadius: '20px', border: '1px solid rgba(59,130,246,0.2)', marginBottom: '25px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#3b82f6', marginBottom: '15px' }}>
+                  <Mail size={20} />
+                  <h4 style={{ fontWeight: '900', fontSize: '14px' }}>RAPOR GÖNDERİM ADRESİ</h4>
+                </div>
+                <input 
+                  type="email" 
+                  placeholder="E-posta adresiniz..." 
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  style={{ width: '100%', padding: '15px', borderRadius: '12px', border: '1px solid #222', background: '#000', color: '#fff', outline: 'none' }}
+                />
+                <div style={{ display: 'flex', gap: '8px', marginTop: '15px', padding: '12px', background: 'rgba(234,179,8,0.1)', borderRadius: '10px', border: '1px solid rgba(234,179,8,0.2)' }}>
+                  <ShieldAlert size={28} color="#eab308" style={{ flexShrink: 0 }} />
+                  <p style={{ fontSize: '11px', color: '#eab308', margin: 0, fontWeight: '600' }}>
+                    ÖNEMLİ: Raporun size ulaşması için Shopier ödeme ekranında da <b>AYNI E-POSTA</b> adresini yazmalısınız.
+                  </p>
+                </div>
+              </div>
 
-             <button onClick={handleFinalPayment} disabled={loading} style={{ width: '100%', padding: '22px', background: '#3b82f6', border: 'none', borderRadius: '18px', color: '#fff', fontWeight: '900', cursor: 'pointer' }}>
-               {loading ? "Yükleniyor..." : "Ödemeye Geç"}
-             </button>
-             <button onClick={() => setShowCart(false)} style={{ width: '100%', marginTop: '20px', background: 'none', border: 'none', color: '#444', cursor: 'pointer' }}>Vazgeç</button>
+              <button onClick={handleFinalPayment} disabled={loading} style={{ width: '100%', padding: '22px', background: '#3b82f6', border: 'none', borderRadius: '18px', color: '#fff', fontWeight: '900', cursor: 'pointer' }}>
+                {loading ? "Yükleniyor..." : "Ödemeye Geç"}
+              </button>
+              <button onClick={() => setShowCart(false)} style={{ width: '100%', marginTop: '20px', background: 'none', border: 'none', color: '#444', cursor: 'pointer' }}>Vazgeç</button>
           </div>
         </div>
       )}
 
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'rgba(59,130,246,0.1)', color: '#3b82f6', borderRadius: '100px', fontSize: '11px', fontWeight: '900' }}>
             <Sparkles size={14} /> {config.title.toUpperCase()} ANALİZ SİSTEMİ
           </div>
-          <h1 style={{ fontSize: '36px', fontWeight: '900', marginTop: '15px' }}>Ekspertiz Görselleri</h1>
+          <h1 style={{ fontSize: '36px', fontWeight: '900', marginTop: '15px' }}>Görselleri Yükleyin</h1>
+          
+          {/* YENI EKLEDIGIMIZ ÖZGÜRLÜK MESAJI */}
+          <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(34,197,94,0.05)', borderRadius: '15px', border: '1px solid rgba(34,197,94,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+            <Info size={18} color="#22c55e" />
+            <p style={{ fontSize: '13px', color: '#22c55e', margin: 0, fontWeight: '600' }}>
+              İster <b>tek bir parçayı</b>, ister <b>tüm aracı</b> analiz ettirebilirsiniz. Sınır yok!
+            </p>
+          </div>
         </div>
 
-        {/* GEREKLİ GÖRSELLER LİSTESİ - instructions dizi mi kontrolü eklendi */}
         <div style={{ background: '#0a0a0a', padding: '30px', borderRadius: '30px', border: '1px solid #111', marginBottom: '25px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#3b82f6', marginBottom: '20px' }}>
             <ScanEye size={22} />
-            <h3 style={{ fontWeight: '900', fontSize: '18px' }}>Gerekli Görseller</h3>
+            <h3 style={{ fontWeight: '900', fontSize: '18px' }}>Örnek Görsel Rehberi</h3>
           </div>
+          <p style={{ fontSize: '12px', color: '#666', marginBottom: '15px', marginTop: '-10px' }}>Aşağıdakiler örnek çekimlerdir, ihtiyacınız olan bölgeleri yüklemeniz yeterlidir:</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             {Array.isArray(instructions) && instructions.map((item, i) => (
               <div key={i} style={{ padding: '15px', background: '#0d0d0d', borderRadius: '15px', fontSize: '12px', border: '1px solid #161616', color: '#999', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -157,7 +163,6 @@ function UploadContent() {
           </div>
         </div>
 
-        {/* DOĞRU / YANLIŞ AÇI REHBERİ */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '25px' }}>
            <div style={{ padding: '25px', background: '#0a0a0a', borderRadius: '25px', border: '1px solid #111' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
@@ -185,16 +190,14 @@ function UploadContent() {
            </div>
         </div>
 
-        {/* YAKIN PLAN NOTU */}
         <div style={{ padding: '20px', background: 'rgba(59,130,246,0.05)', borderRadius: '25px', border: '1px solid rgba(59,130,246,0.1)', marginBottom: '25px', display: 'flex', gap: '15px', alignItems: 'center' }}>
           <Focus size={24} color="#3b82f6" style={{ flexShrink: 0 }} />
           <div>
-             <h5 style={{ fontWeight: '800', fontSize: '13px', margin: '0 0 5px 0' }}>Yakın Plan & Detay Çekimi (50–80 cm)</h5>
-             <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Parça değişimi tespiti için menteşe ve vida bağlantılarını net şekilde fotoğraflayın.</p>
+             <h5 style={{ fontWeight: '800', fontSize: '13px', margin: '0 0 5px 0' }}>Sadece sorunlu parçayı mı çekmek istiyorsunuz?</h5>
+             <p style={{ fontSize: '11px', color: '#888', margin: 0 }}>O bölgeyi 50-80 cm mesafeden net şekilde çekip yükleyin. Yapay zekamız sadece o parçayı da tarayabilir.</p>
           </div>
         </div>
 
-        {/* GÖRSEL YÜKLEME ALANI */}
         <div style={{ border: '2px dashed #222', padding: '80px 20px', borderRadius: '35px', position: 'relative', cursor: 'pointer', textAlign: 'center', transition: 'all 0.3s', backgroundColor: items.length > 0 ? 'rgba(59,130,246,0.02)' : 'transparent' }}>
           <input type="file" multiple accept="image/*" onChange={(e) => setItems(Array.from(e.target.files || []).map(f => ({file: f})))} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} />
           <div style={{ width: '80px', height: '80px', background: 'rgba(59,130,246,0.1)', borderRadius: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
