@@ -15,17 +15,25 @@ export default function CarvixLanding() {
   const [welcomeData, setWelcomeData] = useState<any>(null);
   const [wavingData, setWavingData] = useState<any>(null);
 
-  // JSON dosyalarını public klasöründen güvenli şekilde çekiyoruz
+  // Vercel/Linux sunucularında en güvenli yöntem: useEffect içinde fetch
   useEffect(() => {
     const loadAnimations = async () => {
       try {
-        const welcomeRes = await fetch("/welcome.json");
-        const welcomeJson = await welcomeRes.json();
-        setWelcomeData(welcomeJson);
+        // Promise.all kullanarak her iki dosyayı paralel ve hızlıca çekiyoruz
+        const [welcomeRes, wavingRes] = await Promise.all([
+          fetch("/welcome.json"),
+          fetch("/waving.json")
+        ]);
 
-        const wavingRes = await fetch("/waving.json");
-        const wavingJson = await wavingRes.json();
-        setWavingData(wavingJson);
+        if (welcomeRes.ok) {
+          const welcomeJson = await welcomeRes.json();
+          setWelcomeData(welcomeJson);
+        }
+
+        if (wavingRes.ok) {
+          const wavingJson = await wavingRes.json();
+          setWavingData(wavingJson);
+        }
       } catch (error) {
         console.error("Animasyonlar yüklenemedi:", error);
       }
@@ -33,7 +41,6 @@ export default function CarvixLanding() {
     loadAnimations();
   }, []);
 
-  // TypeScript hatasını önlemek için plan tipini belirledik
   const handleSelectPlan = (plan: "standard" | "detailed") => {
     router.push(`/vehicle?p=${plan}`);
   };
@@ -58,10 +65,10 @@ export default function CarvixLanding() {
           {/* ANIMASYONLAR */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}>
             <div style={{ width: '200px', height: '200px' }}>
-               {welcomeData && <Lottie animationData={welcomeData} loop={true} />}
+               {welcomeData && <Lottie animationData={welcomeData} loop={true} style={{ height: '100%' }} />}
             </div>
             <div style={{ width: '100px', height: '100px', marginTop: '-40px' }}>
-               {wavingData && <Lottie animationData={wavingData} loop={true} />}
+               {wavingData && <Lottie animationData={wavingData} loop={true} style={{ height: '100%' }} />}
             </div>
           </div>
 
@@ -192,6 +199,7 @@ export default function CarvixLanding() {
         </div>
       </section>
 
+      {/* --- 3. NEDEN CARVIX SECTION --- */}
       <section style={{ padding: "100px 20px", background: '#030303' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '40px', fontWeight: 900, marginBottom: '60px' }}>Neden Carvix?</h2>
@@ -204,6 +212,7 @@ export default function CarvixLanding() {
         </div>
       </section>
 
+      {/* --- 4. PRICING SECTION --- */}
       <section id="pricing" style={{ padding: '100px 20px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
@@ -234,6 +243,7 @@ export default function CarvixLanding() {
         </div>
       </section>
 
+      {/* --- 5. REVIEWS SECTION --- */}
       <section style={{ padding: "100px 0 60px", borderTop: '1px solid #111' }}>
         <div style={{ textAlign: 'center', marginBottom: '50px' }}>
             <h2 style={{ fontSize: '32px', fontWeight: 900 }}>Kullanıcı Deneyimleri</h2>
