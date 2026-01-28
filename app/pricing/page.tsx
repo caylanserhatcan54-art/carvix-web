@@ -12,7 +12,7 @@ export default function DashboardPricing() {
   const router = useRouter();
 
   // Pakete tıklandığında vehicle sayfasına yönlendiren fonksiyon
-  const handleSelectPackage = (planType) => {
+  const handleSelectPackage = (planType: string) => {
     // Seçilen paketi vehicle sayfasına parametre olarak gönderiyoruz
     router.push(`/vehicle?plan=${planType}`);
   };
