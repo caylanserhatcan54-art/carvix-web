@@ -210,31 +210,13 @@ function UploadContent() {
         </button>
       </div>
 
-      {/* WHATSAPP SABİT BUTON VE BALONCUK */}
+      {/* WHATSAPP SABİT BUTON - BALONCUK SİLİNDİ */}
       <div style={{ 
         position: 'fixed', 
         bottom: '25px', 
         right: '25px', 
-        zIndex: 9999, 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'flex-end' 
+        zIndex: 9999
       }}>
-        <div style={{ 
-          backgroundColor: '#22c55e', 
-          color: '#fff', 
-          padding: '10px 18px', 
-          borderRadius: '20px 20px 0 20px', 
-          fontSize: '13px', 
-          fontWeight: 800, 
-          marginBottom: '10px', 
-          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-          whiteSpace: 'nowrap',
-          border: '1px solid rgba(255,255,255,0.2)'
-        }}>
-          Destek ve geri dönüşleriniz için 7/24 yazabilirsiniz
-        </div>
-        
         <a 
           href="https://wa.me/905335239954" 
           target="_blank" 
