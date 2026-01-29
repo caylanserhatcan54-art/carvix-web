@@ -269,6 +269,51 @@ export default function CarvixLanding() {
         <p>© 2026 Carvix AI Tech. Türkiye'nin ilk akıllı araç ön kontrol sistemi.</p>
       </footer>
 
+      {/* --- WHATSAPP SABİT BUTON (EKLEME) --- */}
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '25px', 
+        right: '25px', 
+        zIndex: 9999, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'flex-end' 
+      }}>
+        <div style={{ 
+          backgroundColor: '#22c55e', 
+          color: '#fff', 
+          padding: '10px 18px', 
+          borderRadius: '20px 20px 0 20px', 
+          fontSize: '13px', 
+          fontWeight: 800, 
+          marginBottom: '10px', 
+          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+          whiteSpace: 'nowrap',
+          border: '1px solid rgba(255,255,255,0.2)'
+        }}>
+          Destek ve geri dönüşleriniz için 7/24 yazabilirsiniz
+        </div>
+        
+        <a 
+          href="https://wa.me/905335239954" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{ 
+            transition: 'transform 0.3s', 
+            display: 'block',
+            filter: 'drop-shadow(0 5px 15px rgba(37,211,102,0.4))'
+          }} 
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'} 
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+            alt="WhatsApp Destek" 
+            style={{ width: '60px', height: '60px' }} 
+          />
+        </a>
+      </div>
+
       <style jsx>{`
         .marquee { display: flex; overflow: hidden; }
         .marquee-content { display: flex; animation: scroll 45s linear infinite; }

@@ -138,7 +138,6 @@ function UploadContent() {
           </div>
           <h1 style={{ fontSize: '36px', fontWeight: '900', marginTop: '15px' }}>Görselleri Yükleyin</h1>
           
-          {/* YENI EKLEDIGIMIZ ÖZGÜRLÜK MESAJI */}
           <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(34,197,94,0.05)', borderRadius: '15px', border: '1px solid rgba(34,197,94,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
             <Info size={18} color="#22c55e" />
             <p style={{ fontSize: '13px', color: '#22c55e', margin: 0, fontWeight: '600' }}>
@@ -210,6 +209,52 @@ function UploadContent() {
           {isAddedToCart ? "Siparişi Onayla ve Öde" : "Görselleri Kaydet"}
         </button>
       </div>
+
+      {/* WHATSAPP SABİT BUTON VE BALONCUK */}
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '25px', 
+        right: '25px', 
+        zIndex: 9999, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'flex-end' 
+      }}>
+        <div style={{ 
+          backgroundColor: '#22c55e', 
+          color: '#fff', 
+          padding: '10px 18px', 
+          borderRadius: '20px 20px 0 20px', 
+          fontSize: '13px', 
+          fontWeight: 800, 
+          marginBottom: '10px', 
+          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+          whiteSpace: 'nowrap',
+          border: '1px solid rgba(255,255,255,0.2)'
+        }}>
+          Destek ve geri dönüşleriniz için 7/24 yazabilirsiniz
+        </div>
+        
+        <a 
+          href="https://wa.me/905335239954" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{ 
+            transition: 'transform 0.3s', 
+            display: 'block',
+            filter: 'drop-shadow(0 5px 15px rgba(37,211,102,0.4))'
+          }} 
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'} 
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+            alt="WhatsApp Destek" 
+            style={{ width: '60px', height: '60px' }} 
+          />
+        </a>
+      </div>
+
     </div>
   );
 }

@@ -5,10 +5,22 @@ export default function Footer() {
     <footer style={{ backgroundColor: '#000', color: 'rgba(255,255,255,0.7)', borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '80px', padding: '40px 20px' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         
-        {/* LOGO VE İSİM */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '30px' }}>
-          <img src="/carvix-logo.png" alt="Carvix" style={{ height: '20px', width: 'auto' }} />
-          <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Carvix</span>
+        {/* LOGO, İSİM VE SOSYAL MEDYA */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img src="/carvix-logo.png" alt="Carvix" style={{ height: '20px', width: 'auto' }} />
+            <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>Carvix</span>
+          </div>
+
+          {/* SOSYAL MEDYA İKONLARI */}
+          <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+            <a href="https://www.instagram.com/carvix2026/" target="_blank" rel="noopener noreferrer" style={{ opacity: 0.8, transition: '0.3s' }}>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" style={{ height: '20px', width: '20px' }} />
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61586856612270" target="_blank" rel="noopener noreferrer" style={{ opacity: 0.8, transition: '0.3s' }}>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" style={{ height: '20px', width: '20px' }} />
+            </a>
+          </div>
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '30px' }}>
