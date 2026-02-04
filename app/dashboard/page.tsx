@@ -141,8 +141,109 @@ export default function CarvixLanding() {
           </div>
       </section>
 
+      {/* --- YAA! OLUR MU ÖYLE ŞEY? SECTION --- */}
+<section style={{ padding: "100px 20px", background: "radial-gradient(circle at bottom right, rgba(59,130,246,0.05) 0%, transparent 50%)", borderBottom: '1px solid #111' }}>
+  <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '50px' }}>
+    
+    <div style={{ flex: '1 1 450px', position: 'relative' }}>
+      <div style={{ 
+        position: 'relative', 
+        borderRadius: '30px', 
+        overflow: 'hidden', 
+        border: '1px solid rgba(59,130,246,0.3)',
+        boxShadow: '0 0 50px rgba(59,130,246,0.15)'
+      }}>
+        <img 
+          src="/ai-scan-proof.png" 
+          alt="Carvix AI Doku Analizi" 
+          style={{ width: '100%', height: 'auto', display: 'block' }} 
+        />
+        <div style={{ 
+          position: 'absolute', top: '20px', left: '20px', 
+          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)',
+          padding: '8px 15px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)',
+          display: 'flex', alignItems: 'center', gap: '8px'
+        }}>
+          <div className="pulse-red" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
+          <span style={{ fontSize: '12px', fontWeight: 800, color: '#fff' }}>DOKU UYUMSUZLUĞU TESPİT EDİLDİ</span>
+        </div>
+      </div>
+
+      {/* --- YENİ: TEKNİK KIYASLAMA TABLOSU --- */}
+      <div style={{ marginTop: '30px', background: 'rgba(255,255,255,0.02)', borderRadius: '20px', padding: '20px', border: '1px solid #1e293b' }}>
+        <table style={{ width: '100%', fontSize: '13px', color: '#94a3b8', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid #1e293b' }}>
+              <th style={{ textAlign: 'left', padding: '10px', color: '#fff' }}>Özellik</th>
+              <th style={{ textAlign: 'left', padding: '10px', color: '#3b82f6' }}>Fabrika Boyası</th>
+              <th style={{ textAlign: 'left', padding: '10px', color: '#f59e0b' }}>Usta/Sanayi Boyası</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{ borderBottom: '1px solid #0f172a' }}>
+              <td style={{ padding: '10px', fontWeight: 700 }}>Doku Yapısı</td>
+              <td style={{ padding: '10px' }}>Homojen (Mikroskobik)</td>
+              <td style={{ padding: '10px' }}>Portakallanma (Düzensiz)</td>
+            </tr>
+            <tr>
+              <td style={{ padding: '10px', fontWeight: 700 }}>Işık Kırılması</td>
+              <td style={{ padding: '10px' }}>Net ve Düz</td>
+              <td style={{ padding: '10px' }}>Dağınık ve Dalgalı</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style={{ flex: '1 1 450px' }}>
+      <div style={{ display: 'inline-block', color: '#3b82f6', fontWeight: 900, fontSize: '14px', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+        Önyargıları Yıkıyoruz
+      </div>
+      <h2 style={{ fontSize: '48px', fontWeight: 950, lineHeight: 1.1, marginBottom: '25px' }}>
+        Yaa! Olur mu <br /> 
+        <span style={{ color: '#60a5fa' }}>öyle şey?</span>
+      </h2>
+      <p style={{ fontSize: '18px', color: '#94a3b8', lineHeight: 1.6, marginBottom: '30px' }}>
+        "Fotoğraftan boya mı anlaşılır?" dediğinizi duyar gibiyiz. <b>Evet, anlaşılır.</b> Carvix AI, sadece renge bakmaz; boyanın yüzeyindeki <b>mikroskobik doku DNA'sını</b> ve ışık yansıma karakteristiğini analiz eder.
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <div style={{ background: 'rgba(59,130,246,0.1)', padding: '10px', borderRadius: '12px', alignSelf: 'flex-start' }}>
+            <Cpu size={24} color="#3b82f6" />
+          </div>
+          <div>
+            <h4 style={{ fontWeight: 800, fontSize: '18px', marginBottom: '5px' }}>Mikroskobik Doku Analizi</h4>
+            <p style={{ color: '#64748b', fontSize: '15px' }}>Fabrika robotlarının attığı kusursuz mikron seviyesindeki katmanlar ile insan elinden çıkan boyanın "portakallanma" dokusunu birbirinden ayırır.</p>
+          </div>
+        </div>
+        
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <div style={{ background: 'rgba(59,130,246,0.1)', padding: '10px', borderRadius: '12px', alignSelf: 'flex-start' }}>
+            <Sparkles size={24} color="#3b82f6" />
+          </div>
+          <div>
+            <h4 style={{ fontWeight: 800, fontSize: '18px', marginBottom: '5px' }}>Yansıma Keskinliği (Glossiness)</h4>
+            <p style={{ color: '#64748b', fontSize: '15px' }}>Orijinal boyadaki ışık yansıması cam kadar pürüzsüzdür; usta boyasında ise mikron düzeyindeki dalgalanmalar "Yansıma Bozulması" algoritması ile anında yakalanır.</p>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <div style={{ background: 'rgba(34,197,94,0.1)', padding: '10px', borderRadius: '12px', alignSelf: 'flex-start' }}>
+            <CheckCircle2 size={24} color="#22c55e" />
+          </div>
+          <div>
+            <h4 style={{ fontWeight: 800, fontSize: '18px', marginBottom: '5px', color: '#22c55e' }}>%92 Tutarlılık Oranı</h4>
+            <p style={{ color: '#64748b', fontSize: '15px' }}>Yüz binlerce farklı araç datasıyla eğitilen modelimiz, usta boyası ile fabrikasyon boyayı ayırmada insan gözünden daha hassas çalışır.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
       {/* --- 2. ADIM ADIM İŞLEYİŞ --- */}
-      <section id="how-it-works" style={{ padding: "100px 20px", borderTop: '1px solid #111' }}>
+      <section id="how-it-works" style={{ padding: "100px 20px" }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '80px', alignItems: 'center', marginBottom: '120px' }}>
@@ -269,7 +370,7 @@ export default function CarvixLanding() {
         <p>© 2026 Carvix AI Tech. Türkiye'nin ilk akıllı araç ön kontrol sistemi.</p>
       </footer>
 
-      {/* --- WHATSAPP SABİT BUTON (EKLEME) --- */}
+      {/* --- WHATSAPP SABİT BUTON --- */}
       <div style={{ 
         position: 'fixed', 
         bottom: '25px', 
@@ -322,6 +423,13 @@ export default function CarvixLanding() {
         .price-card:hover { transform: translateY(-12px); }
         .animate-spin-slow { animation: spin-anim 8s linear infinite; }
         @keyframes spin-anim { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .pulse-red {
+          animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+          0% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.7); }
+          100% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
       `}</style>
     </main>
   );
